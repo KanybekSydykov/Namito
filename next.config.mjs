@@ -7,7 +7,7 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: "https",
-                hostname:'namito.kg'
+                hostname:'namito.tatadev.pro'
             }
         ]
     },

@@ -4,7 +4,7 @@ import { ENDPOINTS } from '@/API/endpoints'
 
 const page = async ({ params }) => {
   const res = await fetch(`${ENDPOINTS.getMainPage()}`, {
-    cache: 'no-store',
+    cache: 'no-cache',
     headers: {
       'Accept-Language': `${params.locale}`,
     }
@@ -12,7 +12,7 @@ const page = async ({ params }) => {
   const data = await res.json()
 
   const res2 = await fetch(`${ENDPOINTS.getNewProducts()}`, {
-    cache: 'no-store',
+    cache: 'no-cache',
     headers: {
       'Accept-Language': `${params.locale}`,
     }
@@ -20,7 +20,7 @@ const page = async ({ params }) => {
   const newProducts = await res2.json()
 
   const res3 = await fetch(`${ENDPOINTS.getAllProducts()}`, {
-    cache: 'no-store',
+    cache: 'no-cache',
     headers: {
       'Accept-Language': `${params.locale}`,
     }
