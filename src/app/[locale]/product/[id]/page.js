@@ -6,6 +6,7 @@ import React from 'react'
 const page = async({params}) => {
 
   const res = await fetch(`${ENDPOINTS.getProductData(params.id)}`, {
+    cache: 'no-cache',
     headers: {
       'Accept-Language': `${params.locale}`,
     },

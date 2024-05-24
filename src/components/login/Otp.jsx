@@ -34,10 +34,11 @@ const Otp = ({ handleLogin, isCodeSent }) => {
     // when we update it
   }, [time]);
 
+
   const handleOtpEnter = (value) => {
     console.log(value,PW);
 
-    if(value !== PW ){ 
+    if(value !== otp){ 
         console.log('otp doesnt match');
         console.log(value,PW);
         setIsError(true);

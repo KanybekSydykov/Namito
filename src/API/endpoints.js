@@ -1,4 +1,4 @@
-const _URI = 'https://namito.kg/api/'; 
+const _URI = 'https://namito.tatadev.pro/api/'; 
 
 export const ENDPOINTS = {
     getMainPage: () => _URI + 'main-page/',
@@ -12,4 +12,5 @@ export const ENDPOINTS = {
     getProductData: (id) => _URI + `products/${id}/`,
     getSimilarProducts: (id) => _URI + `products/${id}/similar/`,
     postLogin: () => _URI + 'users/login/',
+    postVerifyCode : () => _URI + 'users/verify-code/',
 }

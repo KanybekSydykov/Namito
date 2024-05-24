@@ -15,36 +15,34 @@ import React, { useState } from "react";
 import Form from "./Form";
 import Otp from "./Otp";
 import { ENDPOINTS } from "@/API/endpoints";
+import { requestOtp } from "@/lib/fetch-post";
 
 const Login = ({ params }) => {
   const [isCodeSent, setIsCodeSent] = useState(false);
+  const [statusOtp, setStatusOtp] = useState("");
+  const [phone,setPhone]= useState("");
 
   const handleLogin = async (phone) => {
+    setPhone(phone);
     setIsCodeSent((prev) => !prev);
     const credentials = {
       phone_number: phone,
     };
-  
-    try {
-      const res = await fetch(ENDPOINTS.postLogin(), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-  
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-  
-      // Handle the fact that res.json() won't work
-      const data = await res.json(); // Assume success based on no error
-      console.log(data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    
+    const data = await requestOtp(credentials,ENDPOINTS.postLogin());
+    
+    setStatusOtp(data.status);
+    
   };
+
+  const handleResendOtp = async () => {
+    const data = await requestOtp({ phone_number: phone },ENDPOINTS.postLogin());
+    setStatusOtp(data.status);
+  };
+
+  console.log(statusOtp);
+
+
   
   
 
@@ -86,7 +84,7 @@ const Login = ({ params }) => {
         w={'120px'}
         >{params.locale}</Text>
 
-        {isCodeSent ? <Otp handleLogin={handleLogin} isCodeSent={isCodeSent}/> : <Form handleLogin={handleLogin}/>}
+        {isCodeSent ? <Otp handleLogin={handleLogin} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} otp={otp}/> : <Form handleLogin={handleLogin}/>}
        
 
        
