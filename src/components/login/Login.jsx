@@ -84,7 +84,7 @@ const Login = ({ params }) => {
         w={'120px'}
         >{params.locale}</Text>
 
-        {isCodeSent ? <Otp handleLogin={handleLogin} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} otp={otp}/> : <Form handleLogin={handleLogin}/>}
+        {isCodeSent ? <Otp handleLogin={handleLogin} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} statusOtp={statusOtp}/> : <Form handleLogin={handleLogin}/>}
        
 
        

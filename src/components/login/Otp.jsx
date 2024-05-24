@@ -14,7 +14,7 @@ import { motion } from "framer-motion";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 
 const PW = "1234";
-const Otp = ({ handleLogin, isCodeSent }) => {
+const Otp = ({ handleLogin, isCodeSent,statusOtp }) => {
   const [time, setTime] = useState(60);
   const [isError, setIsError] = useState(false);
 

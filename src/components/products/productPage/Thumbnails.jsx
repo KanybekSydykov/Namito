@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Box, Button, Flex, Grid, GridItem, Skeleton } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Skeleton, Text } from "@chakra-ui/react";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import Image from "next/image";
 import "@splidejs/react-splide/css";
@@ -154,7 +154,7 @@ const Thumbnails = ({ images, tags }) => {
             </Grid>
      
         </Flex>
-        {!images ? (
+        {images?.length === 0 ? (
           <Grid
             gridTemplateRows={"repeat(3,minmax(0,1fr))"}
             gap={"16px"}

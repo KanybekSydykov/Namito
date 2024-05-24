@@ -12,6 +12,7 @@ const Product = ({ width = "100%", details = undefined }) => {
   const params = useParams();
   const router = useRouter();
 
+
   return (
     <>
       <Flex

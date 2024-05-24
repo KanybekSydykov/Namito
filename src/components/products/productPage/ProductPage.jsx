@@ -14,6 +14,7 @@ import {
   AccordionIcon,
   List,
   ListItem,
+  Skeleton,
 } from "@chakra-ui/react";
 import ProductReview from "@/components/products/product-reviews/ProductReview";
 import ProductsSection from "@/components/products/products-section/ProductsSection";
@@ -22,7 +23,7 @@ import Thumbnails from "./Thumbnails";
 import ColorVariants from "./ColorVariants";
 import VariantSizes from "./VariantSizes";
 
-const ProductPage = ({ params, details, similarProds }) => {
+const ProductPage = ({ params, details = undefined, similarProds }) => {
   const [colorVariant, setColorVariant] = useState(undefined);
   const [uniqueVariantColors, setUniqueVariantColors] = useState([]);
   const [sizes, setSizes] = useState([]);
@@ -129,7 +130,9 @@ const ProductPage = ({ params, details, similarProds }) => {
           </Flex>
 
           {/* prod info */}
-          <Flex flexDir={"column"} px={{ base: "16px", lg: "0px" }}>
+          {
+            details ? 
+          <Flex flexDir={"column"} px={{ base: "16px", lg: "0px" }} flexGrow={1}>
             {/* product title */}
 
             <Text
@@ -294,6 +297,8 @@ const ProductPage = ({ params, details, similarProds }) => {
               </AccordionItem>
             </Accordion>
           </Flex>
+          : <Skeleton isLoaded={details} height={"100%"} flexGrow={1} />
+          }
         </Flex>
 
         <ProductReview productId={details.id} params={params} />
