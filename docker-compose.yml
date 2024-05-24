@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  frontend:
+    container_name: namito
+    build:
+      context: .
+      target: runner  # указываем, что нужно использовать стадию runner для сборки
+    ports:
+      - "3002:3002"  # пробрасываем порт, чтобы приложение было доступно снаружи
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - HOSTNAME=0.0.0.0
+    user: "1001"  # используем созданного пользователя для запуска
+
+
+volumes:
+  .next_cache:  # объявляем volume, если вы хотите сохранить кэш .next между перезапусками контейнера
