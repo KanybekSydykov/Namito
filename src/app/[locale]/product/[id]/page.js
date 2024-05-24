@@ -6,7 +6,7 @@ import React from 'react'
 const page = async({params}) => {
 
   const res = await fetch(`${ENDPOINTS.getProductData(params.id)}`, {
-    cache: 'no-cache',
+    cache: 'no-store',
     headers: {
       'Accept-Language': `${params.locale}`,
     },
@@ -19,7 +19,7 @@ const page = async({params}) => {
     headers: {
       'Accept-Language': `${params.locale}`,
     },
-    cache: 'no-cache',
+    cache: 'no-store',
   })
   
   const similarProds = await res2.json()

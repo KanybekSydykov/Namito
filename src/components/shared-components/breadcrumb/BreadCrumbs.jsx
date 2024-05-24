@@ -28,7 +28,7 @@ const BreadCrumbs = ({data,locale}) => {
     </BreadcrumbItem>
   
  { data.parent && <BreadcrumbItem>
-      <BreadcrumbLink as={Link} href={`/${locale}/category?id=${data.parent.slug}`}>{data.parent.name}</BreadcrumbLink>
+      <BreadcrumbLink as={Link} href={`/${locale}/category/${data.parent.slug}`}>{data.parent.name}</BreadcrumbLink>
     </BreadcrumbItem>}
   
     <BreadcrumbItem isCurrentPage>

@@ -8,13 +8,12 @@ import BreadCrumbs from '@/components/shared-components/breadcrumb/BreadCrumbs'
 import { ENDPOINTS } from '@/API/endpoints'
 import {notFound} from 'next/navigation'
 
-export const dynamic = 'force-dynamic'
 
 
 const page = async({ params ,searchParams}) => {
   const {slug} = params;
   const res = await fetch(`${ENDPOINTS.getCategoryData(slug)}`, {
-    cache:'no-cache',
+    cache:'no-store',
     headers: {
       'Accept-Language': `${params.locale}`,
     }

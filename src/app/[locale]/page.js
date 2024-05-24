@@ -2,9 +2,12 @@ import React from 'react'
 import Home from '@/components/homepage/Home'
 import { ENDPOINTS } from '@/API/endpoints'
 
+export const dynamic = 'force-dynamic'
+
+
 const page = async ({ params }) => {
   const res = await fetch(`${ENDPOINTS.getMainPage()}`, {
-    cache: 'no-cache',
+    cache: 'no-store',
     headers: {
       'Accept-Language': `${params.locale}`,
     }
@@ -12,7 +15,7 @@ const page = async ({ params }) => {
   const data = await res.json()
 
   const res2 = await fetch(`${ENDPOINTS.getNewProducts()}`, {
-    cache: 'no-cache',
+    cache: 'no-store',
     headers: {
       'Accept-Language': `${params.locale}`,
     }
@@ -20,7 +23,7 @@ const page = async ({ params }) => {
   const newProducts = await res2.json()
 
   const res3 = await fetch(`${ENDPOINTS.getAllProducts()}`, {
-    cache: 'no-cache',
+    cache: 'no-store',
     headers: {
       'Accept-Language': `${params.locale}`,
     }

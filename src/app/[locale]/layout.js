@@ -31,13 +31,13 @@ export async function generateStaticParams() {
 //   }
 // }
 
+export const dynamic = 'force-dynamic'
 
-export const dynamic = 'force-static'
 
 export default async function RootLayout({ children, params }) {
 
   const res = await fetch(`${ENDPOINTS.getLayoutData()}`, {
-    cache: 'no-cache',
+    cache: 'no-store',
     headers: {
       'Accept-Language': `${params.locale}`,
     }
