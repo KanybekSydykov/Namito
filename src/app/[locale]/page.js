@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 const page = async ({ params }) => {
   const res = await fetch(`${ENDPOINTS.getMainPage()}`, {
-    cache: 'no-store',
+    cache: 'no-cache',
     headers: {
       'Accept-Language': `${params.locale}`,
     }
@@ -35,9 +35,11 @@ const page = async ({ params }) => {
   const token = session?.access_token
 
   return (
+<div>
 
+  <Home data={data} newProducts={newProducts} products={products} token={token} locale={params.locale} />
+</div>
 
-      <Home data={data} newProducts={newProducts} products={products} token={token} locale={params.locale} />
 
   )
 }

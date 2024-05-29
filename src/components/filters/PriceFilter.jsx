@@ -1,4 +1,5 @@
-import React from "react";
+'use client';
+import React,{useState} from "react";
 import {
   RangeSlider,
   RangeSliderTrack,
@@ -15,7 +16,9 @@ import {
   Box,
 } from "@chakra-ui/react";
 
-const PriceFilter = ({prices, onChangePrice}) => {
+const PriceFilter = ({onChangePrice}) => {
+  const [prices, setPrices] = useState([5000, 25000]);
+
   return (
     <Accordion allowToggle defaultIndex={[0]}>
       <AccordionItem
@@ -55,7 +58,8 @@ const PriceFilter = ({prices, onChangePrice}) => {
           >
             <RangeSlider
               aria-label={["min", "max"]}
-              onChange={(val) => onChangePrice(val)}
+              onChange={(val) => setPrices(val)}
+              onChangeEnd={(val) => onChangePrice(val)}
               py={"15px"}
               min={50}
               max={50000}

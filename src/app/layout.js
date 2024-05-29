@@ -1,4 +1,4 @@
-import { Providers } from "./Theme";
+import { Providers } from "./[locale]/Theme";
 import "@/app/[locale]/globals.css";
 import Header from "@/components/header/Header";
 import FixedFooter from "@/components/footer/FixedFooter";
@@ -62,9 +62,9 @@ export default async function RootLayout({ children, params }) {
             </CounterProvider>
 
           </Providers>
-
-
       </body>
+
+
     </html>
   )
 

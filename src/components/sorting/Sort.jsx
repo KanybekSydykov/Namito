@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+
 import {
   Menu,
   MenuButton,
@@ -7,10 +9,22 @@ import {
   MenuOptionGroup,
   Button,
 } from "@chakra-ui/react";
+import { useParams } from "next/navigation";
 
-const Sort = () => {
+const Sort = ({handleSorting}) => {
+  const [value, setValue] = useState(undefined);
+  const { locale } = useParams();
+
+  const handleChange = (value) => {
+    // setValue(event.target.value);
+    setValue(value);
+    handleSorting(value);
+  };
+
+  // console.log(value);
+
   return (
-    <Menu closeOnSelect={true} >
+    <Menu closeOnSelect={true}>
       <MenuButton
         as={Button}
         bg={"transparent"}
@@ -29,35 +43,70 @@ const Sort = () => {
         right={"16px"}
         top={{ base: "0px", lg: "4px" }}
       >
-        Сортировать
+        {value ? value : "Сортировать"}
       </MenuButton>
-      <MenuList minWidth="240px" pos={'relative'} zIndex={2}>
+      <MenuList minWidth="240px" pos={"relative"} zIndex={40}>
         <MenuOptionGroup
           fontFamily={"roboto"}
           fontSize={"16px"}
           fontWeight={"400"}
           lineHeight={"24px"}
+          onChange={handleChange}
         >
-          <MenuItemOption py={"8px"} _hover={{ color: "orange" }} value="asc">
-            По популярности
+          <MenuItemOption
+            py={"8px"}
+            _hover={{ color: "orange" }}
+            value={locale === "ru" ? "По популярности" : "By popularity"}
+          >
+            {locale === "ru" ? " По популярности" : "By popularity"}
           </MenuItemOption>
-          <MenuItemOption py={"8px"} _hover={{ color: "orange" }} value="desc">
-            Скидки
+          <MenuItemOption
+            py={"8px"}
+            _hover={{ color: "orange" }}
+            value={locale === "ru" ? "Скидки" : "Discount"}
+          >
+            {locale === "ru" ? " Скидки" : "Discount"}
           </MenuItemOption>
-          <MenuItemOption py={"8px"} _hover={{ color: "orange" }} value="asc">
-            По возрастанию цены
+          <MenuItemOption
+            py={"8px"}
+            _hover={{ color: "orange" }}
+            value={
+              locale === "ru" ? "По возрастанию цены" : "Price from low to high"
+            }
+          >
+            {locale === "ru"
+              ? "  По возрастанию цены"
+              : "Price from low to high"}
           </MenuItemOption>
-          <MenuItemOption py={"8px"} _hover={{ color: "orange" }} value="desc">
-            По убыванию цены
+          <MenuItemOption
+            py={"8px"}
+            _hover={{ color: "orange" }}
+            value={
+              locale === "ru" ? "По убыванию цены" : "Price from high to low"
+            }
+          >
+            {locale === "ru" ? "По убыванию цены" : "Price from high to low"}
           </MenuItemOption>
-          <MenuItemOption py={"8px"} _hover={{ color: "orange" }} value="desc">
-            Новинки
+          <MenuItemOption
+            py={"8px"}
+            _hover={{ color: "orange" }}
+            value={locale === "ru" ? "Новинки" : "New"}
+          >
+            {locale === "ru" ? "Новинки" : "New"}
           </MenuItemOption>
-          <MenuItemOption py={"8px"} _hover={{ color: "orange" }} value="desc">
-            от А - до Я
+          <MenuItemOption
+            py={"8px"}
+            _hover={{ color: "orange" }}
+            value={locale === "ru" ? "от А - до Я" : "from A - to Z"}
+          >
+            {locale === "ru" ? "от А - до Я" : "from A - to Z"}
           </MenuItemOption>
-          <MenuItemOption py={"8px"} _hover={{ color: "orange" }} value="desc">
-            от Я - до А
+          <MenuItemOption
+            py={"8px"}
+            _hover={{ color: "orange" }}
+            value={locale === "ru" ? "от Я - до А" : "from Z - to A"}
+          >
+            {locale === "ru" ? "от Я - до А" : "from Z - to A"}
           </MenuItemOption>
         </MenuOptionGroup>
       </MenuList>

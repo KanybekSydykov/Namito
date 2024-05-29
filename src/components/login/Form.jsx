@@ -1,11 +1,15 @@
 'use client';
 
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import { Flex, Text,Box, Input, Button,  } from '@chakra-ui/react'
 import Image from 'next/image'
-const Form = ({handleLogin}) => {
+import {motion} from 'framer-motion'
+const Form = ({handleLogin,isError,isRequesting}) => {
 
   const [phone, setPhone] = useState("");
+
+  useEffect(() => {
+  }, [isError,isRequesting]);
 
   const handlePhoneChange = (event) => {
     setPhone(event.target.value);
@@ -33,85 +37,6 @@ const Form = ({handleLogin}) => {
           >
             Вход
           </Text>
-          {/* Providers */}
-          <Flex
-            w={"100%"}
-            flexDir={"column"}
-            gap={"16px"}
-            fontFamily={"roboto"}
-            fontWeight={"300"}
-            fontSize={"16px"}
-            lineHeight={"24px"}
-            color={"rgba(51, 51, 51, 1)"}
-          >
-            <Flex
-              flexDir={"row"}
-              gap={"16px"}
-              alignItems={"center"}
-              justifyContent={"center"}
-              py={"13px"}
-              border={"1px solid rgba(54, 54, 54, 1)"}
-              borderRadius={"10px"}
-            >
-              <Image
-                src={"/google-icon.svg"}
-                alt={"google"}
-                width={24}
-                height={24}
-              />
-
-              <Text>Вход через Google</Text>
-            </Flex>
-            <Flex
-              flexDir={"row"}
-              gap={"16px"}
-              alignItems={"center"}
-              justifyContent={"center"}
-              py={"13px"}
-              border={"1px solid rgba(54, 54, 54, 1)"}
-              borderRadius={"10px"}
-            >
-              <Image
-                src={"/apple-icon.svg"}
-                alt={"google"}
-                width={24}
-                height={24}
-              />
-
-              <Text>Вход через Apple</Text>
-            </Flex>
-          </Flex>
-
-          {/* Divider */}
-          <Box
-            position={"relative"}
-            width={"100%"}
-            _after={{
-              content: "''",
-              position: "absolute",
-              width: "100%",
-              height: "2px",
-              backgroundColor: "rgba(223, 223, 223, 1)",
-              top: "calc(50% - 1px)",
-              left: "0",
-              zIndex: "1",
-            }}
-          >
-            <Text
-              width={"max-content"}
-              px={"23px"}
-              bg={"#fff"}
-              fontFamily={"roboto"}
-              fontWeight={"300"}
-              fontSize={"16px"}
-              lineHeight={"24px"}
-              pos={"relative"}
-              zIndex={2}
-              mx={"auto"}
-            >
-              Или
-            </Text>
-          </Box>
           {/* OTP provider */}
           <Flex
             fontFamily={"roboto"}
@@ -123,7 +48,7 @@ const Form = ({handleLogin}) => {
             gap={"8px"}
             w={"100%"}
           >
-            <Text>Введите номер</Text>
+            <Text textAlign={'center'}>Введите номер</Text>
             <Input
               placeholder="+996"
               py={"13.5px"}
@@ -136,6 +61,17 @@ const Form = ({handleLogin}) => {
               _hover={{ borderColor: "orange" }}
               _focusVisible={{ borderColor: "orange" }}
             />
+                  {isError ? (
+        <Text
+          as={motion.p}
+          initial={{ x: 0 }}
+          animate={{ x: [0, 30, -30, 15, -15, 10, -10, 0] }}
+          textAlign={"center"}
+          color={"red"}
+        >
+          {isError}
+        </Text>
+      ) : null}
 
             <Button
               bg={"orange"}
@@ -156,6 +92,9 @@ const Form = ({handleLogin}) => {
 
               }}
               onClick={()=>handleLogin(phone)}
+              isLoading={isRequesting}
+              loadingText='Отправка...'
+              colorScheme='teal'
             >
               Получить код
             </Button>

@@ -17,7 +17,7 @@ import { ENDPOINTS } from "@/API/endpoints";
 import {login} from "@/lib/lib";
 import { useParams, useRouter } from "next/navigation";
 
-const Otp = ({ handleLogin, isCodeSent, statusOtp ,handleResendOtp,phone}) => {
+const Otp = ({ handleChangeNumber, isCodeSent, statusOtp ,handleResendOtp,phone}) => {
   const [time, setTime] = useState(60);
   const [isError, setIsError] = useState(false);
   const router = useRouter();
@@ -100,7 +100,7 @@ const Otp = ({ handleLogin, isCodeSent, statusOtp ,handleResendOtp,phone}) => {
         w={"24px"}
         h={"24px"}
         z={10}
-        onClick={handleLogin}
+        onClick={handleChangeNumber}
       />
       <Flex
         w={"100%"}
@@ -196,7 +196,9 @@ const Otp = ({ handleLogin, isCodeSent, statusOtp ,handleResendOtp,phone}) => {
           border: "1px solid #fff",
         }}
         onClick={() => handleOtpEnter(code)}
-        disabled={isRequesting ? true : false}
+        isLoading={isRequesting}
+        loadingText='Отправка...'
+        colorScheme='teal'
       >
         Войти
       </Button>

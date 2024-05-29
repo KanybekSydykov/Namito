@@ -53,7 +53,7 @@ const ProductListSlider = ({products,token}) => {
         }}
      
       >
-        <Box as={SplideTrack} w={"100%"} h={"100%"} py={'4px'}>
+        <Box as={SplideTrack} w={"100%"} h={"100%"} py={'4px'} px={'16px'}>
           {products.map((item) => (
             <SplideSlide key={item.id}>
              <Product details={item} token={token} />
@@ -91,6 +91,7 @@ const ProductListSlider = ({products,token}) => {
               src={"/arrow-next.svg"}
               width={11}
               height={14}
+              alt={"arrow"}
               style={{
                 width: "11.78px",
                 height: "14.74px",
@@ -122,6 +123,7 @@ const ProductListSlider = ({products,token}) => {
               src={"/arrow-next.svg"}
               width={11}
               height={14}
+              alt={"arrow"}
               style={{
                 width: "11.78px",
                 height: "14.74px",

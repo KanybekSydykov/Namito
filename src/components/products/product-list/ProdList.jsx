@@ -23,7 +23,7 @@ const ProdList = ({data,locale,token}) => {
     >
       {!isDesktop && <SubCategoriesList data={data.children} locale={locale} />}
 
-  { data.length > 0 ? <Grid templateColumns={{base:"repeat(2, minmax(171px, 1fr))",md:"repeat(3, minmax(171px, 1fr))",lg:"repeat(auto-fit, minmax(216px, 300px))"}} gap={"16px"}>
+  { data.length > 0 ? <Grid templateColumns={{base:"repeat(2, minmax(171px, 1fr))",md:"repeat(3, minmax(171px, 1fr))",lg:"repeat(auto-fit, minmax(216px, 300px))",xl:"repeat(4, minmax(171px, 1fr))"}} gap={"16px"}>
     
         {data.map((item, index) => (
         <GridItem key={index}>

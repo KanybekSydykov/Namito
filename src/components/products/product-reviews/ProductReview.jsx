@@ -76,7 +76,7 @@ const ProductReview = ({ title,params,productId ,token,reviews = [],reviewsAllow
         gap={'20px'}
         textAlign={'center'}
         >
-            <Image src={'/profile-icons/no-reviews-icon.svg'} width={50} height={50} />
+            <Image src={'/profile-icons/no-reviews-icon.svg'} alt={'no-reviews-icon'} width={50} height={50} />
             <Text
             fontWeight={'400'}
             >

@@ -53,7 +53,7 @@ export default function CheckOutModal({ children,handleSelectedPayment ,createOr
         <DrawerOverlay />
         <DrawerContent
           py={"35px"}
-          bottom={{ base: "0px", lg: "450px !important" }}
+          bottom={{ base: "0px", lg: "20% !important" }}
           width={{ base: "100%", lg: "400px" }}
           mx={"auto"}
           fontFamily={"roboto"}

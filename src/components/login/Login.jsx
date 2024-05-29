@@ -16,31 +16,46 @@ import Form from "./Form";
 import Otp from "./Otp";
 import { ENDPOINTS } from "@/API/endpoints";
 import { requestOtp } from "@/lib/apiServices";
+import Link from "next/link";
+import { ChevronRightIcon } from "@chakra-ui/icons";
 
 const Login = ({ params }) => {
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [statusOtp, setStatusOtp] = useState("");
   const [phone,setPhone]= useState("");
+  const [error, setError] = useState("");
+  const [isRequesting, setIsRequesting] = useState(false);
 
   const handleLogin = async (phone) => {
     setPhone(phone);
-    setIsCodeSent((prev) => !prev);
+    setIsRequesting(true);
     const credentials = {
       phone_number: phone,
     };
-    
-    const data = await requestOtp(credentials,ENDPOINTS.postLogin());
+
+    const data = await requestOtp(credentials,ENDPOINTS.postLogin(),params.locale);
+    console.log(data);
+    if(data.status >= 200 && data.status < 400){
+      setIsCodeSent(true);
+      setIsRequesting(false);
+    } else {
+      setIsCodeSent(false);
+      setError(data.data.error);
+      setIsRequesting(false);
+    }
     
     setStatusOtp(data.data.status);
     
   };
-
   const handleResendOtp = async () => {
     const data = await requestOtp({ phone_number: phone },ENDPOINTS.postLogin());
     setStatusOtp(data.status);
   };
 
 
+  function handleChangeNumber() {
+    setIsCodeSent(false);
+  }
 
   
   
@@ -76,14 +91,28 @@ const Login = ({ params }) => {
         justifyContent={'center'}
         gap={"40px"}
       >
-        <Text
+        <Flex 
+        flexDir={'row'} 
+        gap={'1px'}
         position={'absolute'}
         top={'0px'}
         left={0}
-        w={'120px'}
-        >{params.locale}</Text>
+        w={'max-content'}
+        alignItems={'center'}
+        >
+          <Link href={`/${params.locale}`}>
+          <Image src={'/home-icon-bw.svg'} alt="logo" width={20} height={20} />
+          </Link>
+          <ChevronRightIcon color={'gray.500'} w={'18px'} h={'18px'} />
+          <Text
 
-        {isCodeSent ? <Otp phone={phone} handleLogin={handleLogin} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} statusOtp={statusOtp}/> : <Form handleLogin={handleLogin}/>}
+        >
+          {params.locale === 'ru' ? 'Вход' : 'Login'}
+          </Text>
+        </Flex>
+
+
+        {isCodeSent ? <Otp phone={phone} handleChangeNumber={handleChangeNumber} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} statusOtp={statusOtp}/> : <Form isRequesting={isRequesting} isError={error} handleLogin={handleLogin}/>}
        
 
        

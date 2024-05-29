@@ -19,7 +19,6 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose,isAuth }) => {
       fontFamily={'roboto'}
       alignItems={"center"}
     >
-      <Link onClick={onClose} scroll={false} href={`/${locale}/profile?page=orders`}>
         <Flex
           display="flex"
           flexDirection="column"
@@ -40,9 +39,16 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose,isAuth }) => {
             height={20}
           />
           <Text>Заказы</Text>
+      <Link onClick={onClose} scroll={false} href={`/${locale}/profile?page=orders`} style={{
+        position: "absolute",
+        top : "0px",
+        left : "0px",
+        width : "100%",
+        height : "100%",
+      }}/>
+
         </Flex>
-      </Link>
-      <Link onClick={onClose} scroll={false} href={`/${locale}/${isAuth ? 'profile' : 'login'}`}>
+
         <Flex
           display="flex"
           flexDirection="column"
@@ -58,9 +64,17 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose,isAuth }) => {
         >
           <Image src={"/profile-icon-colored.svg"} alt="profile-icon" width={20} height={20} />
           <Text>{isAuth ? 'Профиль' : 'Войти'}</Text>
+      <Link onClick={onClose} scroll={false} href={`/${locale}/${isAuth ? 'profile' : 'login'}`} 
+      style={{
+        position: "absolute",
+        top : "0px",
+        left : "0px",
+        width : "100%",
+        height : "100%",
+      }}
+      />
         </Flex>
-      </Link>
-      <Link onClick={onClose} scroll={false} href={`/${locale}/favorites`}>
+
         <Flex
           display="flex"
           flexDirection="column"
@@ -76,8 +90,18 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose,isAuth }) => {
         >
           <Image src={"/favs-icon-colored.svg"} alt="favs-icon" width={20} height={20} />
           <Text>Избранное</Text>
+      <Link onClick={onClose} scroll={false} href={`/${locale}/favorites`} 
+      style={{
+        position: "absolute",
+        top : "0px",
+        left : "0px",
+        width : "100%",
+        height : "100%",
+      }}
+      />
+
         </Flex>
-      </Link>
+
     </Flex>
   );
 };

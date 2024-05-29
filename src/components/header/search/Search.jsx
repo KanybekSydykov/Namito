@@ -1,13 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Input, Box, useMediaQuery } from "@chakra-ui/react";
-import { motion, useAnimate } from "framer-motion";
+import { Input, Box, useMediaQuery, List, ListItem, Text } from "@chakra-ui/react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import Image from "next/image";
 
 const Search = ({ handleCatalogDrawer }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
-
   const [searchValue, setSearchValue] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const {locale} = useParams();
 
   function handleInputFocus(e, show = false) {
     if (isDesktop) {
@@ -16,6 +19,45 @@ const Search = ({ handleCatalogDrawer }) => {
     e.stopPropagation();
     setIsFocused(show);
   }
+  useEffect(() => {
+    if (isFocused) {
+      document.body.style.width ="100vw"
+      document.body.style.height = "100vh"
+      document.body.style.overflow = "hidden";
+      if(!searchValue.trim()){
+        setSearchResults([]);
+      }
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isFocused]);
+
+  const fetchSearchResults = async (query) => {
+    try {
+      const response = await fetch(`https://namito.tatadev.pro/api/products/search/?name=${query}`);
+      const data = await response.json();
+      setSearchResults(data || []);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    if (value.trim()) {
+      fetchSearchResults(value);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  console.log(searchResults);
 
   return (
     <>
@@ -33,7 +75,7 @@ const Search = ({ handleCatalogDrawer }) => {
           border={"1px solid #A4A4A4"}
           borderRadius={"10px"}
           w={{
-            base: isFocused ? "450px" : "226px",
+            base: isFocused ? "300px" : "226px",
             lg: isFocused ? "450px" : "280px",
             xl: isFocused ? "450px" : "387px",
           }}
@@ -44,16 +86,11 @@ const Search = ({ handleCatalogDrawer }) => {
           color={isFocused ? "#000" : "#A4A4A4"}
           outline={"none"}
           onClick={(e) => handleInputFocus(e, true)}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={handleSearchChange}
           ps={isFocused ? "16px" : "54px"}
           transition={"all 0.1s linear .1s"}
           zIndex={isFocused ? "3010" : "10"}
           h={"auto"}
-          // transform={
-          //   isFocused
-          //     ? "translateY(100px) translateX(-50px) scale(1.2)"
-          //     : "translateY(0px) translateX(0px) scale(1)"
-          // }
           _placeholder={{
             color: "#A4A4A4",
             fontFamily: "roboto",
@@ -93,8 +130,40 @@ const Search = ({ handleCatalogDrawer }) => {
           transition={"opacity .1s ease .15s"}
           backdropFilter={"blur(1px)"}
           onClick={(e) => handleInputFocus(e, false)}
-        />
+        >
+      {searchResults.length > 0 && (
+        <Box 
+        position="absolute" 
+        top={{base:"120px",lg:"80px"}} 
+        left="20px" 
+        right='20px'
+        width="auto" 
+        padding={'20px'}
+        borderRadius={'10px'}
+        bg="white" 
+        boxShadow="lg" 
+        zIndex="3000">
+          <List spacing={2}>
+            {searchResults.map((result) => (
+              <ListItem position={'relative'} display={'flex'} flexDir={'row'} gap={'20px'} justifyContent={'flex-start'} alignItems={'center'} key={result.id} p={2} borderBottom="1px solid #eaeaea" _hover={{bg: "#f5f5f5"}}>
+                <Image src={result.images.length > 0 ? result.images[0] : '/placeholder.jpeg'} alt={result.name} width={50} height={50} />
+                <Text fontSize="16px">{result.name}</Text>
+
+                <Link prefetch={true} href={`/${locale}/product/${result.id}`} style={{
+                  position:'absolute',
+                  top:'0px',
+                  left:'0px',
+                  width:'100%',
+                  height:'100%'
+                }} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      )}
+        </Box>
       </Box>
+
     </>
   );
 };

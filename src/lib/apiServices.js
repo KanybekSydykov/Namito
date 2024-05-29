@@ -1,24 +1,25 @@
-export async function requestOtp(credentials,url) {
+export async function requestOtp(credentials,url,locale) {
     try {
       const res = await fetch(url, {
         cache: 'no-store',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept-Language':`${locale}`,
         },
         body: JSON.stringify(credentials),
       });
   
-      if (!res.ok) {
-        return {status: res.status};
-      }
+      // if (!res.ok) {
+      //   return {status: res.status,response: res};
+      // }
   
       // Handle the fact that res.json() won't work
       const data = await res.json(); // Assume success based on no error
       const response = {data, status: res.status};
       return response;
     } catch (error) {
-      return {status:error.status};
+      return {status:error};
     }
   }
 

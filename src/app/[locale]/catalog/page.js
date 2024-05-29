@@ -16,7 +16,7 @@ const page = async({ params }) => {
   return (
     <Grid
       width={'100%'}
-      px={{base:'16px',lg:'0'}}
+      px={'16px'}
       maxW={{ base: "1200px", xl: "1472px" }}
       mx={'auto'}
       gridTemplateColumns=

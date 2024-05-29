@@ -12,6 +12,11 @@ const CatalogItem = ({locale,item}) => {
     width={'100%'}
     aspectRatio={1}
     overflow={'hidden'}
+    transition={'all 0.3s ease'}
+    _hover={{
+      filter: 'hue-rotate(40deg)',
+      bg: item.background_color === '#000000' ? 'orange' : item.background_color,
+    }}
   >
     <Link href={`/${locale}/category/${item.slug}`} style={{ padding:'16px',width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}>
     <Text

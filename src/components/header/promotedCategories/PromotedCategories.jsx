@@ -50,7 +50,9 @@ const PromotedCategories = ({data, isDesktop,params}) => {
 
         {data?.map((item, index) => (
           
-        <Link key={index} href={`/${params.locale}/category/${item.slug}`}>{item.name}</Link>
+        <Link key={index} prefetch={true} href={`/${params.locale}/category/${item.slug}`} style={{
+          minWidth:'max-content'
+        }}>{item.name}</Link>
         ))}
       </Flex>
 

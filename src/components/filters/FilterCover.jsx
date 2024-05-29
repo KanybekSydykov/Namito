@@ -21,9 +21,8 @@ import ColorFilter from "./ColorFilter";
 import SizeFilter from "./SizeFilter";
 
 const FilterCover = ({
-  prices,
-  onChangePrice,
   getCheckBoxValues,
+  onChangePrice,
   borders = false,
   data,
 }) => {
@@ -35,6 +34,7 @@ const FilterCover = ({
     <Flex
       flexDir={"column"}
       width={{ base: "100%", md: "300px" }}
+      h={'max-content'}
       px={"24px"}
       py={"20px"}
       border={{ base: "none", lg: "1px solid rgba(0,0,0,0.1)" }}
@@ -68,7 +68,7 @@ const FilterCover = ({
       </Flex>
 
       {/* PRICE */}
-      <PriceFilter prices={prices} onChangePrice={onChangePrice} />
+      <PriceFilter onChangePrice={onChangePrice}  />
 
     {colors.length > 0 ? <ColorFilter getValues={getCheckBoxValues} data={colors} /> : null}
     {sizes.length > 0 ?  <SizeFilter getValues={getCheckBoxValues} data={sizes}/> : null}

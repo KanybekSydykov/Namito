@@ -10,32 +10,29 @@ import Image from "next/image";
 import CheckBoxList from "./CheckBoxList";
 import ModalWindow from "../ui/ModalWindow";
 import FilterCover from "./FilterCover";
-const Filters = ({data}) => {
-  const [prices, setPrices] = useState([5000, 25000]);
+const Filters = ({data,handleFilters}) => {
+ 
   const [isMobile] = useMediaQuery("(max-width: 992px)");
 
-  useEffect(() => {
-    
-  },[isMobile])
-
   function onChangePrice(value) {
-    setPrices(value);
+    handleFilters('price',value)
   }
 
   function getCheckBoxValues(title, values) {
-    console.log(title, values);
+    handleFilters(title,values)
   }
+
 
   return (
     <>
       {isMobile ?
       
       <ModalWindow ButtonEl={ModalButton}>
-        <FilterCover data={data} borders={false}  prices={prices} onChangePrice={onChangePrice} getCheckBoxValues={getCheckBoxValues} />
+        <FilterCover data={data} onChangePrice={onChangePrice} borders={false} getCheckBoxValues={getCheckBoxValues} />
       </ModalWindow>
       
       :  (
-       <FilterCover data={data} prices={prices} onChangePrice={onChangePrice} getCheckBoxValues={getCheckBoxValues} />
+       <FilterCover data={data} onChangePrice={onChangePrice} getCheckBoxValues={getCheckBoxValues} />
       )}
     </>
   );

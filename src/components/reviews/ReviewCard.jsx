@@ -18,9 +18,9 @@ const ReviewCard = ({ item, width = "277px", hasDeleteButton = false }) => {
           <Image
             src={item.user.profile_picture}
             alt="user image"
-            width={64}
-            height={64}
-            style={{ width: "60px", height: "60px", borderRadius: "50%" }}
+            width={0}
+            height={0}
+            style={{ width: "64px", height: "64px", borderRadius: "50%" }}
           />
           <Text
             //styleName: 16 bold price;
@@ -46,7 +46,7 @@ const ReviewCard = ({ item, width = "277px", hasDeleteButton = false }) => {
                 borderRadius={'10px'}
                 pos={'relative'}
                 >
-                  <Image src={'/product.png'} fill />
+                  <Image src={'/product.png'} alt="product" fill />
                 </Box>
         <Flex
         flexDir={'column'}
@@ -149,8 +149,8 @@ const ReviewCard = ({ item, width = "277px", hasDeleteButton = false }) => {
               key={item.id}
               src={item.image}
               alt="review-star"
-              width={49}
-              height={64}
+              width={0}
+              height={0}
               style={{
                 width: "53px",
                 height: "64px",

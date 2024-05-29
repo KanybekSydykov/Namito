@@ -11,11 +11,9 @@ export function CounterProvider({ children }) {
   };
 
   const decrement = () => {
-    setCounter(prevCounter => prevCounter - 1);
-  };
-
-  const clearCounter = () => {
-    setCounter(0);
+    if(counter > 0){
+      setCounter(prevCounter => prevCounter - 1);
+    }
   };
 
   return (
@@ -24,7 +22,6 @@ export function CounterProvider({ children }) {
         counter,
         increment,
         decrement,
-        clearCounter
       }}
     >
       {children}

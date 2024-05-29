@@ -8,6 +8,7 @@ import BreadCrumbs from '@/components/shared-components/breadcrumb/BreadCrumbs'
 import { ENDPOINTS } from '@/API/endpoints'
 import {notFound} from 'next/navigation'
 import { getSession } from '@/lib/lib'
+import CategoryCover from '@/components/categories/CategoryCover'
 
 
 
@@ -38,40 +39,8 @@ const page = async({ params ,searchParams}) => {
 
   return (
     <div>
-     <BreadCrumbs locale={params.locale} data={{parent:data.parent,current:data.name}}/>
 
-      <Flex
-        maxW={{ base: "1200px", xl: "1472px" }}
-        mx={'auto'}
-        flexDir={'row'}
-        flexWrap={'wrap'}
-        justifyContent={'space-between'}
-        gap={'30px'}
-        px={{ base: '16px', xl: '0' }}
-        pb={'100px'}
-        position={'relative'}
-        pt={{ base: '0px' }}
-      >
-
-        {/* filters           */}
-
-        <Flex display={{ base: 'none', lg: 'flex' }}>
-
-          <SubCategoriesList data={data.children} locale={params.locale} />
-        </Flex>
-
-        <Filters data={data} />
-
-        <Sort />
-
-
-        {/* products          */}
-
-        <ProdList token={token} data={data.products} locale={params.locale}/>
-
-
-      </Flex>
-
+    <CategoryCover data={data} params={params} token={session ? token : undefined} />
     </div>
   )
 }

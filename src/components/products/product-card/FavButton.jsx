@@ -67,7 +67,7 @@ const FavButton = ({ id, token , isFavorite }) => {
       right={"0px"}
       top={"0px"}
       p={"1px"}
-      zIndex={20}
+      zIndex={5}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

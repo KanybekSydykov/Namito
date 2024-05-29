@@ -184,6 +184,7 @@ const Product = ({ width = "100%", details = undefined,token }) => {
             ))}
           </Flex>
           <Link
+          prefetch={true}
           href={`/${params.locale}/product/${details?.id}`}  style={{
             position:'absolute',
             top:0,
@@ -198,7 +199,14 @@ const Product = ({ width = "100%", details = undefined,token }) => {
           h={"49px"}
           borderRadius={"10px"}
           textAlign={"center"}
-          bg={"orange"}
+          bg={"transparent"}
+          border={'1px solid orange'}
+          color={'orange'}
+          _hover={{
+            bg: "orange",
+            color: "#fff",
+          }}
+          transition={"all 0.3s ease"}
           onClick={() => router.push(`/${params.locale}/product/${details?.id}`)}
         >
           <Text
@@ -206,7 +214,6 @@ const Product = ({ width = "100%", details = undefined,token }) => {
             fontWeight={"400"}
             fontSize={"18px"}
             lineHeight={"25.2px"}
-            color={"#fff"}
           >
             В корзину
           </Text>

@@ -33,6 +33,8 @@ const ProductPage = ({ params, details = undefined, similarProds,token,reviews }
   const [selectedVariant, setSelectedVariant] = useState({});
   const [colors, setColors] = useState([]);
 
+  console.log(details);
+
   useEffect(() => {
     function getVariants() {
       const uniqueColors = new Set();

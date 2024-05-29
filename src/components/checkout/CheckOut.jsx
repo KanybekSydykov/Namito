@@ -24,7 +24,6 @@ import CheckoutProducts from "./CheckoutProducts";
 import DeliveryMethod from "./DeliveryMethod";
 import { ENDPOINTS } from "@/API/endpoints";
 import { useRouter } from "next/navigation";
-import {clearCounter} from "@/lib/auth-content";
 
 const CheckOut = ({ data, token }) => {
   const [deliveryValue, setDeliveryValue] = useState("курьером");
@@ -103,7 +102,6 @@ const CheckOut = ({ data, token }) => {
           isClosable: true,
         });
         setCartData([]);
-        clearCounter();
         router.refresh();
       } else {
 

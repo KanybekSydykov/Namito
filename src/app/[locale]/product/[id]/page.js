@@ -49,7 +49,7 @@ const page = async({params}) => {
   return (
     <Container
     maxW={{ base: "1200px", xl: "1472px" }}
-    px={'16px'}
+    px={'0'}
     >
     <ProductPage params={params} reviews={reviews} details={data} similarProds={similarProds} token={session ? token : undefined} />
     </Container>

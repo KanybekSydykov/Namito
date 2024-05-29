@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect, useRef } from "react";
 import { CheckboxStyled } from "../ui/CheckBoxStyled";
 import {
@@ -18,7 +16,7 @@ import {
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import RatingCheckbox from "./RatingCheckbox";
 
-const CheckBoxList = ({ title, getValues, data = null,isLast=false,isRating=false, ...props }) => {
+const CheckBoxList = ({ title, getValues, data = null, isLast = false, isRating = false, ...props }) => {
   const [show, setShow] = useState(false);
   const handleToggle = () => setShow(!show);
   const { value, getCheckboxProps } = useCheckboxGroup({
@@ -28,20 +26,27 @@ const CheckBoxList = ({ title, getValues, data = null,isLast=false,isRating=fals
   const [collapseHeight, setCollapseHeight] = useState(0);
 
   useEffect(() => {
-    getValues(title, value);
     if (ref.current) {
       setCollapseHeight(ref.current.clientHeight);
     }
-  }, [value, ref.current, data]);
+  }, [ref.current]);
 
+  // Use a debounce function to limit the rate of state updates
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      getValues(title, value);
+    }, 300);
 
-  function getCollapseSize (length){
-    if(length === 5 ){
-      return 200
-    } else if(length > 5){
+    return () => clearTimeout(timeoutId);
+  }, [value]);
+
+  function getCollapseSize(length) {
+    if (length === 5) {
+      return 200;
+    } else if (length > 5) {
       return 5 * 44;
     } else {
-      return length * 44
+      return length * 44;
     }
   }
 
@@ -75,18 +80,15 @@ const CheckBoxList = ({ title, getValues, data = null,isLast=false,isRating=fals
           </h2>
           <AccordionPanel p={"0"} mt={"20px"}>
             <Collapse ref={ref} startingHeight={getCollapseSize(data.length)} in={show}>
-              <Stack  spacing={5} direction="column">
-                {/*COLOR VALUES
-             <Text>The selected checkboxes are: {value.sort().join(' and ')}</Text>
-              */}
-                {data.map((item) => (
+              <Stack spacing={5} direction="column">
+                {data.map((item, index) => (
                   <CheckboxStyled
-                    {...getCheckboxProps({ value: item.name })}
+                    {...getCheckboxProps({ value: isRating ? `${item + 1}` : item.name })}
                     {...props}
-                    color={ item.color ? item.color === '#ffffff' ? 'gray' : item.color : "#cb4508"}
-                    key={item.name}
+                    color={item.color ? item.color === '#ffffff' ? 'red' : item.color : "#cb4508"}
+                    key={index}
                   >
-                   {isRating ? <RatingCheckbox rate={item} /> : <Text ms={"6.5px"}>{item.name}</Text>}
+                    {isRating ? <RatingCheckbox rate={item} /> : <Text ms={"6.5px"}>{item.name}</Text>}
                   </CheckboxStyled>
                 ))}
               </Stack>

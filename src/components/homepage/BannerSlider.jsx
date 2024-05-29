@@ -13,6 +13,8 @@ const BannerSlider = ({ images }) => {
     return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
   }
 
+  console.log(images);
+
   return (
     <>
       <Box
@@ -50,6 +52,7 @@ const BannerSlider = ({ images }) => {
             ) : (<video
             src={item.image}
             key={index}
+            alt="Image 1"
             controls
             autoPlay
             playsInline
@@ -95,6 +98,7 @@ const BannerSlider = ({ images }) => {
               width={11}
               height={14}
               alt={"arrow"}
+              loading="lazy"
               style={{
                 width: "11.78px",
                 height: "14.74px",
