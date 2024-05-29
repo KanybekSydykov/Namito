@@ -15,7 +15,7 @@ import React, { useState } from "react";
 import Form from "./Form";
 import Otp from "./Otp";
 import { ENDPOINTS } from "@/API/endpoints";
-import { requestOtp } from "@/lib/fetch-post";
+import { requestOtp } from "@/lib/apiServices";
 
 const Login = ({ params }) => {
   const [isCodeSent, setIsCodeSent] = useState(false);
@@ -31,7 +31,7 @@ const Login = ({ params }) => {
     
     const data = await requestOtp(credentials,ENDPOINTS.postLogin());
     
-    setStatusOtp(data.status);
+    setStatusOtp(data.data.status);
     
   };
 
@@ -40,7 +40,6 @@ const Login = ({ params }) => {
     setStatusOtp(data.status);
   };
 
-  console.log(statusOtp);
 
 
   
@@ -84,7 +83,7 @@ const Login = ({ params }) => {
         w={'120px'}
         >{params.locale}</Text>
 
-        {isCodeSent ? <Otp handleLogin={handleLogin} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} statusOtp={statusOtp}/> : <Form handleLogin={handleLogin}/>}
+        {isCodeSent ? <Otp phone={phone} handleLogin={handleLogin} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} statusOtp={statusOtp}/> : <Form handleLogin={handleLogin}/>}
        
 
        

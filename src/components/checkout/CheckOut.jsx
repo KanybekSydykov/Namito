@@ -3,31 +3,134 @@
 import {
   Flex,
   Text,
-  Box,
   Radio,
   RadioGroup,
   Stack,
   Button,
-  Grid,
   Checkbox,
+  textDecoration,
+  Highlight,
+  Spinner,
+  useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import Image from "next/image";
+import { useState} from "react";
 import CheckOutModal from "./CheckOutModal";
 import { useParams } from "next/navigation";
 import CartItem from "../cart/CartItem";
-import AdressModal from "../shared-components/adress-modal/AddressModal";
-const CheckOut = () => {
-  const [deliveryValue, setDeliveryValue] = useState("1");
-  const [adressValue, setAdressValue] = useState("1");
+import { deleteData, postData, putData } from "@/lib/apiServices";
+import ProfileAdresses from "../profile/ProfileAdresses";
+import {motion } from "framer-motion";
+import CheckoutProducts from "./CheckoutProducts";
+import DeliveryMethod from "./DeliveryMethod";
+import { ENDPOINTS } from "@/API/endpoints";
+import { useRouter } from "next/navigation";
+import {clearCounter} from "@/lib/auth-content";
+
+const CheckOut = ({ data, token }) => {
+  const [deliveryValue, setDeliveryValue] = useState("курьером");
+  const [adressValue, setAdressValue] = useState("");
+  const [paymentValue, setPaymentValue] = useState("");
   const { locale } = useParams();
+  const [cartData, setCartData] = useState(data.items);
+  const [checkedItems, setCheckedItems] = useState(
+   cartData ? cartData.map((item) => ({ id: item.id, to_purchase: true }) ): []
+  );
+  const [orderPending, setOrderPending] = useState(false);
+  const router = useRouter();
+
+  const toast = useToast();
+
+  function handleCheckedItem(id) {
+    setCheckedItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, to_purchase: !item.to_purchase } : item
+      )
+    );
+
+    console.log(checkedItems);
+  }
+
+
+  function handleSelectedAddress(value) {
+    setAdressValue(value);
+  }
+
+  function handleSelectedPayment(value) {
+    setPaymentValue(value);
+  }
+
+  async function handleDeleteCartItem(id) {
+    const filteredCartData = cartData.filter((item) => item.id !== id);
+    setCartData(filteredCartData);
+    setCheckedItems(prev => {
+      const newCheckedItems = new Set(prev);
+      newCheckedItems.delete(id);
+      return newCheckedItems;
+    });
+    try {
+      const response = await deleteData(id, token);
+      if (response.status >= 200) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function createOrder() {
+
+    const newCartData = await putData({items:checkedItems},token,ENDPOINTS.putCartQuantity());
+
+    console.log(newCartData);
+    const credentials ={
+      delivery_method : deliveryValue,
+      user_address : adressValue,
+      payment_method : paymentValue,
+    }
+
+    try {
+      setOrderPending(true);
+      const response = await postData(credentials,token, ENDPOINTS.postOrder());
+      console.log(response);
+
+      if(response.status >= 200 && response.status < 400){
+        setOrderPending(false);
+        toast({
+          title: "Поздравляем!",
+          description: "Ваш заказ успешно создан!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setCartData([]);
+        clearCounter();
+        router.refresh();
+      } else {
+
+      setOrderPending(false);
+      toast({
+        title: "Ошибка!",
+        description: "В корзине нет товаров для покупки!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setOrderPending(false);
+    }
+    
+  }
 
   return (
     <Flex
       maxW={{ base: "1200px", xl: "1472px" }}
       flexDir={"column"}
       mx={"auto"}
-      pb={'120px'}
+      pb={"120px"}
+      px={"16px"}
     >
       <Flex
         display={{ base: "flex", lg: "none" }}
@@ -35,7 +138,6 @@ const CheckOut = () => {
         flexDir={"row"}
         gap={"16px"}
         py={"10px"}
-        px={"16px"}
         alignItems={"center"}
         boxShadow={"0 1px 4px 0 rgba(151, 151, 151, 0.25)"}
       >
@@ -49,151 +151,41 @@ const CheckOut = () => {
         </Text>
       </Flex>
 
-      <Flex flexDir={{ base: "column", lg: "row" }} gap={"30px"} mt={{base:'20px',lg:'40px'}}>
-        {/* Products */}
-        <Flex
-          fontFamily={"roboto"}
-          flexDir={"column"}
-          alignItems={"center"}
-          maxW={{ base: "100%", lg: "544px" }}
-          gap={"16px"}
-          p={{ base: "30px 10px", lg: "40px 20px 80px" }}
-          mx={{ base: "16px", lg: "0px" }}
-          boxShadow={"0 0 4px 0 rgba(151, 151, 151, 0.25)"}
-          borderRadius={"10px"}
-          height={"max-content"}
+      <Flex
+        flexDir={{ base: "column", lg: "row" }}
+        gap={"30px"}
+        mt={{ base: "20px", lg: "40px" }}
+        position={"relative"}
+      >
+
+     {orderPending &&   <Flex
+        position={'absolute'}
+        top={0}
+        left={0}
+        w={'100%'}
+        h={'100%'}
+        bg={'rgba(0,0,0,0.5)'}
+        justifyContent={'center'}
+        alignItems={'center'} 
+        zIndex={1}
         >
-          <Text
-            fontWeight={"600"}
-            fontSize={"18px"}
-            lineHeight={"25.2px"}
-            color={"#000"}
-          >
-            Товары
-          </Text>
+          <Spinner color="orange" size="xl" />
 
-          <Stack direction={'column'} gap={'16px'}>
-            <Checkbox colorScheme={'red'} defaultChecked>
-            <Flex
-              flexDir={{ base: "column", lg: "row" }}
-              gap={"20px"}
-              pos={"relative"}
-              pb={"16px"}
-              _after={{
-                content: '""',
-                position: "absolute",
-                bottom: 0,
-                left: "10px",
-                right: "10px",
-                width: "auto",
-                height: "1px",
-                background: "rgba(232, 236, 239, 1)",
-              }}
-            >
-              <Flex
-                flexDir={"column"}
-                gap={"16px"}
-                mt={{ base: "20px", lg: "0px" }}
-              >
-                <Box
-                  width={"150px"}
-                  h={"170px"}
-                  borderRadius={"10px"}
-                  boxShadow={"0 0 1px 0 rgba(135, 135, 135, 0.25)"}
-                  pos={"relative"}
-                  overflow={"hidden"}
-                >
-                  <Image
-                    src={"/product.png"}
-                    width={150}
-                    height={170}
-                    alt={"product"}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                </Box>
-              </Flex>
-              <Flex flexDir={"column"} gap={"16px"}>
-                <Text
-                  noOfLines={2}
-                  textOverflow={"ellipsis"}
-                  whiteSpace={"pre-line"}
-                  fontWeight={"400"}
-                >
-                  Шоссейный велосипед Missile Шоссейный велосипед Missile
-                  Шоссейный велосипед Missile
-                </Text>
-                <Flex flexDir={"row"} gap={"14px"}>
-                  <Text>Цена за товар</Text>
-                  <Text fontWeight={"700"}>40 000 сом</Text>
-                </Flex>
-                <Flex flexDir={"row"} gap={"14px"}>
-                  <Text>Размер</Text>
-                  <Text fontWeight={"700"}>25 / S</Text>
-                </Flex>
-                <Flex flexDir={"row"} gap={"14px"}>
-                  <Text>Цвет</Text>
-                  <Text
-                    fontWeight={"700"}
-                    pos={"relative"}
-                    _after={{
-                      content: '""',
-                      position: "absolute",
-                      top: "calc(50% - 5px)",
-                      right: "-20px",
-                      width: "10px",
-                      height: "10px",
-                      borderRadius: "50%",
-                      background: "rgba(10, 180, 222, 1)",
-                    }}
-                  >
-                    Синий{" "}
-                  </Text>
-                </Flex>
-              </Flex>
-            </Flex>
-            </Checkbox>
-          </Stack>
-        </Flex>
-        <Flex flexDir={"column"} flexGrow={1} gap={'30px'}>
+        </Flex>}
+        {/* Products */}
+      <CheckoutProducts cartData={cartData} checkedItems={checkedItems} handleCheckedItem={handleCheckedItem} handleDeleteCartItem={handleDeleteCartItem} />
+        <Flex flexDir={"column"} flexGrow={1} gap={"30px"}>
           {/* Delivery method */}
-          <Flex
-            flexDir={"column"}
-            gap={"30px"}
-            p={"30px 10px"}
-            mx={"16px"}
-            boxShadow={"0 0 4px 0 rgba(151, 151, 151, 0.25)"}
-            borderRadius={"10px"}
-            alignItems={"center"}
-          >
-            <Text
-              fontWeight={"600"}
-              fontSize={"18px"}
-              lineHeight={"25.2px"}
-              color={"#000"}
-            >
-              Способ доставки
-            </Text>
-
-            <RadioGroup
-              onChange={(value) => setDeliveryValue(value)}
-              value={deliveryValue}
-            >
-              <Stack direction="row" gap={"30px"}>
-                <Radio value="1" size={"lg"} colorScheme={"red"}>
-                  Курьер
-                </Radio>
-                <Radio value="2" size={"lg"} colorScheme={"red"}>
-                  Самовывоз
-                </Radio>
-              </Stack>
-            </RadioGroup>
-          </Flex>
+        <DeliveryMethod deliveryValue={deliveryValue} setDeliveryValue={setDeliveryValue} />
 
           {/* Addresses */}
-          <Flex
+         {deliveryValue === 'курьером'
+          && 
+         <Flex as={motion.div}
+            initial={{opacity:0}}
+            animate={{opacity:1}}
+            exit={{opacity:0,x:300}}
+            transition={{duration:0.3,delay:0.3}}
             flexDir={"column"}
             gap={"30px"}
             p={"30px 10px"}
@@ -208,74 +200,11 @@ const CheckOut = () => {
               lineHeight={"25.2px"}
               color={"#000"}
             >
-              Способ доставки
+              Адрес доставки
             </Text>
 
-            <RadioGroup
-              onChange={(value) => setAdressValue(value)}
-              value={adressValue}
-            >
-              <Stack direction="column" gap={"30px"}>
-                <Radio value="1" size={"lg"} colorScheme={"red"}>
-                  Бишкек, ул. Абдрахманова 1/1, кв. 12, подъезд 1
-                </Radio>
-                <Radio value="2" size={"lg"} colorScheme={"red"}>
-                  Бишкек, ул. Абдрахманова 1/1, кв. 12, подъезд 2
-                </Radio>
-              </Stack>
-            </RadioGroup>
-
-            <AdressModal>
-              <Button
-                bg={"#fff"}
-                border={"1px solid rgba(160, 160, 160, 1)"}
-                borderRadius={"10px"}
-                display={"flex"}
-                flexDir={"row"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                gap={"10px"}
-                minW={"338px"}
-                maxW={"380px"}
-                py={"8px"}
-                h={"auto"}
-                role="group"
-                transition={"all .3s ease"}
-                _hover={{
-                  bg: "orange",
-                  borderColor: "orange",
-                }}
-              >
-                <Flex
-                  w={"24px"}
-                  h={"24px"}
-                  filter={"grayscale(100%)"}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  _groupHover={{ filter: "brightness(0) invert(1)" }}
-                >
-                  <Image src={"/plus-icon.svg"} width={14} height={14} 
-                  style={{
-                    transition:'all .3s ease'
-                  }}
-                  />
-                </Flex>
-                <Text
-                  fontFamily={"roboto"}
-                  fontWeight={"300"}
-                  fontSize={"18px"}
-                  lineHeight={"27px"}
-                  color={"rgba(54, 54, 54, 1)"}
-                  transition={"all .3s ease"}
-                  _groupHover={{
-                    color: "#fff",
-                  }}
-                >
-                  Добавить адрес
-                </Text>
-              </Button>
-            </AdressModal>
-          </Flex>
+           <ProfileAdresses token={token} handleSelectedAddress={handleSelectedAddress} />
+          </Flex>}
 
           {/* Payment Method */}
           <Flex
@@ -301,10 +230,13 @@ const CheckOut = () => {
               color={"#000"}
               mt={"20px"}
             >
-              Введите способ оплаты
+              <Highlight query={paymentValue} styles={{color:'orange',fontSize:'18px',textDecoration:'underline'}}>
+
+            {paymentValue ? `Выбраный способ оплаты ${paymentValue} `:  'Выберите способ оплаты'}
+              </Highlight>
             </Text>
 
-            <CheckOutModal>
+            <CheckOutModal handleSelectedPayment={handleSelectedPayment} createOrder={createOrder}>
               <Button
                 mt={"16px"}
                 width={"100%"}
@@ -330,7 +262,7 @@ const CheckOut = () => {
               >
                 <Text>
                   {locale === "ru"
-                    ? "Выбрать способ оплаты"
+                    ? `${!paymentValue ? 'Выбрать' : 'Изменить'} способ оплаты`
                     : "Choose payment method"}
                 </Text>
               </Button>

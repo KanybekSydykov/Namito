@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Flex, Text } from "@chakra-ui/react";
 
-const HeaderProfileLinks = ({ isDesktop, locale, onClose }) => {
+
+const HeaderProfileLinks = ({ isDesktop, locale, onClose,isAuth }) => {
+  useEffect(() => {}, [isAuth]);
   return (
     <Flex
       flexDir={"row"}
@@ -17,7 +19,7 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose }) => {
       fontFamily={'roboto'}
       alignItems={"center"}
     >
-      <Link onClick={onClose} scroll={false} href={`/${locale}/profile/orders#`}>
+      <Link onClick={onClose} scroll={false} href={`/${locale}/profile?page=orders`}>
         <Flex
           display="flex"
           flexDirection="column"
@@ -40,7 +42,7 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose }) => {
           <Text>Заказы</Text>
         </Flex>
       </Link>
-      <Link onClick={onClose} scroll={false} href={`/${locale}/login`}>
+      <Link onClick={onClose} scroll={false} href={`/${locale}/${isAuth ? 'profile' : 'login'}`}>
         <Flex
           display="flex"
           flexDirection="column"
@@ -55,7 +57,7 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose }) => {
           transition={"all 0.2s ease-in-out"}
         >
           <Image src={"/profile-icon-colored.svg"} alt="profile-icon" width={20} height={20} />
-          <Text>Войти</Text>
+          <Text>{isAuth ? 'Профиль' : 'Войти'}</Text>
         </Flex>
       </Link>
       <Link onClick={onClose} scroll={false} href={`/${locale}/favorites`}>

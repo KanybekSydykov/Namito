@@ -1,6 +1,7 @@
 import React from 'react'
 import Home from '@/components/homepage/Home'
 import { ENDPOINTS } from '@/API/endpoints'
+import { getSession } from '@/lib/lib'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,10 +31,13 @@ const page = async ({ params }) => {
   })
   const products = await res3.json()
 
+  const session = await getSession();
+  const token = session?.access_token
+
   return (
 
 
-      <Home data={data} newProducts={newProducts} products={products} locale={params.locale} />
+      <Home data={data} newProducts={newProducts} products={products} token={token} locale={params.locale} />
 
   )
 }

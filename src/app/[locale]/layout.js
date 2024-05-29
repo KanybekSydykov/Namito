@@ -5,7 +5,8 @@ import FixedFooter from "@/components/footer/FixedFooter";
 import { i18n, Locale } from "@/i18n-config";
 import Footer from "@/components/footer/Footer";
 import { ENDPOINTS } from "@/API/endpoints";
-import { AuthProvider } from "@/lib/auth-content";
+import {  CounterProvider } from "@/lib/auth-content";
+import { getSession } from "@/lib/lib";
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ lang: locale }));
@@ -35,32 +36,30 @@ export const dynamic = 'force-dynamic'
 
 
 export default async function RootLayout({ children, params }) {
-
   const res = await fetch(`${ENDPOINTS.getLayoutData()}`, {
-    cache: 'no-store',
+    cache: 'no-cache',
     headers: {
       'Accept-Language': `${params.locale}`,
     }
   })
   const data = await res.json()
-
   const headerData = { categories: data.categories, promoted: data.promoted_categories }
-
   const footerData = { phones: data.phones, emails: data.emails, socials: data.social_links, payment: data.payment_methods }
 
+  const isAuth = await getSession();
 
   return (
     <html lang={params.locale}  >
       <body className={`body`}>
 
           <Providers>
-            <AuthProvider>
+            <CounterProvider>
 
-            <Header data={headerData} params={params} />
+            <Header data={headerData} params={params} isAuth= {isAuth ? true : false} token={ isAuth ? isAuth.access_token : null} />
             {children}
             <FixedFooter params={params} />
             <Footer data={footerData} />
-            </AuthProvider>
+            </CounterProvider>
 
           </Providers>
 

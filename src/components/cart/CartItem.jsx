@@ -1,22 +1,73 @@
 "use client";
 
-import React from "react";
-import { Box, Flex, Text, Button } from "@chakra-ui/react";
+import React,{useState} from "react";
+import { Box, Flex, Text, Button, useToast } from "@chakra-ui/react";
 import Image from "next/image";
 import DeleteIcon from "@/../public/profile-icons/delete-icon.svg";
 import PlusIcon from "@/../public/plus-icon.svg";
 import MinusIcon from "@/../public/minus-icon.svg";
+import { useCounter } from "@/lib/auth-content";
+import { useAnimate } from "framer-motion";
 
-const CartItem = () => {
+const CartItem = ({ item, handleDeleteCartItem, border = true,handleQuantityChange }) => {
+  
+  const [scope, animate] = useAnimate();
+  const [quantity,setQuantity] = useState(item.quantity || 1);
+  const { decrement, increment } = useCounter();
+  const colorCode = item.product_variant.color.color;
+  const colorName = item.product_variant.color.name;
+  const size = item.product_variant.size.name;
+  const price = item.product_variant.price + " сом";
+  const image = item.product_image ? item.product_image : '/placeholder.jpeg';
+  const name = item.product_name;
+  const toast = useToast();
+
+  async function handleDelete() {
+    if(scope.current){
+      await animate(scope.current, { opacity: 0,x:-200 }, { duration: 0.3 });
+      decrement();
+      handleDeleteCartItem(item.id);
+    }
+
+    toast({
+      title: "Товар успешно удален из корзины",
+      status: "success",
+      duration: 3000,
+      position: "top-left",
+      isClosable: true,
+    })
+  }
+
+  function handleItemQuantity(increase = false,decrease = false) {
+    if(increase){
+      increment();
+      handleQuantityChange(item.id, quantity + 1);
+      setQuantity((prev) => prev + 1);
+    }else if(decrease){
+      if(quantity === 1){
+        handleDelete();
+        return;
+      }
+      handleQuantityChange(item.id, quantity - 1);
+      setQuantity((prev) => prev - 1);
+      decrement();
+    }
+
+  }
+
+
+
   return (
     <Flex
+    ref={scope}
       flexDir={"column"}
       gap={"16px"}
       px={"20px"}
       pb={"16px"}
       pos={"relative"}
+      minW={{ base: "100%", lg: "450px" }}
       _after={{
-        content: '""',
+        content: `${border ? '""' : "none"}`,
         position: "absolute",
         bottom: 0,
         left: "16px",
@@ -37,7 +88,7 @@ const CartItem = () => {
             overflow={"hidden"}
           >
             <Image
-              src={"/product.png"}
+              src={image}
               width={99}
               height={113}
               alt={"product"}
@@ -64,19 +115,18 @@ const CartItem = () => {
             color={"rgba(49, 49, 49, 1)"}
             mb={"4px"}
           >
-            Шоссейный велосипед Missile Шоссейный велосипед Missile Шоссейный
-            велосипед Missile
+            {name}
           </Text>
           <Flex flexDir={"row"} gap={"14px"}>
             <Text>Цена за товар</Text>
             <Text fontWeight={"700"} color={"rgba(49, 49, 49, 1)"}>
-              40 000 сом
+              {price}
             </Text>
           </Flex>
           <Flex flexDir={"row"} gap={"14px"}>
             <Text>Размер</Text>
             <Text fontWeight={"700"} color={"rgba(49, 49, 49, 1)"}>
-              25 / S
+              {size}
             </Text>
           </Flex>
           <Flex flexDir={"row"} gap={"14px"}>
@@ -93,10 +143,10 @@ const CartItem = () => {
                 width: "10px",
                 height: "10px",
                 borderRadius: "50%",
-                background: "rgba(10, 180, 222, 1)",
+                background: colorCode,
               }}
             >
-              Синий{" "}
+              {colorName}{" "}
             </Text>
           </Flex>
         </Flex>
@@ -114,6 +164,7 @@ const CartItem = () => {
           _hover={{
             filter: "grayscale(0%)",
           }}
+          onClick={() => handleItemQuantity(false,true)}
         >
           <Image
             src={MinusIcon}
@@ -140,7 +191,7 @@ const CartItem = () => {
           fontFamily={"roboto"}
           py={"8px"}
         >
-          1
+          {quantity}
         </Text>
         <Button
           w={"40px"}
@@ -153,6 +204,7 @@ const CartItem = () => {
           _hover={{
             filter: "grayscale(0%)",
           }}
+          onClick={() => handleItemQuantity(true)}
         >
           <Image
             src={PlusIcon}
@@ -177,6 +229,7 @@ const CartItem = () => {
           _hover={{
             filter: "grayscale(0%)",
           }}
+          onClick={handleDelete}
         >
           <Image
             src={DeleteIcon}

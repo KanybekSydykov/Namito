@@ -24,24 +24,28 @@ const profileDataSkeleton = [
     id: 1,
     name: "Мои данные",
     icon: ProfileIcon,
+    isPage:false,
     url: "settings",
   },
   {
     id: 2,
     name: "Мои заказы",
     icon: OrdersIcon,
+    isPage:false,
     url: "orders",
   },
   {
     id: 3,
     name: "Мои адреса",
     icon: AdressIcon,
+    isPage:false,
     url: "adresses",
   },
   {
     id: 4,
     name: "Мои отзывы",
     icon: ReviewsIcon,
+    isPage:false,
     url: "reviews",
   },
   {
@@ -49,28 +53,36 @@ const profileDataSkeleton = [
     name: "Избранные товары",
     icon: FavsIcon,
     url: "favourites",
+    isPage:false,
   },
   {
     id: 6,
     name: "О нас",
     icon: AboutIcon,
     url: "about",
+    isPage:true,
   },
   {
     id: 7,
     name: "Доставка",
     icon: DeliveryIcon,
     url: "delivery",
+    isPage:true,
   },
   {
     id: 8,
     name: "Язык приложения",
     icon: LangIcon,
     url: "language",
+    isPage:false,
+
   },
 ];
 
-const ProfileNav = () => {
+const serverProfileImg =
+  "https://raw.githubusercontent.com/tturdumamatovv/Namito/main/assets/images/default-user.jpg";
+
+const ProfileNav = ({data}) => {
   const path = usePathname();
   const { locale } = useParams();
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
@@ -132,25 +144,12 @@ const ProfileNav = () => {
               alignItems={"center"}
               py={"14px"}
             >
-              <Box w={"80px"} h={"80px"} pos={"relative"}>
+              <Box w={"80px"} h={"80px"} borderRadius={'50px'} overflow={"hidden"} pos={"relative"}>
                 <Image
-                  src={ProfileIcon}
+                  src={data.profile_picture === serverProfileImg ? ProfileIcon : data.profile_picture}
                   alt={"profile"}
                   width={80}
                   height={80}
-                />
-                <Image
-                  src={CaptureIcon}
-                  width={30}
-                  height={30}
-                  alt="capture"
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    right: 0,
-                    cursor: "pointer",
-                    zIndex: 1,
-                  }}
                 />
               </Box>
               <Flex flexDir={"column"} gap={"16px"}>
@@ -160,7 +159,7 @@ const ProfileNav = () => {
                   lineHeight={"22px"}
                   color={"rgba(203, 70, 9, 1)"}
                 >
-                  Асанов Асан
+                  {data.full_name}
                 </Text>
                 <Text
                   fontWeight={"400"}
@@ -183,7 +182,7 @@ const ProfileNav = () => {
           (item, id) =>
             id !== 0 && (
               <Link
-                href={`/${locale}/profile?page=${item.url}`}
+                href={item.isPage ? `/${locale}/${item.url}` : `/${locale}/profile?page=${item.url}`}
                 key={item.id}
                 style={{ width: "100%" }}
               >
@@ -240,7 +239,7 @@ const ProfileNav = () => {
               </Link>
             )
         )}
-        <ProfileExitDelete>
+        <ProfileExitDelete >
           <Flex
             flexDir={"row"}
             justifyContent={"space-between"}

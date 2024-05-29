@@ -16,9 +16,9 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { get } from "http";
+import RatingCheckbox from "./RatingCheckbox";
 
-const CheckBoxList = ({ title, getValues, data = null,isLast=false, ...props }) => {
+const CheckBoxList = ({ title, getValues, data = null,isLast=false,isRating=false, ...props }) => {
   const [show, setShow] = useState(false);
   const handleToggle = () => setShow(!show);
   const { value, getCheckboxProps } = useCheckboxGroup({
@@ -34,7 +34,16 @@ const CheckBoxList = ({ title, getValues, data = null,isLast=false, ...props }) 
     }
   }, [value, ref.current, data]);
 
-  console.log(ref);
+
+  function getCollapseSize (length){
+    if(length === 5 ){
+      return 200
+    } else if(length > 5){
+      return 5 * 44;
+    } else {
+      return length * 44
+    }
+  }
 
   return (
     <>
@@ -65,24 +74,24 @@ const CheckBoxList = ({ title, getValues, data = null,isLast=false, ...props }) 
             </AccordionButton>
           </h2>
           <AccordionPanel p={"0"} mt={"20px"}>
-            <Collapse ref={ref} startingHeight={200} in={show}>
+            <Collapse ref={ref} startingHeight={getCollapseSize(data.length)} in={show}>
               <Stack  spacing={5} direction="column">
                 {/*COLOR VALUES
              <Text>The selected checkboxes are: {value.sort().join(' and ')}</Text>
               */}
                 {data.map((item) => (
                   <CheckboxStyled
-                    {...getCheckboxProps({ value: item })}
+                    {...getCheckboxProps({ value: item.name })}
                     {...props}
-                    color={"#ee33ef"}
-                    key={item}
+                    color={ item.color ? item.color === '#ffffff' ? 'gray' : item.color : "#cb4508"}
+                    key={item.name}
                   >
-                    <Text ms={"6.5px"}>{item}</Text>
+                   {isRating ? <RatingCheckbox rate={item} /> : <Text ms={"6.5px"}>{item.name}</Text>}
                   </CheckboxStyled>
                 ))}
               </Stack>
             </Collapse>
-            {data.length > 4 && (
+            {data.length > 5 && (
               <Button
                 size="sm"
                 onClick={handleToggle}
@@ -111,7 +120,7 @@ const CheckBoxList = ({ title, getValues, data = null,isLast=false, ...props }) 
                 }}
               >
                 <Text minW={"30px"} textAlign={"start"}>
-                  {show ? "Скрыть" : "Еще 8"}
+                  {show ? "Скрыть" : `Еще ${data.length - 5}`}
                 </Text>
                 <ChevronDownIcon
                   transform={show ? "rotate(180deg)" : "rotate(365deg)"}

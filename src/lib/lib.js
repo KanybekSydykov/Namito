@@ -1,70 +1,59 @@
-const { SignJWT, jwtVerify } = require("jose");
-const { cookies } = require("next/headers");
-const { NextRequest, NextResponse } = require("next/server");
+'use server';
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
-const secretKey = "secret";
-const key = new TextEncoder().encode(secretKey);
+export async function login({ access_token, refresh_token, first_visit }) {
+  // Create the session expiration time
+  const user = { access_token, refresh_token, first_visit };
+  const now = Math.floor(Date.now() / 1000);
+  const expires = now + 30 * 24 * 60 * 60; // 30 days from now
 
-async function encrypt(payload) {
-  return await new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("100 sec from now")
-    .sign(key);
-}
-
-async function decrypt(input) {
-  const { payload } = await jwtVerify(input, key, {
-    algorithms: ["HS256"],
-  });
-  return payload;
-}
-
-async function login(formData) {
-  // Verify credentials && get the user
-  const user = { email: formData.get("email"), name: "John" };
-
-  // Create the session
-  const expires = new Date(Date.now() + 10 * 1000);
-  const session = await encrypt({ user, expires });
-
-  // Save the session in a cookie
-  cookies().set("session", session, { expires, httpOnly: true });
-}
-
-async function logout() {
-  // Destroy the session
-  cookies().set("session", "", { expires: new Date(0) });
-}
-
-async function getSession() {
-  const session = cookies().get("session")?.value;
-  if (!session) return null;
-  return await decrypt(session);
-}
-
-async function updateSession(request) {
-  const session = request.cookies.get("session")?.value;
-  if (!session) return;
-
-  // Refresh the session so it doesn't expire
-  const parsed = await decrypt(session);
-  parsed.expires = new Date(Date.now() + 10 * 1000);
-  const res = NextResponse.next();
-  res.cookies.set({
+  cookies().set({
     name: "session",
-    value: await encrypt(parsed),
+    value: JSON.stringify(user),
     httpOnly: true,
-    expires: parsed.expires,
+    expires: new Date(expires * 1000),
+    path: '/', // Ensure the cookie is accessible across the whole site
   });
-  return res;
 }
 
-module.exports = {
-  encrypt,
-  decrypt,
-  login,
-  logout,
-  getSession,
-  updateSession,
-};
+export async function logout() {
+  // Destroy the session
+  cookies().set({
+    name: "session",
+    value: "",
+    expires: new Date(0),
+    path: '/', // Ensure the cookie is cleared across the whole site
+  });
+}
+
+export async function getSession(request) {
+  const sessionCookie = cookies(request).get("session");
+  if (!sessionCookie) return undefined;
+
+  return JSON.parse(sessionCookie.value);
+}
+
+export async function updateSession(request) {
+  const sessionCookie = cookies(request).get("session");
+  if (!sessionCookie) return;
+
+  const session = JSON.parse(sessionCookie.value);
+
+  // Calculate new expiration time by adding 30 days
+  const now = Math.floor(Date.now() / 1000);
+  const newExpirationTime = now + 30 * 24 * 60 * 60; // 30 days from now
+
+  session.expires = newExpirationTime;
+
+  const response = NextResponse.next();
+  response.cookies.set({
+    name: "session",
+    value: JSON.stringify(session),
+    httpOnly: true,
+    expires: new Date(newExpirationTime * 1000),
+    path: '/', // Ensure the cookie is updated across the whole site
+  });
+
+  return response;
+}

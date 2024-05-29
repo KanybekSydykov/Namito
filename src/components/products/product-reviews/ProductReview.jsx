@@ -1,16 +1,31 @@
 'use client';
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Text, Button, Box } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import ReviewCard from "@/components/reviews/ReviewCard";
+import { getData } from "@/lib/apiServices";
+import { ENDPOINTS } from "@/API/endpoints";
+import OrangeButton from "@/components/ui/OrangeButton";
 
-const ProductReview = ({ title,params,id }) => {
-  const reviews = false;
+const ProductReview = ({ title,params,productId ,token,reviews = [],reviewsAllowed = false}) => {
+  // const [reviews, setReviews] = useState(false);
+
+  // useEffect(() => {
+  //   async function getProductReviews() {
+
+  //     console.log(response);
+  //     setReviews(response.data.reviews);
+  //   }
+
+  //   getProductReviews();
+  // }, [productId]);
+
+  // console.log(token);
 
   return (
-    <Flex flexDir={"column"} gap={"26px"}>
+    <Flex flexDir={"column"} gap={"26px"} id="reviews">
       <Text
         pos={"relative"}
         fontFamily={"roboto"}
@@ -31,17 +46,13 @@ const ProductReview = ({ title,params,id }) => {
           style={{
             position: "absolute",
             left: "100%",
-            bottom: "10px",
+            top:0,
             width: "20px",
             height: "20px",
           }}
         />
       </Text>
-      {reviews ? (
-        <Flex>
-
-        </Flex>
-      ) : (
+      {reviews.length ? (
         <Flex
           flexDir={"row"}
           width={"auto"}
@@ -50,14 +61,48 @@ const ProductReview = ({ title,params,id }) => {
           py={"4px"}
           px={"16px"}
         >
-          {[1, 2, 3, 4, 5, 6].map((item,idx) => (
+          {reviews.map((item,idx) => (
            <ReviewCard key={idx} item={item} />
           ))}
-        </Flex>
-      )}
+        </Flex>)
+        : 
+        <Flex
+        fontFamily={'roboto'}
+        fontSize={'16px'}
+        lineHeight={'24px'}
+        flexDir={'column'}
+        justifyContent={'center'}
+        alignItems={'center'}
+        gap={'20px'}
+        textAlign={'center'}
+        >
+            <Image src={'/profile-icons/no-reviews-icon.svg'} width={50} height={50} />
+            <Text
+            fontWeight={'400'}
+            >
+            Отзывов нет
+            </Text>
+            <Text
+            fontWeight={'300'}
+            >
+           {reviewsAllowed ? "Вы можете оставить отзыв на данный товар" : "Для того чтобы оставить отзыв на данный товар вы должны его приобрести"}
+            </Text>
+        </Flex>  
+        }
+      
 
-      <Link
-        href={`/${params.locale}/reviews/1`}
+   { reviews.length > 0 && 
+   
+   <Flex
+   flexDir={'row'}
+   justifyContent={'space-between'}
+   px={'16px'}
+   >
+     {reviewsAllowed &&   <Link href={`/${params.locale}/reviews/${productId}`}>
+      <OrangeButton text={"Оставить отзыв"} />
+        </Link>}
+   <Link
+        href={`/${params.locale}/reviews/${productId}`}
         style={{
           fontFamily: "var(--chakra-fonts-roboto)",
           fontWeight: 400,
@@ -72,6 +117,11 @@ const ProductReview = ({ title,params,id }) => {
       >
         Смотреть все отзывы
       </Link>
+    </Flex>
+    
+      }
+
+    
     </Flex>
   );
 };

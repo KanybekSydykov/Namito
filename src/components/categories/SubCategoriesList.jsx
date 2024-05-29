@@ -5,13 +5,11 @@ import Link from 'next/link'
 import {Flex, Text, Box} from '@chakra-ui/react'
 
 
-const SubCategoriesList = ({data,locale}) => {
+const SubCategoriesList = ({data,locale,responseData}) => {
 
   useEffect(() => {
-    console.log(data);
   },[data])
 
-  console.log(data);
   return (
     <Flex
     flexDir={'row'}

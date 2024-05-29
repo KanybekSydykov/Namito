@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
-const LeaveReview = () => {
+const LeaveReview = ({getProductRating}) => {
   const [selectedRating, setSelectedRating] = useState(0); // State to track selected rating
   const [hoverRating, setHoverRating] = useState(0); // State to track hovered rating
 
@@ -15,6 +15,8 @@ const LeaveReview = () => {
   const handleClick = (index) => {
     // Set the selected rating when clicked
     setSelectedRating(index + 1);
+
+    getProductRating(index+1);
   };
 
   return (

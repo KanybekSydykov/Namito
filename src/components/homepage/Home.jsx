@@ -15,7 +15,7 @@ import ProductsSection from "@/components/products/products-section/ProductsSect
 import Advantages from "./Advantages";
 import BannerSlider from "./BannerSlider";
 
-const Home = ({ data = undefined, locale, newProducts, products }) => {
+const Home = ({ data = undefined, locale, newProducts, products ,token}) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
 
   const AdvantagesData = [
@@ -187,16 +187,18 @@ const Home = ({ data = undefined, locale, newProducts, products }) => {
 
       <Flex flexDir={"column"} gap={"90px"}>
         {/* Featured Prods       */}
-        <ProductsSection products={data.top_products} locale={locale} slider={true} title={{en:"FEATURED PRODUCTS",ru:"ТОВАРЫ В ТОПЕ"}} productWidth={"219px"} />
+        <ProductsSection products={data.top_products} token={token} locale={locale} slider={true} title={{en:"FEATURED PRODUCTS",ru:"ТОВАРЫ В ТОПЕ"}} productWidth={"219px"} />
         {/* New Prods */}
         <ProductsSection
           title={{ ru: "НОВИНКИ", en: "NEW PRODUCTS" }}
           products={newProducts}
+          token={token}
         />
         {/* All prods */}
         <ProductsSection
           title={{ ru: "ВСЕ ТОВАРЫ", en: "ALL PRODUCTS" }}
           products={products.products}
+          token={token}
         />
       </Flex>
       </>

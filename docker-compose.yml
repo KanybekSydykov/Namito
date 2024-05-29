@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   frontend:
-    container_name: namito
+    container_name: frontend_namito
     build:
       context: .
       target: runner  # указываем, что нужно использовать стадию runner для сборки

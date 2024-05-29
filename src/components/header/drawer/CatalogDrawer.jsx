@@ -108,7 +108,7 @@ const Navmenu = ({ isDesktop, isCatalogDrawer, handleCatalogDrawer, data }) => {
         <DrawerContent
           mt={{ base: "0px", lg: "90px" }}
           maxH={"unset"}
-          pb={"126px"}
+          pb={{base:'30px',lg:"126px"}}
         >
           {!isDesktop && (
             <DrawerHeader
@@ -160,7 +160,6 @@ const Navmenu = ({ isDesktop, isCatalogDrawer, handleCatalogDrawer, data }) => {
                 {data?.map((item, index) => (
                   <motion.div key={index} variants={staggerFlex}>
                     <CategoryItem
-                      imgUrl={"/catalog-item-icon.svg"}
                       locale={locale}
                       onClick={onClose}
                       item={item}

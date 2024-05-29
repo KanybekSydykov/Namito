@@ -24,7 +24,6 @@ const Thumbnails = ({ images, tags }) => {
     slideRef.current.go(index);
   }
 
-  console.log(images);
 
   return (
     <>

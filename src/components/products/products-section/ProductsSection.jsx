@@ -10,6 +10,7 @@ const ProductsSection = ({
   locale,
   slider = false,
   allProducts = false,
+  token,
 }) => {
 
 
@@ -17,8 +18,6 @@ const ProductsSection = ({
     console.error("Products is not an array", products);
     products = [];
   }
-
-  console.log(products);
 
 
   return (
@@ -62,7 +61,7 @@ const ProductsSection = ({
         </Box>
         {slider ? (
           <Flex w={"100vw"} >
-            <ProductListSlider products={products} />
+            <ProductListSlider token={token} products={products} />
           </Flex>
         ) : (
           <Grid
@@ -78,7 +77,7 @@ const ProductsSection = ({
             }}
           >
             {products.map((item,index) => (
-              <Product details={item} key={index} />
+              <Product details={item} key={index} token={token} />
             ))}
           </Grid>
         )}

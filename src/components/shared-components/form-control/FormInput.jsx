@@ -7,12 +7,12 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useState } from "react";
-export default function FormInput({ title, type, required }) {
-  const [input, setInput] = useState("");
+export default function FormInput({ title, type, required,value,setValue }) {
+  // const [input, setInput] = useState("");
 
-  const handleInputChange = (e) => setInput(e.target.value);
+  // const handleInputChange = (e) => setInput(e.target.value);
 
-  const isError = input === "";
+  const isError = value === "";
 
   return (
     <FormControl fontFamily={'roboto'} isRequired={required}>
@@ -24,8 +24,8 @@ export default function FormInput({ title, type, required }) {
       >{title}</FormLabel>
       <Input
         type={type}
-        value={input}
-        onChange={handleInputChange}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         placeholder={title}
         border={'1px solid rgba(160, 160, 160, 1)'}
         borderRadius={'10px'}

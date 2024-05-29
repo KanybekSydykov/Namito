@@ -19,7 +19,7 @@ import Image from "next/image";
 import HeaderProfileLinks from "./HeaderProfileLinks";
 import { useParams } from "next/navigation";
 
-const Navmenu = () => {
+const Navmenu = ({isAuth}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {locale} = useParams();
   return (
@@ -146,7 +146,7 @@ const Navmenu = () => {
               <Text color={"rgba(160, 160, 160, 1)"}>EN</Text>
             </Flex>
 
-            <HeaderProfileLinks onClose={onClose} />
+            <HeaderProfileLinks isAuth={isAuth} locale={locale} onClose={onClose} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

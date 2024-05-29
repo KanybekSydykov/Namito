@@ -1,12 +1,18 @@
-import { Flex, Text, Box } from '@chakra-ui/react'
 import React from 'react'
-import Image from 'next/image'
-import { Radio, RadioGroup } from '@chakra-ui/react'
 import CheckOut from '@/components/checkout/CheckOut'
-const page = () => {
+import { getSession } from '@/lib/lib';
+import { getData } from '@/lib/apiServices';
+import { ENDPOINTS } from '@/API/endpoints';
+const page = async() => {
+
+  const session = await getSession();
+  const res = await getData(session.access_token,ENDPOINTS.getCartData());
+  const data = res.data;
+
+
   return (
    <>
-   <CheckOut />
+   <CheckOut data={data} token={session.access_token} />
    </>
   )
 }

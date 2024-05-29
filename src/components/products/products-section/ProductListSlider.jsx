@@ -5,7 +5,7 @@ import "@splidejs/react-splide/css";
 import Image from "next/image";
 import Product from "../product-card/Product";
 
-const ProductListSlider = ({products}) => {
+const ProductListSlider = ({products,token}) => {
   return (
     <>
 
@@ -56,7 +56,7 @@ const ProductListSlider = ({products}) => {
         <Box as={SplideTrack} w={"100%"} h={"100%"} py={'4px'}>
           {products.map((item) => (
             <SplideSlide key={item.id}>
-             <Product details={item} />
+             <Product details={item} token={token} />
             </SplideSlide>
           ))}
         </Box>

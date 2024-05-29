@@ -1,5 +1,5 @@
 import CatalogItem from '@/components/categories/CatalogItem'
-import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Text,Skeleton } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'

@@ -32,7 +32,7 @@ export default function NotFound() {
         <Image src={'/404.png'} fill />
       </Box>
 
-      <Link href={'/'}>
+      <Link href={`/`}>
       <OrangeButton  text={'Вернуться на главную'}/>
       </Link>
 

@@ -1,16 +1,57 @@
 'use client'
-
-import { Box, Flex, Text } from '@chakra-ui/react'
-import React from 'react'
+import { Box, Flex, Spinner, Text } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
 import ReviewCard from '../reviews/ReviewCard'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { getData } from '@/lib/apiServices'
+import { ENDPOINTS } from '@/API/endpoints'
 
 const reviews = [0,1,2,3]
 
-const ProfileReviews = () => {
+const ProfileReviews = ({token}) => {
     const params = useParams()
+    const [reviews, setReviews] = useState([])
+    const [requesting, setRequesting] = useState(true)
+    useEffect(() => {
+
+        async function getOrders(){
+    
+            setRequesting(true);
+          try{
+            const response = await getData(token,ENDPOINTS.getUserReviews());
+            if(response.status >= 200){
+                setRequesting(false);
+              setReviews(response.data);
+            } else {
+                setReviews([]);
+                setRequesting(false);
+            }
+          }
+          catch(error){
+            setReviews([]);
+            setRequesting(false);
+          }
+     
+        }
+    
+        if(token){
+          getOrders();
+        }
+      }, [token]);
+
+
+  if(requesting){
+    return <Flex
+     width={'100%'}
+     height={'100%'}
+     justifyContent={'center'}
+     alignItems={'center'}
+     >
+      <Spinner size='xl' color="orange" />
+    </Flex>
+  }
   return (
     <Flex
     flexDir={'column'}
@@ -31,11 +72,11 @@ const ProfileReviews = () => {
                    Ваши отзывы на приобретённые товары
                 </Text>
 
-        {reviews && reviews.map((item, index) => (
+        {reviews?.map((item, index) => (
             <ReviewCard key={index} item={item} width='100%' hasDeleteButton={true} />
         ))}
 
-        {!reviews
+        {!reviews.length
          && 
          <Flex
          flexDir={'column'}

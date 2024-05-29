@@ -7,19 +7,30 @@ import SubCategoriesList from '@/components/categories/SubCategoriesList'
 import BreadCrumbs from '@/components/shared-components/breadcrumb/BreadCrumbs'
 import { ENDPOINTS } from '@/API/endpoints'
 import {notFound} from 'next/navigation'
+import { getSession } from '@/lib/lib'
 
 
 
 const page = async({ params ,searchParams}) => {
   const {slug} = params;
+  const session = await getSession();
+  const token = session?.access_token;
+  const headers = {
+    'Accept-Language': `${params.locale}`,
+    'Content-Type': 'application/json',
+  }
+
+  if(token){
+    headers['Authorization'] = `Bearer ${token}`
+  }
+
   const res = await fetch(`${ENDPOINTS.getCategoryData(slug)}`, {
-    cache:'no-store',
-    headers: {
-      'Accept-Language': `${params.locale}`,
-    }
+    cache:'no-cache',
+    headers: headers
   })
-  
-  const [data] = await res.json()
+  const responseData = await res.json()
+  const [data] = responseData;
+
 
   if(!data){
     notFound()
@@ -49,14 +60,14 @@ const page = async({ params ,searchParams}) => {
           <SubCategoriesList data={data.children} locale={params.locale} />
         </Flex>
 
-        <Filters />
+        <Filters data={data} />
 
         <Sort />
 
 
         {/* products          */}
 
-        <ProdList data={data.products} locale={params.locale}/>
+        <ProdList token={token} data={data.products} locale={params.locale}/>
 
 
       </Flex>

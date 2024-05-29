@@ -13,13 +13,13 @@ import {
   useDisclosure,
   Text,
 } from "@chakra-ui/react";
-import { useParams } from "next/navigation";
-import DeleteIcon from "@/../public/profile-icons/delete-icon.svg";
-import LogoutIcon from "@/../public/profile-icons/logout-icon.svg";
+import { redirect, useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ProfileExitDelete({ children, isDelete = false }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { locale } = useParams();
+  const router = useRouter();
   return (
     <>
       <Box onClick={onOpen}>{children}</Box>
@@ -57,7 +57,10 @@ export default function ProfileExitDelete({ children, isDelete = false }) {
                 : "Вы действительно хотите выйти из аккаунта?"}
             </Text>
 
-            <Button
+            
+            
+            <Button as={Link}
+              href={`/${locale}/logout`}
               mt={"8px"}
               width={"100%"}
               maxW={{ base: "257px", lg: "355px" }}

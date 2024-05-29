@@ -1,10 +1,18 @@
+import { ENDPOINTS } from '@/API/endpoints'
 import CatalogItem from '@/components/categories/CatalogItem'
 import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const page = ({ params }) => {
+const page = async({ params }) => {
+  const catalogRes = await fetch(`${ENDPOINTS.getCategories()}`,{
+    cache:'no-cache',
+    'Accept-Language': `${params.locale}`,
+  })
+
+  const catalog = await catalogRes.json()
+
   return (
     <Grid
       width={'100%'}
@@ -24,20 +32,12 @@ const page = ({ params }) => {
       gap={{base:'16px',lg:'30px'}}
     >
       {
-        [0,1,2,3,4,5,6,7,8].map(item => (
+        catalog.map(item => (
           
-      <GridItem
-        key={item}
-        pos={'relative'}
-        bg={'rgba(205, 166, 255, 1)'}
-        borderRadius={'8px'}
-        width={'100%'}
-        aspectRatio={1}
-        overflow={'hidden'}
-      >
-      <CatalogItem locale={params.locale} />
 
-      </GridItem>
+      <CatalogItem key={item.id} locale={params.locale} item={item} />
+
+
         ))
       }
 

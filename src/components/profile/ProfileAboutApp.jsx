@@ -12,17 +12,21 @@ import {
 import Image from "next/image";
 import React from "react";
 
-const ProfileAboutApp = () => {
+const ProfileAboutApp = ({data}) => {
+
+  console.log(data);
   return (
     <Flex fontFamily={"roboto"} flexDir={"column"} gap={"50px"} py={{lg:'30px'}} >
-      <Flex flexDir={{ base: "column", lg: "row" }} px={'16px'} gap={"40px"}>
-        <Flex flexDir={"column"} gap={"26px"} >
+      <Flex flexDir={{ base: "column", lg: "row" }} justifyContent={{ base: "center", lg: "space-between" }} px={'16px'} gap={"40px"}>
+        <Flex flexDir={"column"} gap={"26px"} maxW={'640px'} >
           <Text
           fontWeight={'700'}
           fontSize={{base:'20px',lg:'36px'}}
           lineHeight={{base:'23px',lg:'50px'}}
           textTransform={'uppercase'}
-          >О нас</Text>
+          >
+            {data.title}
+            </Text>
           <Text
             fontWeight={"400"}
             fontSize={"16px"}
@@ -38,39 +42,27 @@ const ProfileAboutApp = () => {
                 lineHeight: "25.2px",
               }}
             >
-              Добро пожаловать в Namito – ваш источник стиля и качества в мире
-              моды и аксессуаров! Мы стремимся сделать шопинг простым,
-              увлекательным и приятным для каждого клиента, предлагая только
-              лучшие товары и высокий уровень обслуживания. В Namito мы верим,
-              что каждый человек заслуживает находиться в центре внимания своего
-              стиля, и мы гордимся тем, что можем помочь в этом. Namito – это
-              команда энтузиастов, ценящих индивидуальность и творчество. Наша
-              команда состоит из экспертов в области моды, дизайна и клиентского
-              обслуживания, которые постоянно стремятся улучшать ваше
-              онлайн-покупательский опыт. Мы ценим каждого нашего клиента и
-              всегда готовы ответить на ваши вопросы или принять ваши отзывы. Не
-              стесняйтесь связаться с нами по любым вопросам или предложениям, и
-              мы с радостью поможем вам. Благодарим вас за выбор Namito – вашего
-              надежного партнера в мире моды и стиля!
+             {data.content}
             </Highlight>
           </Text>
         </Flex>
 
         <Box
-          w={{ base: "100%", lg: "420px" }}
-          height={{ base: "100%", lg: "450px" }}
-          aspectRatio={390 / 418}
+          w={{ base: "100%", lg: "auto" }}
+          maxW={{ base: "390px", lg: "420px" }}
+          height={{ base: "100%", lg: "auto" }}
+          maxH={{base:'418px',lg:'450px'}}
+          aspectRatio={390/418}
           position={"relative"}
         >
           <Image
-            src={"/about-img.jpeg"}
-            width={300}
-            height={600}
+            src={data.image || "/about-img.jpeg"}
+            width={420}
+            height={450}
             alt={"about"}
             style={{
               width: "100%",
               height: "100%",
-              objectFit: "contain",
             }}
           />
         </Box>
@@ -88,39 +80,25 @@ const ProfileAboutApp = () => {
         </Text>
 
         <Accordion allowMultiple>
-          <AccordionItem>
-            <h2>
-              <AccordionButton  px={'5px'} py={'26px'}>
-                <Box as="span" flex="1" textAlign="left">
-                  Section 1 title
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </AccordionPanel>
-          </AccordionItem>
 
-          <AccordionItem>
+          {data.faqs.map((item, index) => (
+            
+          <AccordionItem key={item.question}>
             <h2>
               <AccordionButton  px={'5px'} py={'26px'}>
                 <Box as="span" flex="1" textAlign="left">
-                  Section 2 title
+                  {item.question}
                 </Box>
                 <AccordionIcon />
               </AccordionButton>
             </h2>
             <AccordionPanel pb={4}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+             {item.answer}
             </AccordionPanel>
           </AccordionItem>
+          ))}
+
+  
         </Accordion>
       </Flex>
     </Flex>

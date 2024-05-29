@@ -18,11 +18,26 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "next/navigation";
 
-export default function CheckOutModal({ children }) {
+export default function CheckOutModal({ children,handleSelectedPayment ,createOrder}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
-  const [paymentMethod, setPaymentMethod] = useState("online");
+  const [paymentMethod, setPaymentMethod] = useState("картой");
   const { locale } = useParams();
+
+  useEffect(() => {
+    handleSelectedPayment(paymentMethod)
+  }, [isOpen]);
+
+  function handlePayment(value) {
+    setPaymentMethod(value)
+    handleSelectedPayment(value)
+    createOrder()
+    onClose();
+  }
+
+  function handlePaymentValue(value){
+    setPaymentMethod(value)
+  }
 
   return (
     <>
@@ -62,14 +77,14 @@ export default function CheckOutModal({ children }) {
           alignItems={'center'}
           >
             <RadioGroup
-              onChange={(value) => setPaymentMethod(value)}
+              onChange={(value) => handlePaymentValue(value)}
               value={paymentMethod}
             >
               <Stack direction="row" gap={"30px"} justifyContent={"center"}>
-                <Radio value="online" size={"lg"} colorScheme={"red"}>
+                <Radio value="картой" size={"lg"} colorScheme={"red"}>
                   Онлайн
                 </Radio>
-                <Radio value="cash" size={"lg"} colorScheme={"red"}>
+                <Radio value="наличкой" size={"lg"} colorScheme={"red"}>
                   Наличными
                 </Radio>
               </Stack>
@@ -82,8 +97,9 @@ export default function CheckOutModal({ children }) {
               bg={"orange"}
               color={"#fff"}
               maxW={'300px'}
+              onClick={() => handlePayment(paymentMethod)}
             >
-              Proceed
+              Оформить заказ
             </Button>
           </DrawerBody>
         </DrawerContent>

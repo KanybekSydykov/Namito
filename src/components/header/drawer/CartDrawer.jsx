@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Drawer,
   Box,
@@ -10,28 +10,77 @@ import {
   DrawerOverlay,
   DrawerContent,
   useDisclosure,
-  Button,
-  Radio,
-  RadioGroup,
-  Stack,
   Highlight,
+  Spinner,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { CloseIcon } from "@chakra-ui/icons";
 import CartItem from "@/components/cart/CartItem";
 import Link from "next/link";
 import OrangeButton from "@/components/ui/OrangeButton";
-import { useParams } from "next/navigation";
-import {useAuth} from "@/lib/auth-content";
-const data = true;
-const CartDrawer = ({ isDesktop = false, locale }) => {
+import {  deleteData, getData, putData } from "@/lib/apiServices";
+import { ENDPOINTS } from "@/API/endpoints";
+import { useCounter } from "@/lib/auth-content";
+import { AnimatePresence,motion } from "framer-motion";
+const CartDrawer = ({ isDesktop = false, locale, isAuth, token }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [cartData, setCartData] = useState(undefined);
+  const [isCartPending, setIsCartPending] = useState(true);
+  const { counter } = useCounter();
+  const [totalAmount, setTotalAmount] = useState(0);
 
-  const { isAuthenticated } = useAuth();
+  // Getting current cart data 
+  useEffect(() => {
+    setIsCartPending(true);
+    if (isOpen) {
+      async function getCart() {
+        const response = await getData(token,ENDPOINTS.getCartData());
+        if (response.status === 200) {
+          setCartData(response.data.items);
+          setIsCartPending(false);
+          setTotalAmount(response.data.total_amount);
+        }
+      }
 
-  console.log(isAuthenticated);
+      getCart();
+    }
+  }, [isOpen]);
+  // Updating local cart state after deleting
+  useEffect(() => {
+    if (!cartData?.length) {
+      setCartData(undefined);
+    }
+  }, [cartData?.length]);
 
+  // Cart deletion handler
 
+  const handleDeleteCartItem = async (id) => {
+    const filteredCartData = cartData.filter((item) => item.id !== id);
+    setCartData(filteredCartData);
+    try {
+      const response = await deleteData(token,ENDPOINTS.deleteCartItem(id));
+      if (response.status > 200) {
+      }
+    } catch (error) {
+    }
+  };
+
+  // Cart item quantity handler 
+
+  const handleQuantityChange = async (id, quantity) => {
+    const payload = {items:[{
+      id: id,
+      quantity: quantity,
+    }]};
+    try {
+      const response = await putData(payload,token, ENDPOINTS.putCartQuantity());
+      if (response.status >= 200) {
+      }
+    } catch (error) {
+    }
+  };
+
+  
   return (
     <>
       <Box
@@ -58,6 +107,7 @@ const CartDrawer = ({ isDesktop = false, locale }) => {
           filter={{ base: "unset", lg: "grayscale(100%)" }}
           _groupHover={{ filter: "unset" }}
           transition={"all 0.2s ease-in-out"}
+          position={'relative'}
         >
           <Image
             src="/cart-icon.svg"
@@ -68,6 +118,28 @@ const CartDrawer = ({ isDesktop = false, locale }) => {
               transition: "all 0.2s ease-in-out",
             }}
           />
+                    <AnimatePresence>
+        {counter !== 0 && (
+
+           
+
+            <Text as={motion.p}
+             key={counter}
+             initial={{ opacity: 0, x:0 ,}}
+             animate={{ opacity: 1, x:[30,20,10,0] }}
+             transition={{ duration: 0.15 ,type: "spring", }}
+              pos={"absolute"}
+              top={'-10px'}
+              right={'-10px'}
+              color={'orange'}
+              filter={'unset'}
+              fontSize={'14px'}
+              fontFamily={'roboto'}
+            >
+              {counter ? counter : null}
+            </Text>
+        )}
+      </AnimatePresence>
         </Box>
         <Text
           fontFamily={"roboto"}
@@ -78,6 +150,7 @@ const CartDrawer = ({ isDesktop = false, locale }) => {
         >
           Корзина
         </Text>
+
       </Box>
       <Drawer
         placement={"right"}
@@ -111,79 +184,113 @@ const CartDrawer = ({ isDesktop = false, locale }) => {
               <CloseIcon width={"100%"} height={"100%"} />
             </Flex>
           </DrawerHeader>
-          <DrawerBody
-            p={0}
-            fontFamily={"roboto"}
-            display={"flex"}
-            flexDir={"column"}
-            gap={"16px"}
-          >
-            {data ? (
-              <>
-                <Flex flexDir={"column"} gap={"16px"} mt={"30px"}>
-                  <CartItem />
-                  <CartItem />
-                </Flex>
+          {isCartPending ? (
+            <Flex
+              w={"100%"}
+              h={"100%"}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Spinner color="orange" size="xl" />
+            </Flex>
+          ) : (
+            <DrawerBody
+              p={0}
+              fontFamily={"roboto"}
+              display={"flex"}
+              flexDir={"column"}
+              gap={"16px"}
+            >
+              {isAuth ? (
+                <>
+                  {cartData?.length ? (
+                    <>
+                      <Flex flexDir={"column"} gap={"16px"} mt={"30px"}>
+                        {cartData.map((item) => (
+                          <CartItem
+                            key={item.id}
+                            item={item}
+                            handleDeleteCartItem={handleDeleteCartItem}
+                            handleQuantityChange={handleQuantityChange}
+                          />
+                        ))}
+                      </Flex>
 
+                      <Text
+                        fontFamily={"roboto"}
+                        fontWeight={"700"}
+                        fontSize={"18px"}
+                        lineHeight={"27px"}
+                        color={"rgba(35, 133, 109, 1)"}
+                        textAlign={"end"}
+                        pe={"20px"}
+                        mt={"30px"}
+                      >
+                        <Highlight
+                          query={"Общая цена:"}
+                          styles={{
+                            fontWeight: "300",
+                            color: "rgba(146, 146, 146, 1)",
+                            paddingRight: "10px",
+                          }}
+                        >
+                          Общая цена:</Highlight>{totalAmount} сом
+                      </Text>
+                    </>
+                  ) : (
+                    <Flex
+                      flexDir={"column"}
+                      gap={"26px"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      mt={"140px"}
+                    >
+                      <Text
+                        fontFamily={"roboto"}
+                        fontWeight={"600"}
+                        fontSize={"18px"}
+                        lineHeight={"25px"}
+                        textAlign={"center"}
+                      >
+                        В корзине нет ни одного товара
+                      </Text>
+
+                      <Image src={"/decor-star.png"} width={50} height={50} />
+                    </Flex>
+                  )}
+                </>
+              ) : (
                 <Text
                   fontFamily={"roboto"}
                   fontWeight={"700"}
-                  fontSize={"18px"}
+                  fontSize={"24px"}
                   lineHeight={"27px"}
-                  color={"rgba(35, 133, 109, 1)"}
-                  textAlign={"end"}
-                  pe={"20px"}
-                  mt={"30px"}
-                >
-                  <Highlight
-                    query={"Общая цена"}
-                    styles={{
-                      fontWeight: "300",
-                      color: "rgba(146, 146, 146, 1)",
-                      marginRight: "14px",
-                    }}
-                  >
-                    Общая цена 40000 сом
-                  </Highlight>
-                </Text>
-              </>
-            ) : (
-              <Flex
-                flexDir={"column"}
-                gap={"26px"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                mt={"140px"}
-              >
-                <Text
-                  fontFamily={"roboto"}
-                  fontWeight={"600"}
-                  fontSize={"18px"}
-                  lineHeight={"25px"}
                   textAlign={"center"}
+                  mt={"30%"}
                 >
-                  В корзине нет ни одного товара
+                  Необходимо войти в аккаунт чтобы оформить заказ
                 </Text>
-
-                <Image src={"/decor-star.png"} width={50} height={50} />
-              </Flex>
-            )}
-
-            <Box
-              as={Link}
-              width={"100%"}
-              px={"20px"}
-              py={"7px"}
-              mt={data ? "120px" : "46px"}
-              href={data ? `/${locale}/checkout` : "/"}
-              onClick={onClose}
-            >
-              <OrangeButton
-                link={data ? "/checkout" : "/"}
-                text={data ? "Оформить заказ" : "Главная"}
-              />
-            </Box>
-          </DrawerBody>
+              )}
+              <Box
+                as={Link}
+                width={"100%"}
+                px={"20px"}
+                py={"7px"}
+                mt={cartData ? "120px" : "46px"}
+                href={cartData ? `/${locale}/checkout` : "#"}
+                onClick={onClose}
+              >
+                <OrangeButton
+                  link={
+                    isAuth ? (cartData ? "/checkout" : "/") : `/${locale}/login`
+                  }
+                  text={
+                    isAuth ? (cartData ? "Оформить заказ" : "Закрыть") : "Войти"
+                  }
+                />
+              </Box>
+            </DrawerBody>
+          )}
         </DrawerContent>
       </Drawer>
     </>

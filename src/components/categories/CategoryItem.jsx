@@ -11,7 +11,6 @@ const CategoryItem = ({ locale, imgUrl = false, onClick, onHover, item }) => {
 
 
 
-
   useEffect(() => {
   }, [item]);
 
@@ -45,7 +44,7 @@ const CategoryItem = ({ locale, imgUrl = false, onClick, onHover, item }) => {
         justifyContent={"center"}
         gap={"14px"}
       >
-        {imgUrl && (
+
           <Box
             width={"24px"}
             h={"24px"}
@@ -54,9 +53,9 @@ const CategoryItem = ({ locale, imgUrl = false, onClick, onHover, item }) => {
               filter: "invert(100%) brightness(200%)",
             }}
           >
-            <Image src={imgUrl} fill alt="category icon" />
+            <Image src={item.icon !== null ? item.icon : "/catalog-item-icon.svg"} fill alt="category icon" />
           </Box>
-        )}
+
         <Text>{item?.name}</Text>
       </Flex>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Flex,
   Text,
@@ -12,11 +12,19 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import { requestOtp } from "@/lib/apiServices";
+import { ENDPOINTS } from "@/API/endpoints";
+import {login} from "@/lib/lib";
+import { useParams, useRouter } from "next/navigation";
 
-const PW = "1234";
-const Otp = ({ handleLogin, isCodeSent,statusOtp }) => {
+const Otp = ({ handleLogin, isCodeSent, statusOtp ,handleResendOtp,phone}) => {
   const [time, setTime] = useState(60);
   const [isError, setIsError] = useState(false);
+  const router = useRouter();
+  const {locale} = useParams();
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [code, setCode] = useState("");
+
 
   useEffect(() => {
     // exit early when we reach 0
@@ -34,31 +42,51 @@ const Otp = ({ handleLogin, isCodeSent,statusOtp }) => {
     // when we update it
   }, [time]);
 
+  const handleOtpEnter = async (value) => {
+    setCode(value);
+    setIsRequesting(true);
+    try {
+      const response = await requestOtp({ code: value }, ENDPOINTS.postVerifyCode());
+  
+      if (response.data.access_token && response.data.refresh_token) {
+        await login({
+          access_token: response.data.access_token,
+          refresh_token: response.data.refresh_token,
+          first_visit: response.data.first_visit ? 'true' : 'false'
+        });
+      }
+  
+      if (response.status === 200 && response.data.first_visit) {
+        router.push(`/${locale}/profile?page=settings`);
+      } else if (response.status === 200 && !response.data.first_visit) {
+        router.push(`/`);
 
-  const handleOtpEnter = (value) => {
-    console.log(value,PW);
-
-    if(value !== otp){ 
-        console.log('otp doesnt match');
-        console.log(value,PW);
+      } else {
         setIsError(true);
-    } else {
-      console.log('valid and can login');
-      setIsError(false);
-      setTime(0);
+      }
+    } catch (error) {
+      console.error('An error occurred during OTP verification:', error);
+      if (error.response && error.response.status === 400) {
+        setIsError(true);
+      } else {
+        setIsError(true);
+      }
+      setIsError(true);
     }
+  };
+  const handleRequestOtp = () => {
+    setTime(60);
+    handleResendOtp();
   }
-
-  console.log('is error ' , isError);
 
   return (
     <Flex
-      w={{base:"100%",lg:'550px'}}
-      mx={'auto'}
-      py={{base:"90px",lg:'107px'}}
+      w={{ base: "100%", lg: "550px" }}
+      mx={"auto"}
+      py={{ base: "90px", lg: "107px" }}
       flexDir={"column"}
       gap={"40px"}
-      px={{base:"20px",lg:'60px'}}
+      px={{ base: "20px", lg: "60px" }}
       fontFamily={"roboto"}
       bg={"#fff"}
       borderRadius={"10px"}
@@ -87,18 +115,15 @@ const Otp = ({ handleLogin, isCodeSent,statusOtp }) => {
         </Text>
 
         <Text fontWeight={"400"} fontSize={"18px"} lineHeight={"25px"}>
-          4 - значный код отправлен на номер 
+          4 - значный код отправлен на номер
         </Text>
         <Text fontWeight={"400"} fontSize={"18px"} lineHeight={"25px"}>
-        +996 500 500 500
+         {phone}
         </Text>
       </Flex>
 
       <HStack mx={"auto"} gap={"20px"}>
-        <PinInput
-          otp={true}
-          onComplete={(value)=>handleOtpEnter(value)}
-        >
+        <PinInput otp={true} onComplete={(value) => handleOtpEnter(value)}>
           <PinInputField
             bg={"rgba(0, 0, 0, 0.1)"}
             color={"orange"}
@@ -138,12 +163,13 @@ const Otp = ({ handleLogin, isCodeSent,statusOtp }) => {
         </PinInput>
       </HStack>
       {isError ? (
-        <Text 
-        as={motion.p}
-        initial={{x:0}}
-        animate={{x:[0,30,-30,15,-15,10,-10,0]}}
-        textAlign={"center"} 
-        color={"red"}>
+        <Text
+          as={motion.p}
+          initial={{ x: 0 }}
+          animate={{ x: [0, 30, -30, 15, -15, 10, -10, 0] }}
+          textAlign={"center"}
+          color={"red"}
+        >
           Код введен неверно. Пожалуйста повторите попытку
         </Text>
       ) : null}
@@ -169,8 +195,8 @@ const Otp = ({ handleLogin, isCodeSent,statusOtp }) => {
           color: "#fff",
           border: "1px solid #fff",
         }}
-        onClick={()=>handleOtpEnter(PW)}
-        disabled={isError}
+        onClick={() => handleOtpEnter(code)}
+        disabled={isRequesting ? true : false}
       >
         Войти
       </Button>
@@ -201,7 +227,7 @@ const Otp = ({ handleLogin, isCodeSent,statusOtp }) => {
           textDecoration={"underline"}
           textAlign={"center"}
           textUnderlineOffset={"2px"}
-          onClick={() => setTime(60)}
+          onClick={handleRequestOtp}
         >
           Отправить код еще раз
         </Text>

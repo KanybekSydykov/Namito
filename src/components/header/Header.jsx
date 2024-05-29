@@ -19,15 +19,18 @@ import Logo from "@/components/header/logo/Logo";
 import HeaderProfileLinks from "./drawer/HeaderProfileLinks";
 import LocaleSwitcher from "../Locale/Locale";
 import PromotedCategories from "./promotedCategories/PromotedCategories";
-import { AuthProvider } from "@/lib/auth-content";
+import { useRouter } from "next/navigation";
 
-const Header = ({ data }) => {
+const Header = ({ data,isAuth,token }) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
   const [isCatalogDrawer, setIsCatalogDrawer] = useState(false);
   const params = useParams();
   const path = usePathname();
+  const router = useRouter()
 
-  useEffect(() => {}, [isDesktop]);
+  useEffect(() => {
+      router.refresh()
+  }, [isDesktop,isAuth]);
 
   function handleCatalogDrawer(value) {
     setIsCatalogDrawer(value);
@@ -78,15 +81,16 @@ const Header = ({ data }) => {
 
                 <HeaderProfileLinks
                   isDekstop={isDesktop}
-                  locale={params.locale}
+                  locale={params.locale} 
+                  isAuth={isAuth}
                 />
-                  <CartDrawer locale={params.locale} isDesktop={isDesktop} />
+                  <CartDrawer token={token} isAuth={isAuth} locale={params.locale} isDesktop={isDesktop} />
 
               </Flex>
             </Flex>
           )}
 
-          {!isDesktop && <Navmenu />}
+          {!isDesktop && <Navmenu isAuth={isAuth} />}
         </Flex>
       </Container>
 
@@ -109,7 +113,7 @@ const Header = ({ data }) => {
               data={data.categories}
             />
             <Search handleCatalogDrawer={handleCatalogDrawer} />
-            <CartDrawer locale={params.locale} />
+            <CartDrawer token={token} isAuth={isAuth} locale={params.locale} isDesktop={isDesktop} />
           </>
         </Container>
       )}

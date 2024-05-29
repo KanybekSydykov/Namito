@@ -1,11 +1,36 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Flex, Text } from "@chakra-ui/react";
 import Link from "next/link";
 
 export default function ProfileLayoutHeader({title}) {
   const { locale, orderId } = useParams();
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+
+  if(page === null){
+    return <></>
+  }
+
+  console.log(page);
+
+  function getPageName(page){
+    switch (page) {
+      case "orders":
+        return "Мои заказы";
+      case "settings":
+        return "Личные данные";
+      case "adresses":
+        return "Мои адреса";
+      case "reviews":
+        return "Мои отзывы";
+      case "favourites":
+        return "Избранное";
+    }
+  }
+
+  console.log(getPageName());
   return (
     <Flex
       flexDir={"row"}
@@ -33,7 +58,7 @@ export default function ProfileLayoutHeader({title}) {
         fontSize={"16px"}
         lineHeight={"22px"}
       >
-        {title ? title : orderId ? "Мои заказы" : "Личные данные"}
+        {getPageName(page)}
       </Text>
     </Flex>
   );

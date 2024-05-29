@@ -1,8 +1,18 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { i18n } from "../../i18n-config";
 
 const ProfileLanguage = () => {
+  const router = useRouter();
+  const {locale} = useParams()
+
+  const handleLocaleChange = (locale) => {
+    const newPath = `/${locale}/profile?page=language`;
+    router.push(newPath);
+  };
+
   return (
     <Flex
       flexDir={"column"}
@@ -22,7 +32,7 @@ const ProfileLanguage = () => {
           fontWeight={"500"}
           fontSize={"18px"}
           lineHeight={"20px"}
-          bg={"rgba(255, 211, 191, 1)"}
+          bg={locale === 'ru' ? "rgba(255, 211, 191, 1)" : '#fff'}
           _hover={{
             bg: "rgba(255, 211, 191, 1)",
           }}
@@ -33,6 +43,7 @@ const ProfileLanguage = () => {
           transition={"all 0.2s ease-in-out"}
           h={"auto"}
           width={{ base: "100%", lg: "358px" }}
+          onClick={() => handleLocaleChange(i18n.locales[0])}
         >
           <Image
             src={"/ru-icon.svg"}
@@ -56,7 +67,7 @@ const ProfileLanguage = () => {
           fontWeight={"500"}
           fontSize={"18px"}
           lineHeight={"20px"}
-          bg={"#fff"}
+          bg={locale === 'en' ? "rgba(255, 211, 191, 1)" : "#fff"}
           _hover={{
             bg: "rgba(255, 211, 191, 1)",
           }}
@@ -65,6 +76,7 @@ const ProfileLanguage = () => {
           }}
           boxShadow={"0 0 3px 0 rgba(134, 134, 134, 0.25)"}
           transition={"all 0.2s ease-in-out"}
+          onClick={() => handleLocaleChange(i18n.locales[1])}
         >
           <Image
             src={"/en-icon.svg"}
@@ -74,7 +86,6 @@ const ProfileLanguage = () => {
               borderRadius: "50%",
             }}
           />
-
           <Text>English</Text>
         </Button>
       </Flex>

@@ -10,7 +10,7 @@ import "./CardSlider.css";
 const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
   const slideRef = useRef(null);
   const [loadingImages, setLoadingImages] = useState(
-    new Array(images.length).fill(true)
+    new Array(images?.length).fill(true)
   );
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
         },
         type: "fade",
         loop: true,
-        pagination: images.length > 1,
+        pagination: images?.length > 1,
         speed: 1000,
         arrows: false,
       }}
@@ -51,8 +51,8 @@ const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
       h={"100%"}
     >
       <Box as={SplideTrack} w={"100%"} h={"100%"}>
-        {images.length !== 0 ? (
-          images.map((item, index) => (
+        {images?.length !== 0 ? (
+          images?.map((item, index) => (
             <SplideSlide key={index}>
               <Box pos={"relative"} w={"100%"} h={"100%"}>
                 {isImage(item) ? (

@@ -14,12 +14,62 @@ import {
   Text,
   Grid,
   GridItem,
+  useToast,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import FormInput from "../form-control/FormInput";
 
-export default function AdressModal({ children }) {
+export default function AdressModal({ children,handleAddAdress ,data,isEdit,handleEditAdress }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [city, setCity] = useState(isEdit ? data.city : "");
+  const [street, setStreet] = useState( isEdit ? data.street : "");
+  const [apartment_number, setApartment] = useState( isEdit ? data.apartment_number : "");
+  const [entrance, setEntrance] = useState(isEdit ? data.entrance : "");
+  const [floor, setFloor] = useState(isEdit ? data.floor : "");
+  const [intercom, setIntercom] = useState( isEdit ? data.intercom : "");
+
+
+  useEffect(() => {
+
+   if(!isEdit){ setApartment("");
+    setCity("");
+    setEntrance("");
+    setFloor("");
+    setIntercom("");
+    setStreet("");}
+  }, [isOpen]);
+
+
+  function handleSaveAdress () {
+   const credentials = {
+   city,
+   street,
+   apartment_number,
+   entrance,
+   floor,
+   intercom,
+    "is_primary": false
+   }
+   handleAddAdress(credentials)
+   onClose()
+ 
+  }
+
+  function editAdress() {
+    const credentials = {};
+    if (city !== data.city) credentials.city = city;
+    if (street !== data.street) credentials.street = street;
+    if (apartment_number !== data.apartment_number) credentials.apartment_number = apartment_number;
+    if (entrance !== data.entrance) credentials.entrance = entrance;
+    if (floor !== data.floor) credentials.floor = floor;
+    if (intercom !== data.intercom) credentials.intercom = intercom;
+
+    // Call a function to handle the edited address
+    handleEditAdress(credentials,data.id);
+    onClose();
+  }
+
+
   return (
     <>
       <Box onClick={onOpen}>{children}</Box>
@@ -45,22 +95,22 @@ export default function AdressModal({ children }) {
             columnGap={'16px'}
             >
                 <GridItem colSpan={2}>
-                    <FormInput title={'Город'} type={'text'} required />
+                    <FormInput title={'Город'} value={city} setValue={setCity}  type={'text'} required />
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <FormInput title={'Улица'} type={'text'} required />
+                    <FormInput title={'Улица'} value={street} setValue={setStreet} type={'text'} required />
                 </GridItem>
                 <GridItem colSpan={1}>
-                    <FormInput title={'Квартира/Дом'} type={'number'} required />
+                    <FormInput title={'Квартира/Дом'} value={apartment_number} setValue={setApartment} type={'number'} required />
                 </GridItem>
                 <GridItem colSpan={1}>
-                    <FormInput title={'Подъезд'} type={'number'} />
+                    <FormInput title={'Подъезд'} value={entrance} setValue={setEntrance} type={'number'} />
                 </GridItem>
                 <GridItem colSpan={1}>
-                    <FormInput title={'Этаж'} type={'number'} />
+                    <FormInput title={'Этаж'} value={floor} setValue={setFloor} type={'number'} />
                 </GridItem>
                 <GridItem colSpan={1}>
-                    <FormInput title={'Домофон'} type={'number'} />
+                    <FormInput title={'Домофон'} value={intercom} setValue={setIntercom} type={'number'} />
                 </GridItem>
             </Grid>
          
@@ -85,7 +135,7 @@ export default function AdressModal({ children }) {
                 bg: "rgba(203, 70, 9, 1)",
               }}
               color={"#fff"}
-              onClick={onClose}
+              onClick={isEdit ? editAdress : handleSaveAdress}
             >
               Сохранить
             </Button>
