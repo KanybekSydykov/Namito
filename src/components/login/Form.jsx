@@ -9,7 +9,7 @@ const Form = ({handleLogin,isError,isRequesting}) => {
   const [phone, setPhone] = useState("");
 
   useEffect(() => {
-  }, [isError,isRequesting]);
+  }, [isRequesting]);
 
   const handlePhoneChange = (event) => {
     setPhone(event.target.value);
@@ -69,17 +69,6 @@ const Form = ({handleLogin,isError,isRequesting}) => {
               _hover={{ borderColor: "orange" }}
               _focusVisible={{ borderColor: "orange" }}
             />
-                  {isError ? (
-        <Text
-          as={motion.p}
-          initial={{ x: 0 }}
-          animate={{ x: [0, 30, -30, 15, -15, 10, -10, 0] }}
-          textAlign={"center"}
-          color={"red"}
-        >
-          {isError}
-        </Text>
-      ) : null}
 
             <Button
               bg={"orange"}

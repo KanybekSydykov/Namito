@@ -19,9 +19,9 @@ import Image from "next/image";
 import HeaderProfileLinks from "./HeaderProfileLinks";
 import { useParams } from "next/navigation";
 
-const Navmenu = ({isAuth}) => {
+const Navmenu = ({ isAuth }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {locale} = useParams();
+  const { locale } = useParams();
   return (
     <>
       <Box
@@ -120,13 +120,13 @@ const Navmenu = ({isAuth}) => {
               textAlign={"center"}
             >
               <Link href={"/"} onClick={onClose}>
-                <Text>Главная</Text>
+                <Text>{locale === "en" ? "Home" : "Главная"}</Text>
               </Link>
               <Link href={`/${locale}/catalog`} onClick={onClose}>
-                <Text>Каталог</Text>
+                <Text>{locale === "en" ? "Catalog" : "Каталог"}</Text>
               </Link>
               <Link href={`/${locale}/delivery`} onClick={onClose}>
-                <Text>Доставка</Text>
+                <Text>{locale === "en" ? "Delivery" : "Доставка"}</Text>
               </Link>
             </Flex>
 
@@ -146,7 +146,11 @@ const Navmenu = ({isAuth}) => {
               <Text color={"rgba(160, 160, 160, 1)"}>EN</Text>
             </Flex>
 
-            <HeaderProfileLinks isAuth={isAuth} locale={locale} onClose={onClose} />
+            <HeaderProfileLinks
+              isAuth={isAuth}
+              locale={locale}
+              onClose={onClose}
+            />
           </DrawerBody>
         </DrawerContent>
       </Drawer>

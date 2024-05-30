@@ -156,7 +156,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
           lineHeight={"16px"}
           transition={"all 0.2s ease-in-out"}
         >
-          Корзина
+         {locale === 'en' ? 'Cart' : 'Корзина'}
         </Text>
 
       </Box>}

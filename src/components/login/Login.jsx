@@ -12,7 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "./Form";
 import Otp from "./Otp";
 import { ENDPOINTS } from "@/API/endpoints";
@@ -24,12 +24,32 @@ const Login = ({ params }) => {
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [statusOtp, setStatusOtp] = useState("");
   const [phone,setPhone]= useState("");
-  const [error, setError] = useState("");
+  const [errorMsg,setErrorMsg] = useState("");
   const [isRequesting, setIsRequesting] = useState(false);
   const toast = useToast();
 
-  params.locale === 'ru' ? setError('Номер телефона должен начинаться с +996') : setError('Phone number must start with +996');
+
+  useEffect(() => {
+    if (params.locale === 'ru') {
+      setErrorMsg('Номер телефона должен начинаться с +996');
+    } else {
+      setErrorMsg('Phone number must start with +996');
+    }
+  }, [params.locale]);
+
   const handleLogin = async (phone) => {
+
+    if(phone === ''){
+      toast({
+        title: params.locale === 'ru' ? 'Номер телефона не может быть пустым' : 'Phone number cannot be empty',
+        status: "error",
+        duration: 3000,
+        position: "bottom",
+        isClosable: true,
+      })
+      return;
+    }
+
     setPhone(phone);
     setIsRequesting(true);
     const credentials = {
@@ -44,10 +64,10 @@ const Login = ({ params }) => {
     } else {
       setIsCodeSent(false);
       toast({
-        title: error,
+        title: errorMsg,
         status: "error",
         duration: 3000,
-        position: "top-left",
+        position: "bottom",
         isClosable: true,
       })
       setIsRequesting(false);
@@ -121,7 +141,7 @@ const Login = ({ params }) => {
         </Flex>
 
 
-        {isCodeSent ? <Otp phone={phone} handleChangeNumber={handleChangeNumber} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} statusOtp={statusOtp}/> : <Form isRequesting={isRequesting} isError={error} handleLogin={handleLogin}/>}
+        {isCodeSent ? <Otp phone={phone} handleChangeNumber={handleChangeNumber} handleResendOtp={handleResendOtp} isCodeSent={isCodeSent} statusOtp={statusOtp}/> : <Form isRequesting={isRequesting} handleLogin={handleLogin}/>}
        
 
        

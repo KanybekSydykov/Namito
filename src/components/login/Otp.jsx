@@ -9,22 +9,33 @@ import {
   HStack,
   Button,
   Mark,
+  useToast,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { requestOtp } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
-import {login} from "@/lib/lib";
+import { login } from "@/lib/lib";
 import { useParams, useRouter } from "next/navigation";
 
-const Otp = ({ handleChangeNumber, isCodeSent, statusOtp ,handleResendOtp,phone}) => {
+const Otp = ({
+  handleChangeNumber,
+  isCodeSent,
+  statusOtp,
+  handleResendOtp,
+  phone,
+}) => {
   const [time, setTime] = useState(60);
-  const [isError, setIsError] = useState(false);
+  const { locale } = useParams();
   const router = useRouter();
-  const {locale} = useParams();
   const [isRequesting, setIsRequesting] = useState(false);
   const [code, setCode] = useState("");
+  const toast = useToast();
 
+  const errorMsg =
+    locale === "ru"
+      ? "Код введен неверно. Пожалуйста повторите попытку"
+      : "The code entered is incorrect. Please try again";
 
   useEffect(() => {
     // exit early when we reach 0
@@ -46,38 +57,49 @@ const Otp = ({ handleChangeNumber, isCodeSent, statusOtp ,handleResendOtp,phone}
     setCode(value);
     setIsRequesting(true);
     try {
-      const response = await requestOtp({ code: value }, ENDPOINTS.postVerifyCode());
-  
+      const response = await requestOtp(
+        { code: value },
+        ENDPOINTS.postVerifyCode()
+      );
+
       if (response.data.access_token && response.data.refresh_token) {
         await login({
           access_token: response.data.access_token,
           refresh_token: response.data.refresh_token,
-          first_visit: response.data.first_visit ? 'true' : 'false'
+          first_visit: response.data.first_visit ? "true" : "false",
         });
       }
-  
-      if (response.status === 200 && response.data.first_visit) {
-        router.push(`/${locale}/profile?page=settings`);
-      } else if (response.status === 200 && !response.data.first_visit) {
-        router.push(`/`);
 
+      if (
+        response.status >= 200 &&
+        response.status < 400 &&
+        response.data.first_visit
+      ) {
+        router.push(`/${locale}/profile?page=settings`);
+      } else if (
+        response.status >= 200 &&
+        response.status < 400 &&
+        !response.data.first_visit
+      ) {
+        router.push(`/`);
       } else {
-        setIsError(true);
+        setIsRequesting(false);
+        toast({
+          title: errorMsg,
+          status: "error",
+          duration: 3000,
+          position: "bottom",
+          isClosable: true,
+        });
       }
     } catch (error) {
-      console.error('An error occurred during OTP verification:', error);
-      if (error.response && error.response.status === 400) {
-        setIsError(true);
-      } else {
-        setIsError(true);
-      }
-      setIsError(true);
+      console.error("An error occurred during OTP verification:", error);
     }
   };
   const handleRequestOtp = () => {
     setTime(60);
     handleResendOtp();
-  }
+  };
 
   return (
     <Flex
@@ -118,7 +140,7 @@ const Otp = ({ handleChangeNumber, isCodeSent, statusOtp ,handleResendOtp,phone}
           4 - значный код отправлен на номер
         </Text>
         <Text fontWeight={"400"} fontSize={"18px"} lineHeight={"25px"}>
-         {phone}
+          {phone}
         </Text>
       </Flex>
 
@@ -162,17 +184,6 @@ const Otp = ({ handleChangeNumber, isCodeSent, statusOtp ,handleResendOtp,phone}
           />
         </PinInput>
       </HStack>
-      {isError ? (
-        <Text
-          as={motion.p}
-          initial={{ x: 0 }}
-          animate={{ x: [0, 30, -30, 15, -15, 10, -10, 0] }}
-          textAlign={"center"}
-          color={"red"}
-        >
-          Код введен неверно. Пожалуйста повторите попытку
-        </Text>
-      ) : null}
 
       <Button
         bg={"#FFF"}
@@ -197,8 +208,8 @@ const Otp = ({ handleChangeNumber, isCodeSent, statusOtp ,handleResendOtp,phone}
         }}
         onClick={() => handleOtpEnter(code)}
         isLoading={isRequesting}
-        loadingText='Отправка...'
-        colorScheme='teal'
+        loadingText="Отправка..."
+        colorScheme="teal"
       >
         Войти
       </Button>
