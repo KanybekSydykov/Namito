@@ -1,8 +1,19 @@
-import React from 'react'
-import { Flex, Text,Box } from '@chakra-ui/react'
+'use client';
+
+import React,{useState} from 'react'
+import { Flex, Text,Box, useDisclosure } from '@chakra-ui/react'
 import Image from 'next/image'
+import ReviewModal from './ReviewModal';
 
 const ReviewItem = ({review,borderBottom}) => {
+  const [selectedImage, setSelectedImage] = useState(0);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  function handleModalVisibility(id) {
+    setSelectedImage(id);
+    onOpen();
+  }
+
   return (
     <Flex
     flexDir={"column"}
@@ -82,12 +93,13 @@ const ReviewItem = ({review,borderBottom}) => {
       overflowX={"auto"}
       mt={"20px"}
     >
-      {review.images.map((item) => (
+      {review.images.map((item,index) => (
         <Image
           key={item.id}
           src={item.image}
           alt="review-star"
           width={49}
+          onClick={() => handleModalVisibility(index)}
           height={64}
           style={{
             width: "53px",
@@ -97,6 +109,9 @@ const ReviewItem = ({review,borderBottom}) => {
         />
       ))}
     </Flex>
+    {isOpen && (
+        <ReviewModal images={review.images} activeSlide={selectedImage} isOpen={isOpen} onClose={onClose} />
+      )}
 
   </Flex>
   )

@@ -30,21 +30,21 @@ const ProductListSlider = ({products,token}) => {
           padding: { left: '16px', right: "36%"},
           mediaQuery: 'min',
           updateOnMove:true,
+          fixedWidth:'219px',
           dragMinThreshold: {
             mouse: 0,
             touch: 1,
           },
           breakpoints: {
-            768:{
+            992:{
               perPage:3,
               padding: { left: '16px', right: 0},
-              fixedWidth:'220px',
+              fixedWidth:'277px',
               gap:20
             },
             1200:{
               perPage:4,
               padding: { left: '16px', right: 0},
-              fixedWidth:'277px',
               arrows:true,
               gap:30
             }

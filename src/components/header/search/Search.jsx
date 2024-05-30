@@ -1,6 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Input, Box, useMediaQuery, List, ListItem, Text } from "@chakra-ui/react";
+import {
+  Input,
+  Box,
+  useMediaQuery,
+  List,
+  ListItem,
+  Text,
+  Flex,
+  Spinner,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import Image from "next/image";
@@ -10,7 +19,8 @@ const Search = ({ handleCatalogDrawer }) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const {locale} = useParams();
+  const { locale } = useParams();
+  const [isRequestPending, setIsRequestPending] = useState(false);
 
   function handleInputFocus(e, show = false) {
     if (isDesktop) {
@@ -21,10 +31,10 @@ const Search = ({ handleCatalogDrawer }) => {
   }
   useEffect(() => {
     if (isFocused) {
-      document.body.style.width ="100vw"
-      document.body.style.height = "100vh"
+      document.body.style.width = "100vw";
+      document.body.style.height = "100vh";
       document.body.style.overflow = "hidden";
-      if(!searchValue.trim()){
+      if (!searchValue.trim()) {
         setSearchResults([]);
       }
     } else {
@@ -38,10 +48,14 @@ const Search = ({ handleCatalogDrawer }) => {
   }, [isFocused]);
 
   const fetchSearchResults = async (query) => {
+    setIsRequestPending(true);
     try {
-      const response = await fetch(`https://namito.tatadev.pro/api/products/search/?name=${query}`);
+      const response = await fetch(
+        `https://namito.tatadev.pro/api/products/search/?name=${query}`
+      );
       const data = await response.json();
       setSearchResults(data || []);
+      setIsRequestPending(false);
     } catch (error) {
       console.error("Error fetching search results:", error);
     }
@@ -109,7 +123,7 @@ const Search = ({ handleCatalogDrawer }) => {
           position={"absolute"}
           w={"20px"}
           h={"20px"}
-          top={'calc(50% - 10px)'}
+          top={"calc(50% - 10px)"}
           left={"17px"}
           zIndex={"10"}
           bgImage={"/search-icon.svg"}
@@ -131,39 +145,86 @@ const Search = ({ handleCatalogDrawer }) => {
           backdropFilter={"blur(1px)"}
           onClick={(e) => handleInputFocus(e, false)}
         >
-      {searchResults.length > 0 && (
-        <Box 
-        position="absolute" 
-        top={{base:"120px",lg:"80px"}} 
-        left="20px" 
-        right='20px'
-        width="auto" 
-        padding={'20px'}
-        borderRadius={'10px'}
-        bg="white" 
-        boxShadow="lg" 
-        zIndex="3000">
-          <List spacing={2}>
-            {searchResults.map((result) => (
-              <ListItem position={'relative'} display={'flex'} flexDir={'row'} gap={'20px'} justifyContent={'flex-start'} alignItems={'center'} key={result.id} p={2} borderBottom="1px solid #eaeaea" _hover={{bg: "#f5f5f5"}}>
-                <Image src={result.images.length > 0 ? result.images[0] : '/placeholder.jpeg'} alt={result.name} width={50} height={50} />
-                <Text fontSize="16px">{result.name}</Text>
+          {isRequestPending ? (
+            <Flex
+              justifyContent={"center"}
+              alignItems={"center"}
+              width={"200px"}
+              height={"200px"}
+              position="absolute"
+              top={{ base: "120px", lg: "80px" }}
+              left="calc(50% - 100px)"
+              right="calc(50% - 100px)"
+            >
+              <Spinner
+                thickness="4px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="orange.500"
+                size="xl"
+              />
+            </Flex>
+          ) : (
+            <>
+              {searchResults.length > 0 && (
+                <Box
+                  position="absolute"
+                  top={{ base: "120px", lg: "80px" }}
+                  left="20px"
+                  right="20px"
+                  width="auto"
+                  padding={"20px"}
+                  borderRadius={"10px"}
+                  bg="white"
+                  boxShadow="lg"
+                  zIndex="3000"
+                >
+                  <List spacing={2}>
+                    {searchResults.map((result) => (
+                      <ListItem
+                        position={"relative"}
+                        display={"flex"}
+                        flexDir={"row"}
+                        gap={"20px"}
+                        justifyContent={"flex-start"}
+                        alignItems={"center"}
+                        key={result.id}
+                        p={2}
+                        borderBottom="1px solid #eaeaea"
+                        _hover={{ bg: "#f5f5f5" }}
+                      >
+                        <Image
+                          src={
+                            result.images.length > 0
+                              ? result.images[0]
+                              : "/placeholder.jpeg"
+                          }
+                          alt={result.name}
+                          width={50}
+                          height={50}
+                        />
+                        <Text fontSize="16px">{result.name}</Text>
 
-                <Link prefetch={true} href={`/${locale}/product/${result.id}`} style={{
-                  position:'absolute',
-                  top:'0px',
-                  left:'0px',
-                  width:'100%',
-                  height:'100%'
-                }} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      )}
+                        <Link
+                          prefetch={true}
+                          href={`/${locale}/product/${result.id}`}
+                          style={{
+                            position: "absolute",
+                            top: "0px",
+                            left: "0px",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              )}
+            </>
+          )}
         </Box>
       </Box>
-
     </>
   );
 };

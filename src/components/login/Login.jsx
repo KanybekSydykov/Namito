@@ -9,6 +9,7 @@ import {
   PinInput,
   PinInputField,
   HStack,
+  useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -25,7 +26,9 @@ const Login = ({ params }) => {
   const [phone,setPhone]= useState("");
   const [error, setError] = useState("");
   const [isRequesting, setIsRequesting] = useState(false);
+  const toast = useToast();
 
+  params.locale === 'ru' ? setError('Номер телефона должен начинаться с +996') : setError('Phone number must start with +996');
   const handleLogin = async (phone) => {
     setPhone(phone);
     setIsRequesting(true);
@@ -40,7 +43,13 @@ const Login = ({ params }) => {
       setIsRequesting(false);
     } else {
       setIsCodeSent(false);
-      setError(data.data.error);
+      toast({
+        title: error,
+        status: "error",
+        duration: 3000,
+        position: "top-left",
+        isClosable: true,
+      })
       setIsRequesting(false);
     }
     

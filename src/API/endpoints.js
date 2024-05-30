@@ -32,4 +32,5 @@ export const ENDPOINTS = {
     postToggleFavorite : () => _URI + `favorite/toggle/`,
     getProductReviews : (id) => _URI + `products/${id}/reviews/`,
     postReview : () => _URI + `reviews/`,
+    deleteUserReview : (id) => _URI + `reviews/${id}/delete/`,
 }

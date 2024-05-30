@@ -5,23 +5,17 @@ import Image from "next/image";
 import FavIconFalse from "/public/fav-icon.svg";
 import FavIconTrue from "/public/favs-icon-colored.svg";
 import { postData } from "@/lib/apiServices";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ENDPOINTS } from "@/API/endpoints";
 
-const FavButton = ({ id, token , isFavorite }) => {
-  const [isFav, setIsFav] = useState(false);
+const FavButton = ({ id, token , isFavorite,handleRemoveFavItem }) => {
+  const [isFav, setIsFav] = useState(isFavorite);
   const [isRequestPending, setIsRequestPending] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const toast = useToast();
   const {locale} = useParams();
 
-    useEffect(() => {
-        if (isFavorite) {
-            setIsFav(true);
-        } else {
-            setIsFav(false);
-        }
-    }, [isFavorite]);
+
 
   async function toggleFavourite(id) {
     setIsRequestPending(true);
@@ -35,8 +29,17 @@ const FavButton = ({ id, token , isFavorite }) => {
         ENDPOINTS.postToggleFavorite(id)
       );
       if (response.status >= 200 && response.status < 400) {
-        setIsFav(true);
+        setIsFav((prev) => !prev);
         setIsRequestPending(false);
+        toast({
+          title: locale === 'en' ? (!isFav ? "Added to favorites" : "Removed from favorites") :( !isFav ? "Добавлено в избранное" : "Удалено из избранных"),
+          status:"success",
+          duration: 3000,
+          isClosable: true,
+        })
+        if(handleRemoveFavItem){
+          handleRemoveFavItem(id)
+        }
       }
     } catch (error) {
       setIsFav(false);

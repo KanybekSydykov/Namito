@@ -5,6 +5,7 @@ import Product from "@/components/products/product-card/Product";
 import { getSession } from "@/lib/lib";
 import { getData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
+import Favorites from "@/components/favorites/Favorites";
 
 const favProds = false;
 
@@ -22,22 +23,7 @@ const page = async({params}) => {
     py={'50px'}
     >
       {favProds.length ? 
-        <Grid
-          gridTemplateColumns={{
-            base: "repeat(2, minmax(171px,1fr))",
-            lg: "repeat(3, minmax(171px,1fr))",
-            xl: "repeat(4, minmax(171px,1fr))",
-          }}
-          gap={"16px"}
-          mx={"16px"}
-        >
-          {favProds &&
-            favProds.map((item, index) => (
-              <GridItem key={index}>
-                <Product details={item.product} token={token} />
-              </GridItem>
-            ))}
-        </Grid>
+  <Favorites products = {favProds} token = {token} />
 
 :
         <Flex flexDir={"column"} gap={"24px"} px={{base:"16px",lg:'150px'}} py={'50px'} w={"100%"}>

@@ -22,7 +22,7 @@ import {  deleteData, getData, putData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
 import { useCounter } from "@/lib/auth-content";
 import { AnimatePresence,motion } from "framer-motion";
-const CartDrawer = ({ isDesktop = false, locale, isAuth, token }) => {
+const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cartData, setCartData] = useState(undefined);
   const [isCartPending, setIsCartPending] = useState(true);
@@ -35,14 +35,17 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token }) => {
     if (isOpen) {
       async function getCart() {
         const response = await getData(token,ENDPOINTS.getCartData());
-        if (response.status === 200) {
+        if (response.status >= 200 && response.status < 400) {
           setCartData(response.data.items);
           setIsCartPending(false);
           setTotalAmount(response.data.total_amount);
+        } else {
+          console.log(response);
+          setIsCartPending(false);
         }
       }
+        getCart();
 
-      getCart();
     }
   }, [isOpen]);
   // Updating local cart state after deleting
@@ -83,7 +86,12 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token }) => {
   
   return (
     <>
-      <Box
+    {children ? 
+    <Box onClick={onOpen}>
+      {children}
+    </Box>
+     :  
+    <Box
         w={{ base: "auto", lg: "65px" }}
         maxW={{ base: "50px", lg: "65px" }}
         maxH={{ base: "37px", lg: "44px" }}
@@ -151,7 +159,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token }) => {
           Корзина
         </Text>
 
-      </Box>
+      </Box>}
       <Drawer
         placement={"right"}
         onClose={onClose}
@@ -267,8 +275,10 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token }) => {
                   lineHeight={"27px"}
                   textAlign={"center"}
                   mt={"30%"}
+                  maxW={'390px'}
+                  mx={'auto'}
                 >
-                  Необходимо войти в аккаунт чтобы оформить заказ
+                 {locale === "ru" ? "Необходимо войти в аккаунт чтобы добавить в корзину" : 'You must be logged in to add items to your cart'}
                 </Text>
               )}
               <Box

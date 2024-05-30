@@ -1,39 +1,12 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import {
-  Flex,
-  Box,
-  Text,
-  Highlight,
-  AspectRatio,
-  useMediaQuery,
-} from "@chakra-ui/react";
+import React from "react";
+import { Flex, Box } from "@chakra-ui/react";
 import ContainerBox from "@/components/ui/Container";
-import Link from "next/link";
-import Image from "next/image";
 import ProductsSection from "@/components/products/products-section/ProductsSection";
-import Advantages from "./Advantages";
 import BannerSlider from "./BannerSlider";
 import DesktopHero from "./DesktopHero";
 import MobileHero from "./MobileHero";
-import HomePageSkeleton from "../Skeletons/HomePageSkeleton";
 
 const Home = ({ data = undefined, locale, newProducts, products, token }) => {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return (
-      <>
-      </>
-    );
-  }
-
-  // if(!isLoaded) return <HomePageSkeletonClient isLoaded={isLoaded} />
-
   return (
     <>
       <ContainerBox>

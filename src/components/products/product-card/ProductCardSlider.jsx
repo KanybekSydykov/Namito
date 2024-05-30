@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { Box, Spinner } from "@chakra-ui/react";
+import { Box, Spinner, useMediaQuery } from "@chakra-ui/react";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import Image from "next/image";
 import "@splidejs/react-splide/css";
@@ -12,12 +12,16 @@ const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
   const [loadingImages, setLoadingImages] = useState(
     new Array(images?.length).fill(true)
   );
+  const [isDesktop] = useMediaQuery("(min-width: 768px)");
 
   useEffect(() => {
     if (slideRef.current && activeSlideIndex !== undefined) {
+      console.log(activeSlideIndex);
       slideRef.current.go(activeSlideIndex);
     }
   }, [activeSlideIndex]);
+
+
 
   const isImage = (url) => {
     return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
@@ -31,6 +35,8 @@ const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
     });
   };
 
+  const sliderType = isDesktop ? "fade" : "slide";
+
   return (
     <Box
       as={Splide}
@@ -40,7 +46,7 @@ const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
         classes: {
           pagination: "splide__pagination product-card-pagination",
         },
-        type: "fade",
+        type: 'fade',
         loop: true,
         pagination: images?.length > 1,
         speed: 1000,
@@ -80,6 +86,8 @@ const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
                         alignItems={"center"}
                         justifyContent={"center"}
                         bg={"rgba(0, 0, 0, 0.3)"}
+                        width={"100%"}
+                        height={"100%"}
                       >
                         <Image
                           src="/placeholder.jpeg"

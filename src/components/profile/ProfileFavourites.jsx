@@ -11,6 +11,11 @@ import { getData } from "@/lib/apiServices";
 const ProfileFavourites = ({ token }) => {
   const [favs, setFavs] = useState([]);
   const [requesting, setRequesting] = useState(true);
+
+
+  function handleRemoveFavItem(id){
+    setFavs(favs.filter(item => item.product.id !== id))
+  }
   useEffect(() => {
     async function getOrders() {
       setRequesting(true);
@@ -61,7 +66,7 @@ const ProfileFavourites = ({ token }) => {
         >
           {favs.map((item, index) => (
             <GridItem key={index}>
-              <Product details={item.product} token={token}  />
+              <Product handleRemoveFavItem={handleRemoveFavItem} details={item.product} token={token}  />
             </GridItem>
           ))}
         </Grid>
@@ -96,7 +101,7 @@ const ProfileFavourites = ({ token }) => {
               }}
               position={"relative"}
             >
-              <Image src={"/no-favs-icon.svg"} fill />
+              <Image src={"/no-favs-icon.svg"} alt={"heart"} fill />
             </Box>
             <Text fontWeight={"400"}>
               Вы ещё не добавляли товары в избранное

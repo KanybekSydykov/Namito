@@ -28,6 +28,7 @@ const ProductsSection = ({
         pb={"100px"}
         maxW={{ base: "1200px", xl: "1472px" }}
         mx={"auto"}
+        width={'100dvw'}
       >
         <Box
           pos={"relative"}
@@ -66,12 +67,12 @@ const ProductsSection = ({
         ) : (
           <Grid
             gap={{ base: "16px", xl: "30px" }}
-            overflowX={"auto"}
             py={"4px"}
             px={"16px"}
             gridTemplateColumns={{
-              base: "repeat(2, minmax(171px,1fr))",
-              md: "repeat(3, minmax(171px,1fr))",
+              base: "repeat(2, minmax(161px,216px))",
+              sm: "repeat(3, minmax(171px,240px))",
+              md: "repeat(3, minmax(227px,313px))",
               lg: "repeat(4, minmax(227px,1fr))",
               xl: "repeat(5, minmax(227px,1fr))",
             }}

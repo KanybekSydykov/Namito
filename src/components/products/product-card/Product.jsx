@@ -8,7 +8,7 @@ import ProductCardSlider from "./ProductCardSlider";
 import { useRouter } from "next/navigation";
 import FavButton from "./FavButton";
 
-const Product = ({ width = "100%", details = undefined,token }) => {
+const Product = ({ width = "100%", details = undefined,token,handleRemoveFavItem }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const params = useParams();
   const router = useRouter();
@@ -22,8 +22,8 @@ const Product = ({ width = "100%", details = undefined,token }) => {
       <Flex
         p={"10px 10px 16px 10px"}
         w={"100%"}
-        minW={width}
-        maxW={width}
+        // minW={width}
+        // maxW={width}
         flexDir={"column"}
         gap={"20px"}
         borderRadius={"10px"}
@@ -41,10 +41,12 @@ const Product = ({ width = "100%", details = undefined,token }) => {
             <Flex
               aspectRatio={257 / 290}
               pos={"relative"}
-              w={"100%"}
               position={"relative"}
               borderRadius={'10px'}
               overflow={'hidden'}
+              width={{base:'199px',lg:'257px'}}
+              height={{base:'225px',lg:'290px'}}
+              zIndex={2}
             >
               <ProductCardSlider
                 activeSlideIndex={activeSlide}
@@ -89,20 +91,28 @@ const Product = ({ width = "100%", details = undefined,token }) => {
                 opacity={"0.8"}
                 lineHeight={"16.8px"}
                 h={"20px"}
+                zIndex={5}
               >
                 {tag.name}
               </Text>
             ))}
 
-            <FavButton id={details.id} token={token} isFavorite = {details.is_favorite} />
+            <FavButton handleRemoveFavItem = {handleRemoveFavItem} id={details.id} token={token} isFavorite = {details.is_favorite} />
           </Flex>
           {/* Card Prices */}
           <Flex
-            flexDir={{ base: "column", lg: "row" }}
+          flexDir={"column"}
+          gap={"20px"}
+          position={'relative'}
+          cursor={'pointer'}
+         
+        >
+          <Flex
+            flexDir={{ base: "row", lg: "row" }}
             gap={{ base: "12px", lg: "10px" }}
             justifyContent={{ base: "unset", lg: "flex-start" }}
             alignItems={{ base: "unset", lg: "flex-start" }}
-            minH={"56px"}
+            minH={"68px"}
           >
             <Text
               fontFamily={"roboto"}
@@ -190,8 +200,10 @@ const Product = ({ width = "100%", details = undefined,token }) => {
             top:0,
             left:0,
             width:'100%',
-            height:'100%'
+            height:'100%',
+            zIndex:1
           }}/>
+          </Flex>
         </Flex>
 
         <Button

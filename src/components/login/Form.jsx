@@ -15,6 +15,12 @@ const Form = ({handleLogin,isError,isRequesting}) => {
     setPhone(event.target.value);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin(phone);
+    }
+  };
+
   return (
     <Flex
           flexDir={"column"}
@@ -54,8 +60,10 @@ const Form = ({handleLogin,isError,isRequesting}) => {
               py={"13.5px"}
               height={"auto"}
               borderRadius={"10px"}
+              type='tel'
               borderColor={"rgba(160, 160, 160, 1)"}
               onChange={handlePhoneChange}
+              onKeyDown={handleKeyDown}
               value={phone}
               _focus={{ borderColor: "orange" }}
               _hover={{ borderColor: "orange" }}

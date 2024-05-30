@@ -111,7 +111,7 @@ const ProductPage = ({ params, details = undefined, similarProds,token,reviews }
         color={"rgb(160, 160, 160)"}
         ps={"16px"}
       ></Text>
-      <Flex flexDir={"column"} gap={"100px"} fontFamily={"roboto"}>
+      <Flex flexDir={"column"} px={'16px'} gap={"100px"} fontFamily={"roboto"}>
         <Flex
           width={"100%"}
           flexDir={{ base: "column", lg: "row" }}
