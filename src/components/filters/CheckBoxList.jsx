@@ -14,10 +14,12 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import RatingCheckbox from "./RatingCheckbox";
+import RatingCheckbox from "./RatingRadioGroup";
 
-const CheckBoxList = ({ title, getValues, data = null, isLast = false, isRating = false, ...props }) => {
+const CheckBoxList = ({ title, getValues, data = null, isLast = false, isRating = false, isColor=false,...props }) => {
   const [show, setShow] = useState(false);
+
+  // console.log(data);
   const handleToggle = () => setShow(!show);
   const { value, getCheckboxProps } = useCheckboxGroup({
     defaultValue: [],
@@ -83,7 +85,7 @@ const CheckBoxList = ({ title, getValues, data = null, isLast = false, isRating 
               <Stack spacing={5} direction="column">
                 {data.map((item, index) => (
                   <CheckboxStyled
-                    {...getCheckboxProps({ value: isRating ? `${item + 1}` : item.name })}
+                    {...getCheckboxProps({ value: isColor ? item.id : item.name })}
                     {...props}
                     color={item.color ? item.color === '#ffffff' ? 'red' : item.color : "#cb4508"}
                     key={index}

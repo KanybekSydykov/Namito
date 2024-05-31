@@ -36,8 +36,6 @@ export const dynamic = 'force-dynamic'
 
 
 export default async function LocaleLayout({ children, params }) {
-
-    console.log('layout request locale', params.locale);
     const res = await fetch(`${ENDPOINTS.getLayoutData()}`, {
         cache: 'no-cache',
         headers: {

@@ -29,7 +29,7 @@ const PromotedCategories = ({data, isDesktop,params}) => {
     }}
   >
     <Flex
-      maxW={{ base: "1200px", xl: "1472px" }}
+      maxW={{ base: "1200px", xl: "1472px",'2xl':'1600px'}}
       flexDir={"row"}
       w={"100%"}
       px={'16px'}
@@ -68,16 +68,24 @@ const PromotedCategories = ({data, isDesktop,params}) => {
           fontWeight={"400"}
         >
           <Link href={"/"}>
-            <Text>Главная</Text>
+            <Text>
+              {params.locale === "en" ? "Home" : "Главная"}
+            </Text>
           </Link>
           <Link href={`/${params.locale}/about`}>
-            <Text>О нас</Text>
+            <Text>
+              {params.locale === "en" ? "About" : "О нас"}
+            </Text>
           </Link>
           <Link href={`/${params.locale}/catalog`}>
-            <Text>Каталог</Text>
+            <Text>
+              {params.locale === "en" ? "Catalog" : "Каталог"}
+            </Text>
           </Link>
           <Link href={`/${params.locale}/delivery`}>
-            <Text>Доставка</Text>
+            <Text>
+              {params.locale === "en" ? "Delivery" : "Доставка"}
+            </Text>
           </Link>
         </Flex>
       )}

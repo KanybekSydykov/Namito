@@ -10,6 +10,7 @@ const ColorFilter = ({getValues,data}) => {
     getValues={getValues}
     data={data}
     roundedFull
+    isColor={true}
   />
   )
 }

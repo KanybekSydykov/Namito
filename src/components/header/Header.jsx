@@ -51,7 +51,7 @@ const Header = ({ data,isAuth,token }) => {
         }
       >
         <Flex
-          maxW={{ base: "1200px", xl: "1472px" }}
+          maxW={{ base: "1200px", xl: "1472px",'2xl':'1600px' }}
           flexDir={"row"}
           px={"16px"}
           justifyContent={{ base: "space-between", xl: "flex-start" }}
@@ -97,7 +97,7 @@ const Header = ({ data,isAuth,token }) => {
       {/* Middle nav */}
       {!isDesktop && (
         <Container
-          maxW={{ base: "1200px", xl: "1472px" }}
+          maxW={{ base: "1200px", xl: "1472px",'2xl':'1600px' }}
           display={"flex"}
           flexDir={"row"}
           justifyContent={"space-between"}

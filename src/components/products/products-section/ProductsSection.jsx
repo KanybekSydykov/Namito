@@ -26,7 +26,7 @@ const ProductsSection = ({
         flexDir={"column"}
         gap={"26px"}
         pb={"100px"}
-        maxW={{ base: "1200px", xl: "1472px" }}
+        maxW={{ base: "1200px", xl: "1472px" ,'2xl':'1600px'}}
         mx={"auto"}
         width={'100dvw'}
       >
@@ -69,12 +69,15 @@ const ProductsSection = ({
             gap={{ base: "16px", xl: "30px" }}
             py={"4px"}
             px={"16px"}
+            width={'100%'}
+            justifyItems={"center"}
+            justifyContent={"center"}
             gridTemplateColumns={{
               base: "repeat(2, minmax(161px,216px))",
-              sm: "repeat(3, minmax(171px,240px))",
-              md: "repeat(3, minmax(227px,313px))",
-              lg: "repeat(4, minmax(227px,1fr))",
-              xl: "repeat(5, minmax(227px,1fr))",
+              sm: "repeat(auto-fit, minmax(171px,240px))",
+              md: "repeat(auto-fit, minmax(240px,250px))",
+              lg: "repeat(auto-fit, minmax(250px,277px))",
+              xl: "repeat(auto-fit, minmax(277px,277px))",
             }}
           >
             {products.map((item,index) => (

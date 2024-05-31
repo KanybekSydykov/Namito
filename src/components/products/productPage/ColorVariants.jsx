@@ -1,8 +1,12 @@
+'use client';
+
 import React from "react";
 import { Flex, Box, Text } from "@chakra-ui/react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
 const ColorVariants = ({ colors, setVariant, variant }) => {
+  const {locale} = useParams();
   return (
     <Flex
       flexDir={"column"}
@@ -18,7 +22,7 @@ const ColorVariants = ({ colors, setVariant, variant }) => {
         lineHeight={"22.4px"}
         color={"#000"}
       >
-        Цветa
+        {locale === "ru" ? "Цвет" : "Color"}
       </Text>
 
       <Flex flexDir={"row"} gap={"16px"}>

@@ -159,8 +159,8 @@ const Footer = ({ data }) => {
                   <Image
                     src={item.icon}
                     alt="vk icon"
-                    width={20}
-                    height={20}
+                    width={36}
+                    height={12}
                     style={{
                       width: "100%",
                       height: "auto",

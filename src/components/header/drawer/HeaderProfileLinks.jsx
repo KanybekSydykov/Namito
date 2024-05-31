@@ -19,6 +19,7 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
       justifyContent={"center"}
       fontFamily={"roboto"}
       alignItems={"center"}
+      onClick={onClose}
     >
       <Flex
         display="flex"
@@ -114,7 +115,7 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
           prefetch={true}
           onClick={onClose}
           scroll={false}
-          href={`/${locale}/favorites`}
+          href={`/${locale}/profile?page=favourites`}
           style={{
             position: "absolute",
             top: "0px",

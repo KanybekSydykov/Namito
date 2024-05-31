@@ -118,14 +118,15 @@ const Navmenu = ({ isAuth }) => {
               fontWeight={"400"}
               textTransform={"uppercase"}
               textAlign={"center"}
+              onClick={onClose}
             >
-              <Link href={"/"} onClick={onClose}>
+              <Link href={"/"} >
                 <Text>{locale === "en" ? "Home" : "Главная"}</Text>
               </Link>
-              <Link href={`/${locale}/catalog`} onClick={onClose}>
+              <Link href={`/${locale}/catalog`} >
                 <Text>{locale === "en" ? "Catalog" : "Каталог"}</Text>
               </Link>
-              <Link href={`/${locale}/delivery`} onClick={onClose}>
+              <Link href={`/${locale}/delivery`} >
                 <Text>{locale === "en" ? "Delivery" : "Доставка"}</Text>
               </Link>
             </Flex>

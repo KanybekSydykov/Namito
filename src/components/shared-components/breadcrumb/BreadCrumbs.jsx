@@ -14,8 +14,8 @@ import Image from 'next/image'
 const BreadCrumbs = ({data,locale}) => {
   return (
     <Container
-    maxW={{base:'1200px',xl:'1472px'}}
-    px={{base:'16px',xl:'0px'}}
+    maxW={{base:'1200px',xl:'1472px','2xl':'1600px'}}
+    px={{base:'16px'}}
     my={{base:'40px',lg:'30px'}}
     >
 

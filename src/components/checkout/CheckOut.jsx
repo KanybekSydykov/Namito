@@ -102,7 +102,7 @@ const CheckOut = ({ data, token }) => {
           isClosable: true,
         });
         setCartData([]);
-        router.refresh();
+        router.push(`/${locale}`);
       } else {
 
       setOrderPending(false);

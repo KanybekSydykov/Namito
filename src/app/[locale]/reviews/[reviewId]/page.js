@@ -1,16 +1,19 @@
+
 import { ENDPOINTS } from '@/API/endpoints'
 import LeaveReview from '@/components/reviews/LeaveReview'
 import ReviewCard from '@/components/reviews/ReviewCard'
 import ReviewForm from '@/components/reviews/ReviewForm'
 import ReviewItem from '@/components/reviews/ReviewItem'
-import CartButton from '@/components/ui/CartButton'
+import ReviewPageItem from '@/components/reviews/ReviewPageItem'
 import { getData } from '@/lib/apiServices'
 import { getSession } from '@/lib/lib'
 import { Container, Flex, Text, Textarea, Button, Box } from '@chakra-ui/react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const page = async ({ params }) => {
+
 
   const session = await getSession();
   const token = session?.access_token;
@@ -29,73 +32,55 @@ const page = async ({ params }) => {
     <>
       <Container
         maxW={'container.xl'}
+        pb={'50px'}
       >
-        <Text
-          fontFamily={'roboto'}
-          fontWeight={'400'}
-          fontSize={'16px'}
-          lineHeight={'24px'}
+        <Flex
           color={'#A0A0A0'}
           my={'40px'}
-        >
-          {params.reviewId}
-        </Text>
+          flexDir={'row'}
+          gap={'8px'}
+          alignItems={'center'}
+          justifyContent={'flex-start'}>
+          <Text as={Link}
+            href={`/${params.locale}/product/${params.reviewId}`}
+            fontFamily={'roboto'}
+            fontWeight={'400'}
+            fontSize={'16px'}
+            lineHeight={'24px'}
+            _hover={{
+              textDecoration: 'underline',
+            }}
+
+          >
+            {productData.data.name}
+          </Text>
+          /
+          <Text
+            fontFamily={'roboto'}
+            fontWeight={'400'}
+            fontSize={'16px'}
+            lineHeight={'24px'}
+
+          >
+            ОТЗЫВЫ
+          </Text>
+        </Flex>
+
 
         <Flex
           flexDir={'row'}
           flexWrap={'wrap'}
           gap={'40px'}
           justifyContent={{ base: 'unset', lg: 'space-between' }}
+          pt={'40px'}
         >
           {/* prod info */}
-          <Flex
-            flexDir={'row'}
-            gap={'16px'}
-            justifyContent={'space-between'}
-            w={'100%'}
-            maxW={'437px'}
-            height={'90px'}
-          >
-            <Image src={productData.data.images[0].image} alt={'product'} width={100} height={100} style={{
-              borderRadius: '10px',
-              width: '80px',
-              height: '90px',
-            }} />
-
-            <Flex
-              flexDir={'column'}
-              justifyContent={'flex-start'}
-              gap={'22px'}
-              width={'100%'}
-              maxW={'262px'}
-            >
-              <Text
-                fontFamily={'roboto'}
-                fontWeight={'500'}
-                fontSize={'18px'}
-                lineHeight={'22px'}
-              >
-                {productData.data.name}
-              </Text>
-              <Text
-                fontFamily={'roboto'}
-                fontWeight={'400'}
-                fontSize={'16px'}
-                lineHeight={'22px'}
-              >
-                {productData.data.description}
-              </Text>
-
-
-
-            </Flex>
-
-          </Flex>
+          <ReviewPageItem data={productData.data} />
 
           {/* leave review */}
 
           {res.data.review_allowed &&
-            <ReviewForm  params={params} token={token}/>
+            <ReviewForm params={params} token={token} />
           }
         </Flex>
 
@@ -134,9 +119,9 @@ const page = async ({ params }) => {
           {res.data.reviews.length ? <Flex
             flexDir={"column"}
             width={"auto"}
-            gap={{base:"20px",lg:'40px'}}
-            pt={{base:"4px",lg:'50px'}}
-            pb={{base:'10px',lg:'50px'}}
+            gap={{ base: "20px", lg: '40px' }}
+            pt={{ base: "4px", lg: '50px' }}
+            pb={{ base: '10px', lg: '50px' }}
           >
             {reviews.map((review, index, array) => (
               <ReviewItem key={index} borderBottom={index === array.length - 1 ? 'none' : '1px solid #A0A0A0'} review={review} />

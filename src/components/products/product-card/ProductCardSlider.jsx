@@ -7,8 +7,9 @@ import Image from "next/image";
 import "@splidejs/react-splide/css";
 import "./CardSlider.css";
 
-const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
+const ProductCardSlider = ({ activeSlideIndex, imagesArr = undefined }) => {
   const slideRef = useRef(null);
+  const images = imagesArr.slice(0,3);
   const [loadingImages, setLoadingImages] = useState(
     new Array(images?.length).fill(true)
   );
@@ -16,7 +17,6 @@ const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
 
   useEffect(() => {
     if (slideRef.current && activeSlideIndex !== undefined) {
-      console.log(activeSlideIndex);
       slideRef.current.go(activeSlideIndex);
     }
   }, [activeSlideIndex]);
@@ -43,12 +43,9 @@ const ProductCardSlider = ({ activeSlideIndex, images = undefined }) => {
       aria-label="My Favorite Images"
       hasTrack={false}
       options={{
-        classes: {
-          pagination: "splide__pagination product-card-pagination",
-        },
         type: 'fade',
+        pagination:false,
         loop: true,
-        pagination: images?.length > 1,
         speed: 1000,
         arrows: false,
       }}

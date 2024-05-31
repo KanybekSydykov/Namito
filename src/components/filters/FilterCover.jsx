@@ -1,31 +1,30 @@
+'use client';
+
 import React from "react";
 import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Flex,
   Text,
   Image,
-  Box,
-  RangeSlider,
-  RangeSliderTrack,
-  RangeSliderFilledTrack,
-  RangeSliderThumb,
 } from "@chakra-ui/react";
-import CheckBoxList from "./CheckBoxList";
 import PriceFilter from "./PriceFilter";
 import BrandFilter from "./BrandFilter";
 import ColorFilter from "./ColorFilter";
 import SizeFilter from "./SizeFilter";
+import RatingRadioGroup from "./RatingRadioGroup";
+import OrangeButton from "../ui/OrangeButton";
+import { useParams } from "next/navigation";
+
 
 const FilterCover = ({
   getCheckBoxValues,
+  handleRating,
   onChangePrice,
   borders = false,
   data,
 }) => {
+
+  const {locale} = useParams();
+
   const brands = data.brands;
   const colors = data.colors;
   const sizes = data.sizes;
@@ -73,13 +72,12 @@ const FilterCover = ({
     {colors.length > 0 ? <ColorFilter getValues={getCheckBoxValues} data={colors} /> : null}
     {sizes.length > 0 ?  <SizeFilter getValues={getCheckBoxValues} data={sizes}/> : null}
     {brands.length > 0 ?  <BrandFilter getValues={getCheckBoxValues} data={brands} /> : null}
-      <CheckBoxList
-        title={"Рейтинг товара"}
-        getValues={getCheckBoxValues}
-        data={[0, 1, 2, 3, 4]}
-        isLast={true}
-        isRating = {true}
-      />
+
+    <RatingRadioGroup handleRating={handleRating} locale={locale} />
+
+        
+    <OrangeButton text={locale === "en" ? "Reset filters" : "Сбросить фильтры"}/>
+
     </Flex>
   );
 };

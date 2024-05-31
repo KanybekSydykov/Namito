@@ -84,7 +84,7 @@ const Search = ({ handleCatalogDrawer }) => {
       >
         <Input
           type="text"
-          placeholder="Я ищу..."
+          placeholder={locale === "en" ? "Search" : "Я ищу..."}
           bg={isFocused ? "fff" : "transparent"}
           border={"1px solid #A4A4A4"}
           borderRadius={"10px"}

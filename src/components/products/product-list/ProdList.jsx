@@ -13,18 +13,18 @@ const ProdList = ({ data, locale, token }) => {
     <Flex
       flexDir={"column"}
       gap={"20px"}
-      width={{ base: "100%", lg: "calc(100% - 330px)" }}
+    w={'100%'}
     >
       {!isDesktop && <SubCategoriesList data={data.children} locale={locale} />}
 
       {data.length > 0 ? (
         <Grid
           templateColumns={{
-            base: "repeat(2, minmax(161px,216px))",
-            sm: "repeat(3, minmax(171px,240px))",
-            md: "repeat(3, minmax(227px,313px))",
-            lg: "repeat(4, minmax(227px,1fr))",
-            xl: "repeat(5, minmax(227px,1fr))",
+            base: "repeat(2, minmax(161px,199px))",
+            sm: "repeat(auto-fit, minmax(199px,210px))",
+            md: "repeat(auto-fit, minmax(210px,230px))",
+            lg: "repeat(auto-fit, minmax(230px,257px))",
+            xl: "repeat(auto-fit, minmax(277px,277px))",
           }}
           gap={"16px"}
         >
