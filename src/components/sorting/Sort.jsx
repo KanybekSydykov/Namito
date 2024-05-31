@@ -54,7 +54,7 @@ const Sort = ({ handleSorting }) => {
   };
 
   return (
-    <Box position={"absolute"} right={"16px"} top={{ base: "0px", lg: "-75px" }}>
+    <Box>
       <Menu closeOnSelect={true}>
         <MenuButton
           as={Button}

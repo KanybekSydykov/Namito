@@ -14,6 +14,7 @@ const ProfileCover = ({ children, data }) => {
       maxW={{ base: "1200px", xl: "1472px" }}
       px={"0px"}
       pt={{ base: "0px", lg: "30px" }}
+      pb={'50px'}
     >
       <Flex
         flexDir={{

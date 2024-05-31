@@ -50,7 +50,8 @@ const CartButton = ({ selectedVariant, token }) => {
   return (
     <Button
       w={"100%"}
-      h={"52px"}
+      h={"32px"}
+      minH={'unset'}
       borderRadius={"10px"}
       bg={"orange"}
       color={"#fff"}

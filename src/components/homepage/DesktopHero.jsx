@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react'
 import { Flex, Text, Box, Highlight, useMediaQuery,AspectRatio } from '@chakra-ui/react'
 import Image from 'next/image'
@@ -50,6 +52,7 @@ const DesktopHero = ({data}) => {
             fontFamily: "readex",
             fontWeight: "700",
             color: "#000",
+            marginStart:'10px'
           }}
         >
           {data.title}
@@ -80,7 +83,7 @@ const DesktopHero = ({data}) => {
           fontWeight={"400"}
           fontSize={{ base: "18px", lg: "20px" }}
           lineHeight={"25.2px"}
-          mt={{ base: "40px", lg: "0px" }}
+          mt={{ base: "40px", lg: "6px" }}
         >
           {data.button}
         </Flex>
@@ -89,7 +92,7 @@ const DesktopHero = ({data}) => {
 
     <Flex
       flexDir={"row"}
-      gap={{ base: "16px", xl: "50px" }}
+      gap={{ base: "16px", xl: "35px" }}
       justifyContent={"space-between"}
       mt={{ base: "40px", lg: "0px" }}
       mx={{ base: "4px", lg: "0px" }}

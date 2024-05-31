@@ -1,5 +1,9 @@
+'use client';
+
 import React from "react";
-import { Flex, Box } from "@chakra-ui/react";
+
+
+import { Flex, Box, Container } from "@chakra-ui/react";
 import ContainerBox from "@/components/ui/Container";
 import ProductsSection from "@/components/products/products-section/ProductsSection";
 import BannerSlider from "./BannerSlider";
@@ -7,9 +11,15 @@ import DesktopHero from "./DesktopHero";
 import MobileHero from "./MobileHero";
 
 const Home = ({ data = undefined, locale, newProducts, products, token }) => {
+
+  const topProducts = data.top_products.filter(item => item !== null)
+
   return (
     <>
-      <ContainerBox>
+      <Container
+        maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+        pb={"90px"}
+      >
         <Box display={{ base: "none", lg: "block" }}>
           <DesktopHero data={data} />
         </Box>
@@ -31,12 +41,12 @@ const Home = ({ data = undefined, locale, newProducts, products, token }) => {
             <BannerSlider images={data.slider} />
           </Flex>
         ) : null}
-      </ContainerBox>
+      </Container>
 
       <Flex flexDir={"column"} gap={"90px"}>
         {/* Featured Prods       */}
         <ProductsSection
-          products={data.top_products}
+          products={topProducts}
           token={token}
           locale={locale}
           slider={true}

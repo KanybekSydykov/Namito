@@ -26,7 +26,7 @@ const ProfilePages = ({ data, token }) => {
 
   return (
     <Container
-      pt={"20px"}
+      py={{base:"20px",lg:'40px'}}
       px={"unset"}
       w={{ base: "100%", lg: "auto" }}
       minW={{ base: "100%", lg: "420px" }}

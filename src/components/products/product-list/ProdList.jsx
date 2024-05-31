@@ -20,11 +20,10 @@ const ProdList = ({ data, locale, token }) => {
       {data.length > 0 ? (
         <Grid
           templateColumns={{
-            base: "repeat(2, minmax(161px,199px))",
-            sm: "repeat(auto-fit, minmax(199px,210px))",
-            md: "repeat(auto-fit, minmax(210px,230px))",
-            lg: "repeat(auto-fit, minmax(230px,257px))",
-            xl: "repeat(auto-fit, minmax(277px,277px))",
+            base: "repeat(2, minmax(161px,219px))",
+            md: "repeat(auto-fit, minmax(220px,230px))",
+            lg: "repeat(auto-fit, minmax(230px,247px))",
+            xl: "repeat(auto-fit, minmax(247px,247px))",
           }}
           gap={"16px"}
         >

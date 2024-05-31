@@ -7,7 +7,7 @@ const Advantages = ({ data }) => {
       fontFamily={"roboto"}
       color={"#363636"}
       fontWeight={"400"}
-      mt={{base:"50px",lg:'30px',xl:'50px'}}
+      mt={{base:"50px",lg:'20px',xl:'20px'}}
       textAlign={{ base: "start", xl: "center" }}
       gap={{base:'15px',xl:'30px'}}
     >

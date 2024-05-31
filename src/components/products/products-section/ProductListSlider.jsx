@@ -6,6 +6,8 @@ import Image from "next/image";
 import Product from "../product-card/Product";
 
 const ProductListSlider = ({products,token}) => {
+
+ 
   return (
     <>
 

@@ -8,27 +8,42 @@ import Sort from "@/components/sorting/Sort";
 import ProdList from "@/components/products/product-list/ProdList";
 import BreadCrumbs from "../shared-components/breadcrumb/BreadCrumbs";
 import { getData } from "@/lib/apiServices";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const baseURL = "https://namito.tatadev.pro/api/products?";
 
+const queries = ['brand','category','color','size','min_price','max_price','rating','ordering'];
+
 const CategoryCover = ({ data, params, token }) => {
+  const router = useRouter();
+  const queryParams = useSearchParams();
   // const { filter, setFilters, sorting, setSorting, url } = useConstructUrl();
-  const [filterValues, setFilterValues] = useState({category:params.slug});
+  const [filterValues, setFilterValues] = useState({});
   const [query, setQuery] = useState("");
+  const [products, setProducts] = useState(data.products);
+  const [initialProducts, setInitialProducts] = useState(data.products);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
+     const url = constructURL(filterValues);
+     console.log(url);
 
-    constructURL(filterValues);
-    async function getFilteredProducts() {
-      const res = await getData('',query);
-      console.log(res);
-    }
-
-    if (query) {
-      console.log(query);
-      getFilteredProducts();
+    if (url) {
+      getFilteredProducts(url);
     }
   }, [filterValues]);
+
+  
+
+
+  async function getFilteredProducts(url) {
+    const res = await getData('',`${baseURL}category_slug=${params.slug}&${url}`);
+    if(res.status >= 200 && res.status < 300){
+      router.replace(`?${url}`);
+      setFilteredProducts(res.data.products);
+      setProducts(res.data.products);
+    }
+  }
 
   function handleFilters(title, value) {
     if (filterValues.length > 1) {
@@ -75,14 +90,12 @@ const CategoryCover = ({ data, params, token }) => {
       )
       .join("&");
 
-    setQuery(`${baseURL}${queryString}`);
+     return queryString; 
   }
-
-  console.log(query);
 
   return (
     <Flex
-      maxW={{ base: "1200px", xl: "1472px", "2xl": "1600px" }}
+      maxW={{ base:'100%', lg:"1200px", xl: "1200px", "2xl": "1440px" }}
       mx={"auto"}
       flexDir={"row"}
       flexWrap={"wrap"}
@@ -103,20 +116,30 @@ const CategoryCover = ({ data, params, token }) => {
         <SubCategoriesList data={data.children} locale={params.locale} />
       </Flex>
 
+    <Flex
+    flexDir={'row'}
+    justifyContent={'space-between'}
+    width={{base:'100%',lg:'auto'}}
+    >
       <Filters
         data={data}
         handleFilters={handleFilters}
         handlePrice={handlePrice}
         handleRating={handleRating}
       />
+      <Box display={{ base: "block", lg: "none" }}>
+
+        <Sort handleSorting={handleSorting} />
+      </Box>
+
+    </Flex>
 
       {/* Products */}
       <Box
         position={"relative"}
         width={{ base: "100%", lg: "calc(100% - 330px)" }}
       >
-        <Sort handleSorting={handleSorting} />
-        <ProdList token={token} data={data.products} locale={params.locale} />
+        <ProdList token={token} data={products} locale={params.locale} />
       </Box>
     </Flex>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import { Box, Flex, Text, Grid, AspectRatio } from "@chakra-ui/react";
 import Product from "@/components/products/product-card/Product";
@@ -26,7 +28,7 @@ const ProductsSection = ({
         flexDir={"column"}
         gap={"26px"}
         pb={"100px"}
-        maxW={{ base: "1200px", xl: "1472px" ,'2xl':'1600px'}}
+        maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
         mx={"auto"}
         width={'100dvw'}
       >
@@ -70,12 +72,9 @@ const ProductsSection = ({
             py={"4px"}
             px={"16px"}
             width={'100%'}
-            justifyItems={"center"}
-            justifyContent={"center"}
             gridTemplateColumns={{
-              base: "repeat(2, minmax(161px,216px))",
-              sm: "repeat(auto-fit, minmax(171px,240px))",
-              md: "repeat(auto-fit, minmax(240px,250px))",
+              base: "repeat(2, minmax(161px,219px))",
+              md: "repeat(auto-fit, minmax(220px,250px))",
               lg: "repeat(auto-fit, minmax(250px,277px))",
               xl: "repeat(auto-fit, minmax(277px,277px))",
             }}

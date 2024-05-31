@@ -51,14 +51,17 @@ const Header = ({ data,isAuth,token }) => {
         }
       >
         <Flex
-          maxW={{ base: "1200px", xl: "1472px",'2xl':'1600px' }}
+                  maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+
           flexDir={"row"}
           px={"16px"}
           justifyContent={{ base: "space-between", xl: "flex-start" }}
           alignItems={"center"}
           mx={"auto"}
         >
+          <Box onClick={() => setIsCatalogDrawer(false)}>
           <Logo />
+          </Box>
 
           {isDesktop && (
             <Flex
@@ -97,7 +100,8 @@ const Header = ({ data,isAuth,token }) => {
       {/* Middle nav */}
       {!isDesktop && (
         <Container
-          maxW={{ base: "1200px", xl: "1472px",'2xl':'1600px' }}
+        maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+
           display={"flex"}
           flexDir={"row"}
           justifyContent={"space-between"}

@@ -12,6 +12,11 @@ import {   Box,
     ListItem} from '@chakra-ui/react'
 
 const ProductCharacteristics = ({data ,params}) => {
+
+  if(data.length === 0){
+    return null;
+  }
+
   return (
     <Accordion
     defaultIndex={[0]}
