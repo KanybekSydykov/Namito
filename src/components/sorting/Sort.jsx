@@ -23,7 +23,7 @@ const Sort = ({ handleSorting }) => {
     },
     {
       name: locale === "ru" ? "Скидки" : "Discount",
-      value: 'max-discount',
+      value: 'max_discount',
     },
     {
       name: locale === "ru" ? "По возрастанию цены" : "Price from low to high",

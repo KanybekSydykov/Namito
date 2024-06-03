@@ -1,19 +1,24 @@
-"use client";
-
-import React from "react";
+'use client';
+import React,{ useEffect, useState } from "react";
 import { Box, Flex,Button } from "@chakra-ui/react";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import Image from "next/image";
 import "@splidejs/react-splide/css";
 
 const BannerSlider = ({ images }) => {
+  const [sliderImages,setSliderImages] = useState([]);
 
+  useEffect(() => {
+    setSliderImages(images);
+  },[images]);
+
+  if(sliderImages.length === 0) return null
 
   function isImage(url) {
     return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
   }
 
-  console.log(images);
+
 
   return (
     <>
@@ -34,7 +39,7 @@ const BannerSlider = ({ images }) => {
         h={"100%"}
       >
         <Box as={SplideTrack} w={"100%"} h={"100%"}>
-          {images?.map((item, index) => (
+          {sliderImages?.map((item, index) => (
             
           <SplideSlide key={index}>
             <Box pos={'relative'} w={"100%"} h={"100%"}>

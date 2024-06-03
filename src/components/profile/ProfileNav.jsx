@@ -22,56 +22,64 @@ import ProfileExitDelete from "./ProfileExitDelete";
 const profileDataSkeleton = [
   {
     id: 1,
-    name: "Мои данные",
+    name_ru: "Мои данные",
+    name_en: "My data",
     icon: ProfileIcon,
     isPage:false,
     url: "settings",
   },
   {
     id: 2,
-    name: "Мои заказы",
+    name_ru: "Мои заказы",
+    name_en: "My orders",
     icon: OrdersIcon,
     isPage:false,
     url: "orders",
   },
   {
     id: 3,
-    name: "Мои адреса",
+    name_ru: "Мои адреса",
+    name_en: "My addresses",
     icon: AdressIcon,
     isPage:false,
     url: "adresses",
   },
   {
     id: 4,
-    name: "Мои отзывы",
+    name_ru: "Мои отзывы",
+    name_en: "My reviews",
     icon: ReviewsIcon,
     isPage:false,
     url: "reviews",
   },
   {
     id: 5,
-    name: "Избранные товары",
+    name_ru: "Избранные товары",
+    name_en: "Favourites",
     icon: FavsIcon,
     url: "favourites",
     isPage:false,
   },
   {
     id: 6,
-    name: "О нас",
+    name_ru: "О нас",
+    name_en: "About",
     icon: AboutIcon,
     url: "about",
     isPage:true,
   },
   {
     id: 7,
-    name: "Доставка",
+    name_ru: "Доставка",
+    name_en: "Delivery",
     icon: DeliveryIcon,
     url: "delivery",
     isPage:true,
   },
   {
     id: 8,
-    name: "Язык приложения",
+    name_ru: "Язык приложения",
+    name_en: "Language",
     icon: LangIcon,
     url: "language",
     isPage:false,
@@ -109,7 +117,7 @@ const ProfileNav = ({data}) => {
         lineHeight={"22px"}
         px="16px"
       >
-        Профиль
+        {locale === 'ru' ? 'Профиль' : 'Profile'}
       </Text>}
       <Flex w={"100%"} mt={"20px"}>
         <Link
@@ -167,7 +175,7 @@ const ProfileNav = ({data}) => {
                   lineHeight={"22px"}
                   color={"#000"}
                 >
-                  Личные данные
+                 {locale === 'ru' ? 'Личные данные' : 'Personal data'}
                 </Text>
               </Flex>
             </Flex>
@@ -230,7 +238,7 @@ const ProfileNav = ({data}) => {
                       lineHeight={"24px"}
                       color={item.id === 6 ? "#000" : "rgba(203, 70, 9, 1)"}
                     >
-                      {item.name}
+                      {locale === 'ru' ? item.name_ru : item.name_en}
                     </Text>
                   </Flex>
 

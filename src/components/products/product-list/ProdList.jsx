@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Grid, GridItem, Text, useMediaQuery } from "@chakra-ui/react";
+import { Flex, Grid, GridItem, Spinner, Text, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import Product from "../product-card/Product";
 import SubCategoriesList from "@/components/categories/SubCategoriesList";
@@ -8,6 +8,7 @@ import Image from "next/image";
 
 const ProdList = ({ data, locale, token }) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
+
 
   return (
     <Flex
@@ -17,7 +18,7 @@ const ProdList = ({ data, locale, token }) => {
     >
       {!isDesktop && <SubCategoriesList data={data.children} locale={locale} />}
 
-      {data.length > 0 ? (
+      {data?.length > 0 ? (
         <Grid
           templateColumns={{
             base: "repeat(2, minmax(161px,219px))",
@@ -41,7 +42,7 @@ const ProdList = ({ data, locale, token }) => {
           alignItems={"center"}
           gap={"16px"}
         >
-          <Text
+          {/* <Text
             fontFamily={"roboto"}
             fontSize={"26px"}
             color={"#000"}
@@ -55,7 +56,9 @@ const ProdList = ({ data, locale, token }) => {
             alt="decor-icon"
             width={80}
             height={80}
-          />
+          /> */}
+
+          <Spinner size="xl" color="orange" />
         </Flex>
       )}
     </Flex>

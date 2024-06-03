@@ -47,15 +47,15 @@ const Product = ({
           {/* Card Images */}
           <Flex position={"relative"}>
             <Flex
-              aspectRatio={257 / 290}
+              aspectRatio={{ base: "1", lg: "0.95" }}
               pos={"relative"}
               position={"relative"}
               borderRadius={"10px"}
               overflow={"hidden"}
-              minW={{ base: "199px", lg: "225px" }}
+              minW={{ base: "100%", lg: "225px" }}
               width={"100%"}
               maxW={{ base: "240px", lg: "270px" }}
-              height={{ base: "225px", lg: "250px" }}
+              // height={{ base: "225px", lg: "250px" }}
               zIndex={2}
             >
               <ProductCardSlider

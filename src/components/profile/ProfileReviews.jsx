@@ -3,7 +3,6 @@ import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import ReviewCard from "../reviews/ReviewCard";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { deleteData, getData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
@@ -12,12 +11,13 @@ const ProfileReviews = ({ token }) => {
   const params = useParams();
   const [reviews, setReviews] = useState([]);
   const [requesting, setRequesting] = useState(true);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     async function getOrders() {
       setRequesting(true);
       try {
-        const response = await getData(token, ENDPOINTS.getUserReviews());
+        const response = await getData(token, ENDPOINTS.getUserReviews(),params.locale);
         if (response.status >= 200 && response.status < 400) {
           setRequesting(false);
           setReviews(response.data);
@@ -74,7 +74,7 @@ const ProfileReviews = ({ token }) => {
         lineHeight={"23.44px"}
         mb={"20px"}
       >
-        Ваши отзывы на приобретённые товары
+      {params.locale === "ru" ? "Ваши отзывы на приобретённые товары" : "Your reviews on purchased goods"}  
       </Text>
 
       {reviews.length > 0 ? (
@@ -105,10 +105,10 @@ const ProfileReviews = ({ token }) => {
               width={50}
               height={50}
             />
-            <Text fontWeight={"400"}>Вы ещё не оставляли отзывов</Text>
+            <Text fontWeight={"400"}>
+              {params.locale === "ru" ? "Вы ещё не оставляли отзывов" : "You have not made any reviews"}</Text>
             <Text fontWeight={"300"}>
-              Если Вы хотите оценить приобретённый товар, выберите товар из
-              списка
+          {params.locale === "ru" ? "Если Вы хотите оценить приобретённый товар, выберите товар из списка" : "If you want to rate purchased goods, select the goods from the list"}
             </Text>
           </Flex>
         </Flex>

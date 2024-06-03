@@ -6,6 +6,29 @@ import { Container } from '@chakra-ui/react'
 import { notFound, redirect } from 'next/navigation'
 import React from 'react'
 
+export async function generateMetadata({ params, searchParams }, parent) {
+  // read route params
+
+  // fetch data
+  const res = await fetch(`https://namito.tatadev.pro/api/product-seo/${params.id}/`,{
+    cache: 'no-store'
+  })
+  const meta = await res.json()
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: meta.meta_title,
+    description: meta.meta_description,
+    openGraph: {
+      description: meta.meta_description,
+      title: meta.meta_title,
+      images: [{ url: meta.meta_image }, ...previousImages],
+    },
+  }
+}
+
 const page = async({params}) => {
 
   const session = await getSession();

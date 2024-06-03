@@ -91,7 +91,7 @@ const Navmenu = ({ isDesktop, isCatalogDrawer, handleCatalogDrawer, data }) => {
             lineHeight={"21px"}
             color={"#fff"}
           >
-            Каталог
+          {locale === "ru" ? "Каталог" : "Catalog"}
           </Text>
         )}
       </Box>

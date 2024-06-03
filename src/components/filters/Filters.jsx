@@ -14,9 +14,6 @@ const Filters = ({data,handleFilters,handlePrice,handleRating}) => {
  
   const [isMobile] = useMediaQuery("(max-width: 992px)");
 
-  function onChangePrice(value) {
-    handlePrice(value)
-  }
 
   function getCheckBoxValues(title, values) {
     handleFilters(title,values)
@@ -28,11 +25,11 @@ const Filters = ({data,handleFilters,handlePrice,handleRating}) => {
       {isMobile ?
       
       <ModalWindow ButtonEl={ModalButton}>
-        <FilterCover handleRating={handleRating} data={data} onChangePrice={onChangePrice} borders={false} getCheckBoxValues={getCheckBoxValues} />
+        <FilterCover handleRating={handleRating} data={data} onChangePrice={handlePrice} borders={false} getCheckBoxValues={getCheckBoxValues} />
       </ModalWindow>
       
       :  (
-       <FilterCover handleRating={handleRating} data={data} onChangePrice={onChangePrice} getCheckBoxValues={getCheckBoxValues} />
+       <FilterCover handleRating={handleRating} data={data} onChangePrice={handlePrice} getCheckBoxValues={getCheckBoxValues} />
       )}
     </>
   );

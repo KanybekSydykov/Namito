@@ -1,48 +1,91 @@
-import React from 'react'
-import { Flex } from '@chakra-ui/react'
-import Filters from '@/components/filters/Filters'
-import ProdList from '@/components/products/product-list/ProdList'
-import Sort from '@/components/sorting/Sort'
-import SubCategoriesList from '@/components/categories/SubCategoriesList'
-import BreadCrumbs from '@/components/shared-components/breadcrumb/BreadCrumbs'
-import { ENDPOINTS } from '@/API/endpoints'
-import {notFound} from 'next/navigation'
-import { getSession } from '@/lib/lib'
-import CategoryCover from '@/components/categories/CategoryCover'
+import React, { Suspense } from 'react';
+import { ENDPOINTS } from '@/API/endpoints';
+import { notFound } from 'next/navigation';
+import { getSession } from '@/lib/lib';
+import CategoryCover from '@/components/categories/CategoryCover';
+import { Flex } from '@chakra-ui/react';
+import Loading from './loading';
 
+const baseURL = "https://namito.tatadev.pro/api/products";
+const buildQueryString = (params) => {
+  return Object.keys(params)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+    .join('&');
+};
+let filteredData = [];
 
-
-const page = async({ params ,searchParams}) => {
-  const {slug} = params;
+const page = async ({ params, searchParams }) => {
+  const { slug } = params;
   const session = await getSession();
   const token = session?.access_token;
   const headers = {
     'Accept-Language': `${params.locale}`,
     'Content-Type': 'application/json',
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
-  if(token){
-    headers['Authorization'] = `Bearer ${token}`
+  // Fetch category data
+  const categoryRes = await fetch(`${ENDPOINTS.getCategoryData(slug)}`, {
+    cache: 'no-cache',
+    headers: headers,
+  });
+
+  if (!categoryRes.ok) {
+    notFound();
+    return null;
   }
 
-  const res = await fetch(`${ENDPOINTS.getCategoryData(slug)}`, {
-    cache:'no-cache',
-    headers: headers
-  })
-  const responseData = await res.json()
-  const [data] = responseData;
+  const categoryData = await categoryRes.json();
+  const [data] = categoryData;
 
-
-  if(!data){
-    notFound()
+  if (!data) {
+    notFound();
+    return null;
   }
+
+  // Build query string for filtered products
+  const queryString = buildQueryString(searchParams);
+
+  console.log('query string ------', queryString);
+
+  if (queryString) {
+    const url = `${baseURL}?${queryString}`;
+    filteredData = await getFilteredProducts(url, headers);
+  }
+
+  async function getFilteredProducts(url, headers) {
+    const res = await fetch(url, {
+      cache: 'no-cache',
+      headers: headers,
+    });
+
+    if (!res.ok) {
+      console.error('Failed to fetch filtered products:', res.statusText);
+      return [];
+    }
+
+    const filteredResData = await res.json();
+    return filteredResData;
+  }
+
 
   return (
-    <div>
+<Suspense fallback={<Loading />}>
 
-    <CategoryCover data={data} params={params} token={session ? token : undefined} />
-    </div>
-  )
-}
+    <Flex flexGrow={1}>
+      <CategoryCover
+        data={data}
+        params={params}
+        filteredProductsData={filteredData?.products}
+        token={session ? token : undefined}
+      />
+    </Flex>
+</Suspense>
 
-export default page
+  );
+};
+
+export default page;

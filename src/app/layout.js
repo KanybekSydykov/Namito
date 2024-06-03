@@ -8,41 +8,47 @@ import { ENDPOINTS } from "@/API/endpoints";
 import { CounterProvider } from "@/lib/auth-content";
 import { getSession } from "@/lib/lib";
 
-export async function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ lang: locale }));
-}
-// export async function generateMetadata({ params, searchParams }, parent) {
-//   // read route params
-
-//   // fetch data
-//   const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.PAGES}`)
-//   const meta = await res.json()
-
-//   // optionally access and extend (rather than replace) parent metadata
-//   const previousImages = (await parent).openGraph?.images || []
-
-//   return {
-//     title: meta['about_page'].meta_title,
-//     description: meta['about_page'].meta_description,
-//     openGraph: {
-//       description: meta['about_page'].meta_description,
-//       title: meta['about_page'].meta_title,
-//       images: [{ url: meta['about_page'].meta_image }, ...previousImages],
-//     },
-//   }
-// }
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata({ params, searchParams }, parent) {
+  // read route params
+
+  // fetch data
+  const res = await fetch(`https://namito.tatadev.pro/api/layout-meta/`, {
+    cache: 'no-store'
+  })
+  const [meta] = await res.json()
+
+  // console.log(meta);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+
+  return {
+    title: meta.meta_title,
+    description: meta.meta_description,
+    openGraph: {
+      description: meta.meta_description,
+      title: meta.meta_title,
+      images: [{ url: meta.meta_image }, ...previousImages],
+    },
+  }
+}
 
 
 export default async function RootLayout({ children }) {
 
 
   return (
-    <>
-      {
-        children}
-    </>
+    <html   >
+      <body className={`body`}>
+        {
+          children}
+      </body>
+
+
+    </html>
   )
 
 

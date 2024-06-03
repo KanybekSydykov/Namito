@@ -10,7 +10,7 @@ const page = async({params,searchParams}) => {
 
   const token = session?.access_token
 
-  const response = await getData(token,ENDPOINTS.getUserOrderId(id))
+  const response = await getData(token,ENDPOINTS.getUserOrderId(id),params.locale)
 
   console.log(response,id);
 

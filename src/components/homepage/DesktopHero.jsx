@@ -28,8 +28,8 @@ const DesktopHero = ({data}) => {
     <Flex
     flexDir={{ base: "column", lg: "row" }}
     gap={"24px"}
-    justifyContent={{ base: "unset", xl: "space-between" }}
-    mt={{ base: "55px", lg: "50px", xl: "50px" }}
+    justifyContent={{ base: "unset", lg: "space-between" }}
+    mt={{ base: "55px", lg: "50px", lg: "50px" }}
   >
     <Flex
       flexDir={"column"}

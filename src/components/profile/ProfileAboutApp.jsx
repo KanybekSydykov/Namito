@@ -1,3 +1,4 @@
+'use client';
 import {
   Box,
   Flex,
@@ -10,11 +11,11 @@ import {
   AccordionPanel,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import React from "react";
 
 const ProfileAboutApp = ({data}) => {
-
-  console.log(data);
+  const {locale} = useParams();
   return (
     <Flex fontFamily={"roboto"} flexDir={"column"} gap={"50px"} py={{lg:'30px'}} >
       <Flex flexDir={{ base: "column", lg: "row" }} justifyContent={{ base: "center", lg: "space-between" }} px={'16px'} gap={"40px"}>
@@ -76,12 +77,12 @@ const ProfileAboutApp = ({data}) => {
           color={"#000"}
           textTransform={"uppercase"}
         >
-          часто задаваемые вопросы *
+         {locale === 'ru' ? 'Часто задаваемые вопросы' : 'Frequently asked questions'}
         </Text>
 
         <Accordion allowMultiple>
 
-          {data.faqs.map((item, index) => (
+          {data.faqs?.map((item, index) => (
             
           <AccordionItem key={item.question}>
             <h2>

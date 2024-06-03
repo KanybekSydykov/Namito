@@ -4,7 +4,7 @@ import { Flex, Box, Text, Input, Button, Spinner, useToast } from "@chakra-ui/re
 import { useState } from "react";
 import Image from "next/image";
 import { ENDPOINTS } from "@/API/endpoints";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 const serverProfileImg =
   "https://raw.githubusercontent.com/tturdumamatovv/Namito/main/assets/images/default-user.jpg";
 
@@ -21,6 +21,7 @@ const ProfileSettings = ({ data, token }) => {
       : data.profile_picture
   );
   const router = useRouter();
+  const {locale} = useParams();
 
   const toast = useToast();
 
@@ -73,7 +74,7 @@ const ProfileSettings = ({ data, token }) => {
         if (response.status >= 200) {
           setIsEdit(false);
           toast({
-            title: "Профиль успешно обновлен",
+            title: locale === 'ru' ? "Профиль успешно обновлен" : "Profile updated successfully",
             status: "success",
             duration: 3000,
             isClosable: true,
@@ -104,6 +105,9 @@ const ProfileSettings = ({ data, token }) => {
       reader.readAsDataURL(file);
     }
   };
+
+  const saveText = locale === 'ru' ? "Сохранить" : "Save";
+  const editText = locale === 'ru' ? "Редактировать" : "Edit";
 
   return (
     <Flex
@@ -164,7 +168,7 @@ const ProfileSettings = ({ data, token }) => {
               lineHeight={"24px"}
               color={"rgba(54, 54, 54, 1)"}
             >
-              Ваше ФИО *
+             {locale === 'ru' ? 'Ваше ФИО *' : 'Your full name *'}
             </Text>
             <Input
               placeholder="Например: Асанов Асан"
@@ -188,7 +192,9 @@ const ProfileSettings = ({ data, token }) => {
               lineHeight={"24px"}
               color={"rgba(54, 54, 54, 1)"}
             >
-              Дата рождения *
+             {locale === 'ru' ? 'Дата рождения *' : 'Date of birth *'}
+
+            
             </Text>
             <Input
               placeholder="дд.мм.гггг"
@@ -213,7 +219,7 @@ const ProfileSettings = ({ data, token }) => {
               lineHeight={"24px"}
               color={"rgba(54, 54, 54, 1)"}
             >
-              Электронный адрес почты (e-mail) *
+             {locale === 'ru' ? 'Электронный адрес почты (e-mail) *' : 'Email address (e-mail) *'}
             </Text>
             <Input
               placeholder="example@gmail.com"
@@ -237,7 +243,7 @@ const ProfileSettings = ({ data, token }) => {
               lineHeight={"24px"}
               color={"rgba(54, 54, 54, 1)"}
             >
-              Номер телефона *
+             {locale === 'ru' ? 'Номер телефона *' : 'Phone number *'}
             </Text>
             <Input
               placeholder={data.phone_number}
@@ -278,9 +284,9 @@ const ProfileSettings = ({ data, token }) => {
           {requestPending ? (
             <Spinner />
           ) : isEdit ? (
-            "Сохранить"
+            saveText
           ) : (
-            "Редактировать"
+           editText
           )}
         </Button>
       </form>

@@ -17,7 +17,7 @@ const ProfileOrders = ({ params,token }) => {
 
       SetRequesting(true);
       try{
-        const response = await getData(token,ENDPOINTS.getUserOrders());
+        const response = await getData(token,ENDPOINTS.getUserOrders(),params.locale);
         if(response.status >= 200){
           SetRequesting(false);
           SetOrders(response.data);
@@ -41,15 +41,16 @@ const ProfileOrders = ({ params,token }) => {
   const getOrderStatusName = (status) => {
     switch (status) {
       case 0:
-        return "В процессе";
+        return params.locale === 'ru' ? "В процессе" : "In process";
       case 1:
-        return "Доставлено";
+        return params.locale === 'ru' ? "Доставлено" : "Delivered";
       case 2:
-        return "Отменен";
+        return  params.locale === 'ru' ? "Отменен" : "Canceled";
       case 3:
-        return "Отправлено";
+        return  params.locale === 'ru' ? "Отправлено" : "Sent";
     }
   }
+
 
   if(requesting){
     return <Flex
@@ -97,7 +98,7 @@ function formatDate(dateString) {
         <Image src={"/no-favs-icon.svg"} fill />
       </Box>
       <Text fontWeight={"400"}>
-        Вы ещё не оформили ни один заказ
+       {params.locale === 'ru' ? "У вас нет заказов" : "You have no orders"}
       </Text>
         <Flex
         display={'inline-flex'}
@@ -154,7 +155,7 @@ function formatDate(dateString) {
      >
        <Flex flexDir={"row"}>
          <Text w={"50%"} fontWeight={"300"}>
-           Номер заказа
+         {params.locale === 'ru' ? "Номер заказа" : "Order number"}  
          </Text>
          <Text w={"50%"} fontWeight={"400"}>
            {order.order_number}
@@ -162,7 +163,7 @@ function formatDate(dateString) {
        </Flex>
        <Flex flexDir={"row"}>
          <Text w={"50%"} fontWeight={"300"}>
-           Дата заказа
+        {params.locale === 'ru' ? "Дата заказа" : "Order date"}  
          </Text>
          <Text w={"50%"} fontWeight={"400"}>
            {formatDate(order.created_at)}
@@ -170,7 +171,7 @@ function formatDate(dateString) {
        </Flex>
        <Flex flexDir={"row"}>
          <Text w={"50%"} fontWeight={"300"}>
-           Статус заказа
+          {params.locale === 'ru' ? "Статус заказа" : "Order status"}
          </Text>
          <Text w={"50%"} fontWeight={"400"}>
           {getOrderStatusName(order.status)}
@@ -178,7 +179,7 @@ function formatDate(dateString) {
        </Flex>
        <Flex flexDir={"row"}>
          <Text w={"50%"} fontWeight={"300"}>
-           Общая цена
+          {params.locale === 'ru' ? "Общая цена" : "Total price"}
          </Text>
          <Text w={"50%"} fontWeight={"400"}>
           {order.total_amount} сом
@@ -208,19 +209,19 @@ function formatDate(dateString) {
     >
       <Flex flexDir={"row"} ps={"5px"} mb={'20px'}>
         <Text w={"50%"} fontWeight={"300"}>
-          Номер заказа
+         {params.locale === 'ru' ? "Номер заказа" : "Order number"} 
         </Text>
 
         <Text w={"50%"} fontWeight={"300"}>
-          Дата заказа
+         {params.locale === 'ru' ? "Дата заказа" : "Order date"} 
         </Text>
 
         <Text w={"50%"} fontWeight={"300"}>
-          Статус заказа
+         {params.locale === 'ru' ? "Статус заказа" : "Order status"} 
         </Text>
 
         <Text w={"50%"} fontWeight={"300"}>
-          Общая цена
+         {params.locale === 'ru' ? "Общая цена" : "Total price"}
         </Text>
       </Flex>
 

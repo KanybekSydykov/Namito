@@ -57,9 +57,10 @@ const ProfileFavourites = ({ token }) => {
   return (
     <>{favs.length ? (
         <Grid
+        w={'100%'}
           gridTemplateColumns={{
-            base: "repeat(2, minmax(171px,1fr))",
-            lg: "repeat(2, minmax(171px,1fr))",
+            base: "repeat(auto-fit, minmax(171px,191px))",
+            lg: "repeat(auto-fit, minmax(171px,245px))",
           }}
           gap={"16px"}
           mx={"16px"}
@@ -104,10 +105,10 @@ const ProfileFavourites = ({ token }) => {
               <Image src={"/no-favs-icon.svg"} alt={"heart"} fill />
             </Box>
             <Text fontWeight={"400"}>
-              Вы ещё не добавляли товары в избранное
+            {params.locale === "ru" ? "Вы ещё не добавляли товары в избранное" : "You have no favourites"}  
             </Text>
             <Text fontWeight={"300"}>
-              Чтобы сохранить товар в избранных, нажмите значок
+            {params.locale === "ru" ? "Чтобы сохранить товар в избранных, нажмите значок" : "To add a product to favorites click the heart"}  
             </Text>
             <Flex
               display={"inline-flex"}
@@ -127,7 +128,7 @@ const ProfileFavourites = ({ token }) => {
               />
             </Flex>
             <Text fontWeight={"300"}>
-              на карточке товара или на странице товара
+             {params.locale === "ru" ? "на карточке товара или на странице товара" : "on the product card or on the product page"}
             </Text>
           </Flex>
         </Flex>

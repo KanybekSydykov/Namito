@@ -4,7 +4,7 @@ import Logo from "@/components/header/logo/Logo";
 import Link from "next/link";
 import Image from "next/image";
 
-const Footer = ({ data }) => {
+const Footer = ({ data,params }) => {
   return (
     <>
       <Container
@@ -19,6 +19,7 @@ const Footer = ({ data }) => {
           gap={{ base: "70px", lg: "20px", xl: "50px" }}
           maxW={{ base: "1200px", xl: "1472px" }}
           mx={"auto"}
+          justifyContent={{ base: "unset", lg: "space-between" }}
           flexWrap={{ base: "wrap", lg: "nowrap" }}
         >
           <Box minW={"92px"}>
@@ -35,11 +36,25 @@ const Footer = ({ data }) => {
             color={"rgba(249, 249, 249, 1)"}
             flexDir={"column"}
           >
-            <ListItem>О нас</ListItem>
-            <ListItem>Доставка</ListItem>
-            <ListItem>Политика конфиденциальности</ListItem>
-            <ListItem>Возврат средств</ListItem>
-            <ListItem>Процесс оплаты</ListItem>
+            <ListItem>
+              <Link href={`/${params.locale}/about`}>{params.locale === 'ru' ? 'О нас' : 'About us'}</Link>
+            </ListItem>
+            <ListItem>
+              <Link href={`/${params.locale}/delivery`}>{params.locale === 'ru' ? 'Доставка' : 'Delivery'}</Link>
+            </ListItem>
+            <ListItem>
+              <Link href={`/${params.locale}/privacy`}>
+              {params.locale === 'ru' ? 'Политика конфиденциальности' : 'Privacy policy'}
+                </Link>
+            </ListItem>
+            <ListItem>
+              <Link href={`/${params.locale}/refund`}>
+                {params.locale === 'ru' ? 'Возврат средств' : 'Refund'}
+                </Link>
+            </ListItem>
+            <ListItem>
+              <Link href={`/${params.locale}/payment`}>{params.locale === 'ru' ? 'Процесс оплаты' : 'Payment process'}</Link>
+            </ListItem>
           </List>
 
           <List
@@ -57,7 +72,7 @@ const Footer = ({ data }) => {
               lineHeight={"23.44px"}
               color={"#fff"}
             >
-              Тех.поддержка
+             {params.locale === 'ru' ? ' Тех.поддержка' : 'Support'}
             </Text>
             {data.phones.map((item, index) => (
               <ListItem
@@ -93,7 +108,7 @@ const Footer = ({ data }) => {
               lineHeight={"23.44px"}
               color={"#fff"}
             >
-              Наши соцсети
+             {params.locale === 'ru' ? ' Наши соцсети' : 'Social networks'}
             </Text>
             <Flex flexDir={"row"} flexWrap={"wrap"} gap={"12px"}>
               {data.socials.map((item) => (
@@ -136,7 +151,7 @@ const Footer = ({ data }) => {
               lineHeight={"23.44px"}
               color={"#fff"}
             >
-              СПОСОБЫ ОПЛАТЫ
+             {params.locale === 'ru' ? ' СПОСОБЫ ОПЛАТЫ' : 'Payment methods'}
             </Text>
             <Flex flexDir={"row"} flexWrap={"wrap"} gap={"12px"}>
               {data.payment.map((item) => (

@@ -16,17 +16,15 @@ const OrderDetails = ({ params, searchParams, data = undefined }) => {
   const getOrderStatusName = (status) => {
     switch (status) {
       case 0:
-        return "В процессе";
+        return params.locale === 'ru' ? "В процессе" : "In process";
       case 1:
-        return "Доставлено";
+        return params.locale === 'ru' ? "Доставлено" : "Delivered";
       case 2:
-        return "Отменен";
+        return  params.locale === 'ru' ? "Отменен" : "Canceled";
       case 3:
-        return "Отправлено";
-        default:
-          return "";
+        return  params.locale === 'ru' ? "Отправлено" : "Sent";
     }
-  };
+  }
 
   console.log(data);
 
@@ -81,7 +79,7 @@ const OrderDetails = ({ params, searchParams, data = undefined }) => {
       >
         <Flex flexDir={{ base: "column", lg: "row" }} gap={"16px"}>
           <Text w={"50%"} fontWeight={"300"}>
-            Номер заказа
+           {params.locale === 'ru' ? 'Номер заказа' : 'Order number'}
           </Text>
           <Text w={"50%"} fontWeight={"400"}>
             {data.order_number ? data.order_number : data.id}
@@ -89,7 +87,7 @@ const OrderDetails = ({ params, searchParams, data = undefined }) => {
         </Flex>
         <Flex flexDir={{ base: "column", lg: "row" }} gap={"16px"}>
           <Text w={"50%"} fontWeight={"300"}>
-            Дата заказа
+           {params.locale === 'ru' ? "Дата заказа" : "Order date"}
           </Text>
           <Text w={"50%"} fontWeight={"400"}>
             {formatDate(data.created_at)}
@@ -97,7 +95,7 @@ const OrderDetails = ({ params, searchParams, data = undefined }) => {
         </Flex>
         <Flex flexDir={{ base: "column", lg: "row" }} gap={"16px"}>
           <Text w={"50%"} fontWeight={"300"}>
-            Статус заказа
+          {params.locale === 'ru' ? "Статус заказа" : "Order status"}
           </Text>
           <Text w={"50%"} fontWeight={"400"}>
             {getOrderStatusName(data.status)}
@@ -105,15 +103,15 @@ const OrderDetails = ({ params, searchParams, data = undefined }) => {
         </Flex>
         <Flex flexDir={{ base: "column", lg: "row" }} gap={"16px"}>
           <Text w={"50%"} fontWeight={"300"}>
-            Общая цена
+           {params.locale === 'ru' ? "Общая цена" : "Total price"}
           </Text>
           <Text w={"50%"} fontWeight={"400"}>
-            {data.total_amount} сом
+            {data.total_amount} {params.locale === 'ru' ? "сом" : "kgs"}
           </Text>
         </Flex>
         <Flex flexDir={{ base: "column", lg: "row" }} gap={"16px"}>
           <Text w={"50%"} fontWeight={"300"}>
-            Адрес доставки
+           {params.locale === 'ru' ? "Адрес доставки" : "Delivery address"}
           </Text>
           <Text w={"50%"} fontWeight={"400"}>
             {getAdressString(data.user_address)}
@@ -122,7 +120,7 @@ const OrderDetails = ({ params, searchParams, data = undefined }) => {
 
         <Flex flexDir={"column"} w={'100%'} gap={""}>
           <Text fontWeight={"700"} fontSize={"22px"}>
-            Товары :
+           {params.locale === 'ru' ? "Товары :" : "Products :"}
           </Text>
           {data?.items.map((item, index) => (
             <Flex
@@ -174,7 +172,9 @@ const OrderDetails = ({ params, searchParams, data = undefined }) => {
                   {item.product_name}
                 </Text>
                 <Flex flexDir={"row"} gap={"14px"}>
-                  <Text width={{base:"105px",lg:'220px'}}>Цена за товар</Text>
+                  <Text width={{base:"105px",lg:'220px'}}>
+                  {params.locale === 'ru' ? "Цена за товар" : "Product price"}  
+                    </Text>
                   <Text fontWeight={"700"}>
                     {item.product_variant.discounted_price
                       ? item.product_variant.discounted_price
@@ -182,13 +182,19 @@ const OrderDetails = ({ params, searchParams, data = undefined }) => {
                   </Text>
                 </Flex>
                 <Flex flexDir={"row"} gap={"14px"}>
-                  <Text width={{base:"105px",lg:'220px'}}>Размер</Text>
+                  <Text width={{base:"105px",lg:'220px'}}>
+                   {params.locale === 'ru' ? "Размер" : "Size"}
+                    </Text>
                   <Text fontWeight={"700"}>{
                     item.product_variant.size.name
                   }</Text>
                 </Flex>
                 <Flex flexDir={"row"} gap={"14px"}>
-                  <Text width={{base:"105px",lg:'220px'}}>Цвет</Text>
+                  <Text width={{base:"105px",lg:'220px'}}>
+                    
+                   {params.locale === 'ru' ? "Цвет" : "Color"}
+                    
+                    </Text>
                   <Text
                     fontWeight={"700"}
                     pos={"relative"}

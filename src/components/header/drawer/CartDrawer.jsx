@@ -83,6 +83,13 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
     }
   };
 
+
+  const closeText = locale === 'ru' ? "Закрыть" : "Close";
+
+  const loginText = locale === 'ru' ? "Войти" : "Login";
+
+  const checkOutText = locale === 'ru' ? "Оформить заказ" : "Checkout";
+
   
   return (
     <>
@@ -179,7 +186,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
             pos={"relative"}
           >
             <Text width={"auto"} flexGrow={1} textAlign={"center"}>
-              Корзина
+             {locale === 'en' ? 'Cart' : 'Корзина'}
             </Text>
             <Flex
               onClick={onClose}
@@ -242,7 +249,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
                             paddingRight: "10px",
                           }}
                         >
-                          Общая цена:</Highlight>{totalAmount} сом
+                          {params.locale === 'ru' ? 'Общая цена:' : 'Total price:'}</Highlight>{totalAmount} {params.locale === 'ru' ? 'сом' : 'kgs'}
                       </Text>
                     </>
                   ) : (
@@ -260,7 +267,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
                         lineHeight={"25px"}
                         textAlign={"center"}
                       >
-                        В корзине нет ни одного товара
+                       {locale === "ru" ? "Ваша корзина пуста" : "Your cart is empty"}
                       </Text>
 
                       <Image src={"/decor-star.png"} width={50} height={50} />
@@ -295,7 +302,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
                     isAuth ? (cartData ? "/checkout" : "/") : `/${locale}/login`
                   }
                   text={
-                    isAuth ? (cartData ? "Оформить заказ" : "Закрыть") : "Войти"
+                    isAuth ? (cartData ? checkOutText : closeText) : loginText
                   }
                 />
               </Box>

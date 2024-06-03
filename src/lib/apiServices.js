@@ -49,10 +49,11 @@ export async function requestOtp(credentials,url,locale) {
     }
   }
 
-  export async function getData(token, url) {
+  export async function getData(token, url,lang) {
     try {
       const headers = {
         'Content-Type': 'application/json',
+        'Accept-Language':`${lang}`,
       };
   
       if (token) {

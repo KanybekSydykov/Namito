@@ -144,6 +144,7 @@ const Search = ({ handleCatalogDrawer }) => {
           transition={"opacity .1s ease .15s"}
           backdropFilter={"blur(1px)"}
           onClick={(e) => handleInputFocus(e, false)}
+          overflowY={'auto'}
         >
           {isRequestPending ? (
             <Flex
@@ -166,7 +167,7 @@ const Search = ({ handleCatalogDrawer }) => {
             </Flex>
           ) : (
             <>
-              {searchResults.length > 0 && (
+              {searchResults.length > 0 ? (
                 <Box
                   position="absolute"
                   top={{ base: "120px", lg: "80px" }}
@@ -178,8 +179,11 @@ const Search = ({ handleCatalogDrawer }) => {
                   bg="white"
                   boxShadow="lg"
                   zIndex="3000"
+                  pb={'50px'}
                 >
-                  <List spacing={2}>
+                  <List spacing={2} 
+                  overflowY={'auto'}
+                  >
                     {searchResults.map((result) => (
                       <ListItem
                         position={"relative"}
@@ -219,8 +223,25 @@ const Search = ({ handleCatalogDrawer }) => {
                       </ListItem>
                     ))}
                   </List>
+                </Box>)
+                : 
+                <Box
+                position="absolute"
+                top={{ base: "120px", lg: "80px" }}
+                left="20px"
+                right="20px"
+                width="auto"
+                padding={"20px"}
+                borderRadius={"10px"}
+                bg="white"
+                boxShadow="lg"
+                zIndex="3000"
+                >
+                  <Text textAlign={'center'}>
+                    {locale === "ru" ? "Ничего не найдено" : "Nothing found"}
+                  </Text>
                 </Box>
-              )}
+              }
             </>
           )}
         </Box>
