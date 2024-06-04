@@ -7,21 +7,26 @@ export default async function ProfileLayout({
   }) {
 
     const session = await getSession();
+    const token = session?.access_token;
+    const headers = {
+      'Accept-Language': `${params.locale}`,
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  
     const res = await fetch(`${ENDPOINTS.getUserProfile()}`, {
       cache: 'no-store',
-      headers: {
-        'Accept-Language': `${params.locale}`,
-        'Authorization': `Bearer ${session.access_token}`
-      }
+      headers:headers
     })
     const data = await res.json()
-    const token = session.access_token
 
     return (
       <Flex 
       flexDir={'row'}
       gap={'30px'}
-      ps={'16px'}
+      px={'16px'}
       >
         <ProfileCover data={data} token={token} >
             {children}

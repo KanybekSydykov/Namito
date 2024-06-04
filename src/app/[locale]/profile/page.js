@@ -9,15 +9,20 @@ import ProfileNav from '@/components/profile/ProfileNav'
 const page = async({params}) => {
 
   const session = await getSession();
+  const token = session?.access_token;
+  const headers = {
+    'Accept-Language': `${params.locale}`,
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
   const res = await fetch(`${ENDPOINTS.getUserProfile()}`, {
     cache: 'no-cache',
-    headers: {
-      'Accept-Language': `${params.locale}`,
-      'Authorization': `Bearer ${session.access_token}`
-    }
+    headers: headers
   })
   const data = await res.json()
-  const token = session.access_token
+
 
   if(!token){
     redirect('/login')

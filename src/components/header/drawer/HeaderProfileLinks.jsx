@@ -15,11 +15,10 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
       fontSize={{ base: "14px", lg: "12px" }}
       lineHeight={"16px"}
       color={{ base: "#fff", lg: "rgba(54, 54, 54, 1)" }}
-      mt={{ base: "70px", lg: "0" }}
       justifyContent={"center"}
       fontFamily={"roboto"}
       alignItems={"center"}
-      onClick={onClose}
+
     >
       <Flex
         display="flex"
@@ -33,6 +32,8 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
         _hover={{ color: "orange", filter: "grayscale(0%)" }}
         role="group"
         transition={"all 0.2s ease-in-out"}
+        position={"relative"}
+        onClick={onClose}
       >
         <Image
           src={"/profile-icons/orders-icon.svg"}
@@ -42,7 +43,6 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
         />
         <Text>{locale === "en" ? "Orders" : "Заказы"}</Text>
         <Link
-          onClick={onClose}
           prefetch={true}
           scroll={false}
           href={`/${locale}/profile?page=orders`}
@@ -68,6 +68,8 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
         _hover={{ color: "orange", filter: "grayscale(0%)" }}
         role="group"
         transition={"all 0.2s ease-in-out"}
+        position={"relative"}
+        onClick={onClose}
       >
         <Image
           src={"/profile-icon-colored.svg"}
@@ -78,7 +80,6 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
         <Text>{isAuth ? (locale === 'en' ? "Profile" : "Профиль") : (locale === 'en' ? "Sign in" : "Войти")}</Text>
         <Link
           prefetch={true}
-          onClick={onClose}
           scroll={false}
           href={`/${locale}/${isAuth ? "profile" : "login"}`}
           style={{
@@ -103,6 +104,8 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
         _hover={{ color: "orange", filter: "grayscale(0%)" }}
         role="group"
         transition={"all 0.2s ease-in-out"}
+        position={"relative"}
+        onClick={onClose}
       >
         <Image
           src={"/favs-icon-colored.svg"}
@@ -113,7 +116,6 @@ const HeaderProfileLinks = ({ isDesktop, locale, onClose, isAuth }) => {
         <Text>{locale === "en" ? "Favorites" : "Избранное"}</Text>
         <Link
           prefetch={true}
-          onClick={onClose}
           scroll={false}
           href={`/${locale}/profile?page=favourites`}
           style={{

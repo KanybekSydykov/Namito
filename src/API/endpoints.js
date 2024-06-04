@@ -19,6 +19,7 @@ export const ENDPOINTS = {
     getUserOrders : () => _URI + 'carts/orders/',
     getUserOrderId : (id) => _URI + `carts/orders/${id}/`,
     postAddToCart : () => _URI + 'carts/add/',
+    postItemsToCard:() => _URI + 'carts/cart/add-multiple/',
     getCartData : () => _URI + 'carts/detail/',
     putCartQuantity : () => _URI + `carts/multi-update/`,
     deleteCartItem : (id) => _URI + `carts/item/${id}/`,

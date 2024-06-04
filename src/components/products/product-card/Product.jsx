@@ -1,6 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Flex, Box, Text, Button, Grid, GridItem } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Text,
+  Button,
+  Grid,
+  GridItem,
+  useToast,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -8,6 +16,10 @@ import ProductCardSlider from "./ProductCardSlider";
 import { useRouter } from "next/navigation";
 import FavButton from "./FavButton";
 import { motion } from "framer-motion";
+import { useCounter } from "@/lib/auth-content";
+import ButtonText from "./ButtonText";
+import { postData } from "@/lib/apiServices";
+import { ENDPOINTS } from "@/API/endpoints";
 
 const Product = ({
   width = "100%",
@@ -18,11 +30,79 @@ const Product = ({
   const [activeSlide, setActiveSlide] = useState(0);
   const params = useParams();
   const router = useRouter();
+  const [requestIsPending,setIsRequestPending] = useState(false);
   const [buttonVisibility, setButtonVisibility] = useState(false);
+  const { addItem, increaseQuantity, decreaseQuantity, cart } = useCounter();
+  const toast = useToast();
 
-  if (details === null) {
-    return <></>;
+  // if (details === null) {
+  //   return <></>;
+  // }
+
+  // console.log(details);
+
+  function getButtonText() {
+    if (details.variants.length > 1) {
+      return params.locale === "ru" ? "Подробнее" : "Details";
+    } else {
+      return params.locale === "ru" ? "В корзину" : "Add to cart";
+    }
   }
+
+  function handleProductBtnClick() {
+    details.variants.length > 1
+      ? router.push(`/${params.locale}/product/${details.id}`)
+      : handleAddToCart(details.variants[0].id);
+  }
+
+  const handleAddToCart = async (id) => {
+    if (token) {
+      setIsRequestPending(true);
+      console.log('should be sending request to add to cart product');
+      const credentials = { product_variant: id };
+
+      try {
+        const response = await postData(
+          credentials,
+          token,
+          ENDPOINTS.postAddToCart()
+        );
+        // Check for a range of 2xx status codes
+        if (response.status >= 200 && response.status < 400) {
+          setIsRequestPending(false);
+          // increment();
+          toast({
+            title: "Товар успешно добавлен в корзину",
+            status: "success",
+            duration: 3000,
+            position: "top-left",
+            isClosable: true,
+          });
+        }
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+      } finally {
+        if (requestIsPending) {
+          setIsRequestPending(false);
+        }
+      }
+    } else {
+      const clientCartItem = {
+        quantity: 1,
+        product_variant: details.variants[0],
+        product_image: details.images[0],
+        id: id,
+      };
+      addItem(clientCartItem);
+      toast({
+        title: "Товар успешно добавлен в корзину",
+        status: "success",
+        duration: 3000,
+        position: "top-left",
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <>
@@ -63,9 +143,6 @@ const Product = ({
                 imagesArr={details?.images}
               />
               <Grid
-                as={Link}
-                prefetch={true}
-                href={`/${params.locale}/product/${details?.id}`}
                 position={"absolute"}
                 top={0}
                 left={0}
@@ -74,11 +151,13 @@ const Product = ({
                 opacity={0}
                 zIndex={1}
                 gridTemplateColumns={`repeat(3, minmax(0,1fr))`}
+                onClick={() => router.push(`/${params.locale}/product/${details?.id}`)}
               >
                 {[0, 1, 2].map((item, index) => (
                   <GridItem
                     key={index}
                     onMouseEnter={() => setActiveSlide(index)}
+
                     w={"100%"}
                     h={"100%"}
                   />
@@ -227,41 +306,42 @@ const Product = ({
                 zIndex: 1,
               }}
             />
-
-            {buttonVisibility ? (
-              <Button
-                as={motion.div}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: [0, -5, 0] }}
-                transition={{ type: "spring", dumbness: 100, duration: 0.1 }}
-                w={"100%"}
-                h={"36px"}
-                borderRadius={"10px"}
-                textAlign={"center"}
-                bg={"white"}
-                border={"1px solid orange"}
-                position={"absolute"}
-                bottom={0}
-                left={"0"}
-                color={"orange"}
-                zIndex={2}
-                _hover={{
-                  bg: "orange",
-                  color: "#fff",
-                }}
-                onClick={() =>
-                  router.push(`/${params.locale}/product/${details?.id}`)
-                }
-              >
-                <Text
-                  fontFamily={"roboto"}
-                  fontWeight={"400"}
-                  fontSize={"18px"}
-                >
-                  {params.locale === "en" ? (details.variants.length > 0 ? "More details" : "Add to cart") : (details.variants.length > 0 ? "Подробнее" :  "В корзину")}
-                </Text>
-              </Button>
-            ) : null}
+            <Button
+              as={motion.div}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: [0, 0, 1], y: [0, -5, 0] }}
+              transition={{
+                type: "spring",
+                dumbness: 100,
+                duration: 0.3,
+                delay: 2,
+              }}
+              w={"100%"}
+              h={"38px"}
+              borderRadius={"10px"}
+              textAlign={"center"}
+              bg={"white"}
+              border={"1px solid orange"}
+              // position={"absolute"}
+              bottom={"-8px"}
+              left={"0"}
+              color={"orange"}
+              zIndex={2}
+              isLoading={requestIsPending}
+              loadingText="Добавляем"
+              colorScheme="teal"
+              variant="outline"
+              _hover={{
+                bg: "orange",
+                color: "#fff",
+              }}
+              onClick={handleProductBtnClick}
+            >
+              <Text fontFamily={"roboto"} fontWeight={"400"} fontSize={"18px"}>
+                {getButtonText()}
+              </Text>
+            </Button>
           </Flex>
         </Flex>
       </Flex>

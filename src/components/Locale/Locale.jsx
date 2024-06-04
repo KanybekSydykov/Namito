@@ -5,7 +5,7 @@ import Link from "next/link";
 import { i18n } from "../../i18n-config";
 import { Link as ChakraLink, Divider, Flex } from "@chakra-ui/react";
 
-export default function LocaleSwitcher() {
+export default function LocaleSwitcher({isWhite=false}) {
   const pathName = usePathname();
 
   const isActive = (locale) => {
@@ -36,7 +36,7 @@ export default function LocaleSwitcher() {
           as={Link}
           href={redirectedPathName(i18n.locales[0])}
           key={i18n.locales[0]}
-          color={isActive(i18n.locales[0]) ? "orange" : "#000"}
+          color={isActive(i18n.locales[0]) ? "orange" : isWhite ? "#fff" : "#000"}
         >
           РУ
         </ChakraLink>
@@ -45,7 +45,7 @@ export default function LocaleSwitcher() {
           as={Link}
           href={redirectedPathName(i18n.locales[1])}
           key={i18n.locales[1]}
-          color={isActive(i18n.locales[1]) ? "orange" : "#000"}
+          color={isActive(i18n.locales[1]) ? "orange" : isWhite ? "#fff" : "#000"}
         >
           EN
         </ChakraLink>

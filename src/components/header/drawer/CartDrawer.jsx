@@ -18,155 +18,183 @@ import { CloseIcon } from "@chakra-ui/icons";
 import CartItem from "@/components/cart/CartItem";
 import Link from "next/link";
 import OrangeButton from "@/components/ui/OrangeButton";
-import {  deleteData, getData, putData } from "@/lib/apiServices";
+import { deleteData, getData, postData, putData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
 import { useCounter } from "@/lib/auth-content";
-import { AnimatePresence,motion } from "framer-motion";
-const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
+import { AnimatePresence, motion } from "framer-motion";
+
+const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cartData, setCartData] = useState(undefined);
   const [isCartPending, setIsCartPending] = useState(true);
-  const { counter } = useCounter();
+  const { counter, cart, increaseQuantity, decreaseQuantity, removeItem,clearCart } =
+    useCounter();
   const [totalAmount, setTotalAmount] = useState(0);
 
-  // Getting current cart data 
-  useEffect(() => {
-    setIsCartPending(true);
-    if (isOpen) {
-      async function getCart() {
-        const response = await getData(token,ENDPOINTS.getCartData());
-        if (response.status >= 200 && response.status < 400) {
-          setCartData(response.data.items);
-          setIsCartPending(false);
-          setTotalAmount(response.data.total_amount);
-        } else {
-          console.log(response);
-          setIsCartPending(false);
-        }
-      }
-        getCart();
+  const translate = (enText, ruText) => (locale === "ru" ? ruText : enText);
 
+
+  useEffect(() => {
+
+
+    if (token && isOpen) {
+      if(cart.length && !cartData){
+        console.log('should send data');
+        postCartData();
+      } else {
+        clearCart();
+        setIsCartPending(true);
+        fetchCartData();
+      }
+     
+    } else {
+      setIsCartPending(false);
     }
-  }, [isOpen]);
-  // Updating local cart state after deleting
+  }, [isOpen, token]);
+
   useEffect(() => {
     if (!cartData?.length) {
       setCartData(undefined);
     }
   }, [cartData?.length]);
 
-  // Cart deletion handler
+  const fetchCartData = async () => {
+    try {
+      const response = await getData(token, ENDPOINTS.getCartData());
+      if (response.status >= 200 && response.status < 400) {
+        setCartData(response.data.items);
+        setTotalAmount(response.data.total_amount);
+      }
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
+    } finally {
+      setIsCartPending(false);
+    }
+  };
+
+  const postCartData = async () => {
+    if (token) {
+      const credentials = 
+      {items: cart.map((item) => {
+        return {product_variant: item.product_variant.id, quantity: item.quantity};
+      })};
+      console.log(credentials);
+      try {
+        const response = await postData(credentials,token, ENDPOINTS.postItemsToCard());
+        if (response.status >= 200 && response.status < 400) {
+          console.log(response);
+          clearCart();
+          setCartData(response.data.items);
+          setTotalAmount(response.data.total_amount);
+        }
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+      }
+    }
+  };
 
   const handleDeleteCartItem = async (id) => {
-    const filteredCartData = cartData.filter((item) => item.id !== id);
-    setCartData(filteredCartData);
-    try {
-      const response = await deleteData(token,ENDPOINTS.deleteCartItem(id));
-      if (response.status > 200) {
+    if (token) {
+      try {
+        await deleteData(token, ENDPOINTS.deleteCartItem(id));
+        setCartData((prevData) => prevData.filter((item) => item.id !== id));
+      } catch (error) {
+        console.error("Error deleting cart item:", error);
       }
-    } catch (error) {
+    } else {
+      removeItem(id);
     }
   };
 
-  // Cart item quantity handler 
-
-  const handleQuantityChange = async (id, quantity) => {
-    const payload = {items:[{
-      id: id,
-      quantity: quantity,
-    }]};
-    try {
-      const response = await putData(payload,token, ENDPOINTS.putCartQuantity());
-      if (response.status >= 200) {
+  const handleQuantityChange = async (id, quantity, action) => {
+    if (token) {
+      const payload = { items: [{ id, quantity }] };
+      try {
+        await putData(payload, token, ENDPOINTS.putCartQuantity());
+      } catch (error) {
+        console.error("Error updating cart item quantity:", error);
       }
-    } catch (error) {
+    } else {
+      if (action === "increase") {
+        increaseQuantity(id);
+      } else if (action === "decrease") {
+        decreaseQuantity(id);
+      }
     }
   };
 
-
-  const closeText = locale === 'ru' ? "Закрыть" : "Close";
-
-  const loginText = locale === 'ru' ? "Войти" : "Login";
-
-  const checkOutText = locale === 'ru' ? "Оформить заказ" : "Checkout";
-
-  
   return (
     <>
-    {children ? 
-    <Box onClick={onOpen}>
-      {children}
-    </Box>
-     :  
-    <Box
-        w={{ base: "auto", lg: "65px" }}
-        maxW={{ base: "50px", lg: "65px" }}
-        maxH={{ base: "37px", lg: "44px" }}
-        cursor={"pointer"}
-        h={{ base: "auto", lg: "44px" }}
-        borderRadius={"10px"}
-        bg={"transparent"}
-        onClick={onOpen}
-        display={"flex"}
-        flexDir={"column"}
-        justifyContent={"center"}
-        alignItems={"center"}
-        gap={{ base: "2px", lg: "7px" }}
-        color={{ lg: "rgba(54, 54, 54, 1)", base: "#fff" }}
-        _hover={{ color: "orange" }}
-        role="group"
-      >
+      {children ? (
+        <Box onClick={onOpen}>{children}</Box>
+      ) : (
         <Box
-          w={"20px"}
-          h={"17px"}
-          filter={{ base: "unset", lg: "grayscale(100%)" }}
-          _groupHover={{ filter: "unset" }}
-          transition={"all 0.2s ease-in-out"}
-          position={'relative'}
+          w={{ base: "auto", lg: "65px" }}
+          maxW={{ base: "50px", lg: "65px" }}
+          maxH={{ base: "37px", lg: "44px" }}
+          cursor={"pointer"}
+          h={{ base: "auto", lg: "44px" }}
+          borderRadius={"10px"}
+          bg={"transparent"}
+          onClick={onOpen}
+          display={"flex"}
+          flexDir={"column"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          gap={{ base: "2px", lg: "7px" }}
+          color={{ lg: "rgba(54, 54, 54, 1)", base: "#fff" }}
+          _hover={{ color: "orange" }}
+          role="group"
         >
-          <Image
-            src="/cart-icon.svg"
-            alt="catalog icon"
-            width={20}
-            height={17}
-            style={{
-              transition: "all 0.2s ease-in-out",
-            }}
-          />
-                    <AnimatePresence>
-        {counter !== 0 && (
-
-           
-
-            <Text as={motion.p}
-             key={counter}
-             initial={{ opacity: 0, x:0 ,}}
-             animate={{ opacity: 1, x:[30,20,10,0] }}
-             transition={{ duration: 0.15 ,type: "spring", }}
-              pos={"absolute"}
-              top={'-10px'}
-              right={'-10px'}
-              color={'orange'}
-              filter={'unset'}
-              fontSize={'14px'}
-              fontFamily={'roboto'}
-            >
-              {counter ? counter : null}
-            </Text>
-        )}
-      </AnimatePresence>
+          <Box
+            w={"20px"}
+            h={"17px"}
+            filter={{ base: "unset", lg: "grayscale(100%)" }}
+            _groupHover={{ filter: "unset" }}
+            transition={"all 0.2s ease-in-out"}
+            position={"relative"}
+          >
+            <Image
+              src="/cart-icon.svg"
+              alt="catalog icon"
+              width={20}
+              height={17}
+              style={{
+                transition: "all 0.2s ease-in-out",
+              }}
+            />
+            <AnimatePresence>
+              {counter !== 0 && (
+                <Text
+                  as={motion.p}
+                  key={counter}
+                  initial={{ opacity: 0, x: 0 }}
+                  animate={{ opacity: 1, x: [30, 20, 10, 0] }}
+                  transition={{ duration: 0.15, type: "spring" }}
+                  pos={"absolute"}
+                  top={"-10px"}
+                  right={"-10px"}
+                  color={"orange"}
+                  filter={"unset"}
+                  fontSize={"14px"}
+                  fontFamily={"roboto"}
+                >
+                  {counter || null}
+                </Text>
+              )}
+            </AnimatePresence>
+          </Box>
+          <Text
+            fontFamily={"roboto"}
+            fontWeight={"300"}
+            fontSize={"12px"}
+            lineHeight={"16px"}
+            transition={"all 0.2s ease-in-out"}
+          >
+            {translate("Cart", "Корзина")}
+          </Text>
         </Box>
-        <Text
-          fontFamily={"roboto"}
-          fontWeight={"300"}
-          fontSize={"12px"}
-          lineHeight={"16px"}
-          transition={"all 0.2s ease-in-out"}
-        >
-         {locale === 'en' ? 'Cart' : 'Корзина'}
-        </Text>
-
-      </Box>}
+      )}
       <Drawer
         placement={"right"}
         onClose={onClose}
@@ -184,9 +212,10 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
             fontWeight={"600"}
             fontFamily={"roboto"}
             pos={"relative"}
+            mt={"40px"}
           >
             <Text width={"auto"} flexGrow={1} textAlign={"center"}>
-             {locale === 'en' ? 'Cart' : 'Корзина'}
+              {translate("Cart", "Корзина")}
             </Text>
             <Flex
               onClick={onClose}
@@ -230,7 +259,6 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
                           />
                         ))}
                       </Flex>
-
                       <Text
                         fontFamily={"roboto"}
                         fontWeight={"700"}
@@ -242,14 +270,16 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
                         mt={"30px"}
                       >
                         <Highlight
-                          query={"Общая цена:"}
+                          query={translate("Total price:", "Общая цена:")}
                           styles={{
                             fontWeight: "300",
                             color: "rgba(146, 146, 146, 1)",
                             paddingRight: "10px",
                           }}
                         >
-                          {params.locale === 'ru' ? 'Общая цена:' : 'Total price:'}</Highlight>{totalAmount} {params.locale === 'ru' ? 'сом' : 'kgs'}
+                          {translate("Total price:", "Общая цена:")}
+                        </Highlight>
+                        {totalAmount} {translate("kgs", "сом")}
                       </Text>
                     </>
                   ) : (
@@ -267,28 +297,72 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
                         lineHeight={"25px"}
                         textAlign={"center"}
                       >
-                       {locale === "ru" ? "Ваша корзина пуста" : "Your cart is empty"}
+                        {translate("Your cart is empty", "Ваша корзина пуста")}
                       </Text>
-
                       <Image src={"/decor-star.png"} width={50} height={50} />
                     </Flex>
                   )}
                 </>
               ) : (
-                <Text
-                  fontFamily={"roboto"}
-                  fontWeight={"700"}
-                  fontSize={"24px"}
-                  lineHeight={"27px"}
-                  textAlign={"center"}
-                  mt={"30%"}
-                  maxW={'390px'}
-                  mx={'auto'}
-                >
-                 {locale === "ru" ? "Необходимо войти в аккаунт чтобы добавить в корзину" : 'You must be logged in to add items to your cart'}
-                </Text>
+                <>
+                  {cart.length ? (
+                    <>
+                      <Flex flexDir={"column"} gap={"16px"} mt={"30px"}>
+                        {cart.map((item, index) => (
+                          <CartItem
+                            key={index}
+                            item={item}
+                            handleDeleteCartItem={handleDeleteCartItem}
+                            handleQuantityChange={handleQuantityChange}
+                          />
+                        ))}
+                      </Flex>
+                      <Text
+                        fontFamily={"roboto"}
+                        fontWeight={"700"}
+                        fontSize={"18px"}
+                        lineHeight={"27px"}
+                        color={"rgba(35, 133, 109, 1)"}
+                        textAlign={"end"}
+                        pe={"20px"}
+                        mt={"30px"}
+                      >
+                        <Highlight
+                          query={translate("Total price:", "Общая цена:")}
+                          styles={{
+                            fontWeight: "300",
+                            color: "rgba(146, 146, 146, 1)",
+                            paddingRight: "10px",
+                          }}
+                        >
+                          {translate("Total price:", "Общая цена:")}
+                        </Highlight>
+                        {totalAmount} {translate("kgs", "сом")}
+                      </Text>
+                    </>
+                  ) : (
+                    <Flex
+                      flexDir={"column"}
+                      gap={"26px"}
+                      justifyContent={"center"}
+                      alignItems={"center"}
+                      mt={"140px"}
+                    >
+                      <Text
+                        fontFamily={"roboto"}
+                        fontWeight={"600"}
+                        fontSize={"18px"}
+                        lineHeight={"25px"}
+                        textAlign={"center"}
+                      >
+                        {translate("Your cart is empty", "Ваша корзина пуста")}
+                      </Text>
+                      <Image src={"/decor-star.png"} width={50} height={50} />
+                    </Flex>
+                  )}
+                </>
               )}
-              <Box
+      { cartData || cart.length > 0 ?  <Box
                 as={Link}
                 width={"100%"}
                 px={"20px"}
@@ -298,14 +372,14 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token,children }) => {
                 onClick={onClose}
               >
                 <OrangeButton
-                  link={
-                    isAuth ? (cartData ? "/checkout" : "/") : `/${locale}/login`
-                  }
+                  link={cartData || cart.length > 0 ? "/checkout" : "/"}
                   text={
-                    isAuth ? (cartData ? checkOutText : closeText) : loginText
+                    cartData || cart.length > 0
+                      ? translate("Checkout", "Оформить заказ")
+                      : translate("Close", "Закрыть")
                   }
                 />
-              </Box>
+              </Box> : null}
             </DrawerBody>
           )}
         </DrawerContent>

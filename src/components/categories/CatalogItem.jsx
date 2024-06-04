@@ -32,8 +32,8 @@ const CatalogItem = ({locale,item}) => {
       position={'absolute'}
       right={'0px'}
       bottom={'0px'}
-      w={'150px'}
-      h={'150px'}
+      w={{base:'120px',lg:'150px'}}
+      h={{base:'120px',lg:'150px'}}
     >
       <Image src={item.image ? item.image : '/catalog-img.png'} width={150} height={150} style={{
         width: '100%',

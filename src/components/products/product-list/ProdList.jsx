@@ -9,7 +9,7 @@ import Image from "next/image";
 const ProdList = ({ data, locale, token }) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
 
-
+console.log(data);
   return (
     <Flex
       flexDir={"column"}
@@ -42,7 +42,7 @@ const ProdList = ({ data, locale, token }) => {
           alignItems={"center"}
           gap={"16px"}
         >
-          {/* <Text
+          <Text
             fontFamily={"roboto"}
             fontSize={"26px"}
             color={"#000"}
@@ -56,9 +56,9 @@ const ProdList = ({ data, locale, token }) => {
             alt="decor-icon"
             width={80}
             height={80}
-          /> */}
+          />
 
-          <Spinner size="xl" color="orange" />
+          {/* <Spinner size="xl" color="orange" /> */}
         </Flex>
       )}
     </Flex>

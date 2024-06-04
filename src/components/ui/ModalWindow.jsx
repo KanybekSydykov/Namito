@@ -21,10 +21,14 @@ const ModalWindow = ({ ButtonEl, children }) => {
   return (
     <>
       <ButtonEl onClick={onOpen} />
-      <Drawer placement={"bottom"} onClose={onClose} isOpen={isOpen}>
+      <Drawer placement={"bottom"} onClose={onClose} isOpen={isOpen} >
         <DrawerOverlay />
         <DrawerContent
-        minH={'100dvh'}
+      maxH={'90dvh'}
+      mx={'10px'}
+      w={'auto'}
+      borderTopLeftRadius={'20px'}
+      borderTopRightRadius={'20px'}
         >
           <DrawerHeader display={"flex"} justifyContent={"flex-end"}>
             <Button

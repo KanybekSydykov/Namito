@@ -40,8 +40,6 @@ const ProductPage = ({
   const [colors, setColors] = useState([]);
   const [showMore,setShowMore] = useState(false);
 
-  console.log(details);
-
   useEffect(() => {
     function getVariants() {
       const uniqueColors = new Set();
@@ -259,7 +257,7 @@ const ProductPage = ({
                 selectedVariant={selectedVariant}
               />
 
-              <CartButton selectedVariant={selectedVariant} token={token} />
+              <CartButton selectedVariant={selectedVariant} token={token} image={sliderImages[0]} />
 
               {/* Product desc */}
               <Box position={'relative'}>

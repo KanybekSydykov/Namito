@@ -6,8 +6,7 @@ import Link from "next/link";
 const Logo = ({ color }) => {
   return (
     <Flex
-      as={Link}
-      href={"/"}
+      pos={'relative'}
       py={{base:"8px",lg:'0px'}}
       gap={"2px"}
       justifyContent={"center"}
@@ -32,6 +31,7 @@ const Logo = ({ color }) => {
       >
         Namito
       </Text>
+      <Link  href={'/'} style={{ position: "absolute", top: "0px", left: "0px", width: "100%", height: "100%" }} />
     </Flex>
   );
 };

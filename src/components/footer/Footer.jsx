@@ -4,7 +4,7 @@ import Logo from "@/components/header/logo/Logo";
 import Link from "next/link";
 import Image from "next/image";
 
-const Footer = ({ data,params }) => {
+const Footer = ({ data, params }) => {
   return (
     <>
       <Container
@@ -37,23 +37,31 @@ const Footer = ({ data,params }) => {
             flexDir={"column"}
           >
             <ListItem>
-              <Link href={`/${params.locale}/about`}>{params.locale === 'ru' ? 'О нас' : 'About us'}</Link>
+              <Link href={`/${params.locale}/about`}>
+                {params.locale === "ru" ? "О нас" : "About us"}
+              </Link>
             </ListItem>
             <ListItem>
-              <Link href={`/${params.locale}/delivery`}>{params.locale === 'ru' ? 'Доставка' : 'Delivery'}</Link>
+              <Link href={`/${params.locale}/delivery`}>
+                {params.locale === "ru" ? "Доставка" : "Delivery"}
+              </Link>
             </ListItem>
             <ListItem>
               <Link href={`/${params.locale}/privacy`}>
-              {params.locale === 'ru' ? 'Политика конфиденциальности' : 'Privacy policy'}
-                </Link>
+                {params.locale === "ru"
+                  ? "Политика конфиденциальности"
+                  : "Privacy policy"}
+              </Link>
             </ListItem>
             <ListItem>
               <Link href={`/${params.locale}/refund`}>
-                {params.locale === 'ru' ? 'Возврат средств' : 'Refund'}
-                </Link>
+                {params.locale === "ru" ? "Возврат средств" : "Refund"}
+              </Link>
             </ListItem>
             <ListItem>
-              <Link href={`/${params.locale}/payment`}>{params.locale === 'ru' ? 'Процесс оплаты' : 'Payment process'}</Link>
+              <Link href={`/${params.locale}/payment`}>
+                {params.locale === "ru" ? "Процесс оплаты" : "Payment process"}
+              </Link>
             </ListItem>
           </List>
 
@@ -72,7 +80,7 @@ const Footer = ({ data,params }) => {
               lineHeight={"23.44px"}
               color={"#fff"}
             >
-             {params.locale === 'ru' ? ' Тех.поддержка' : 'Support'}
+              {params.locale === "ru" ? " Тех.поддержка" : "Support"}
             </Text>
             {data.phones.map((item, index) => (
               <ListItem
@@ -108,24 +116,21 @@ const Footer = ({ data,params }) => {
               lineHeight={"23.44px"}
               color={"#fff"}
             >
-             {params.locale === 'ru' ? ' Наши соцсети' : 'Social networks'}
+              {params.locale === "ru" ? " Наши соцсети" : "Social networks"}
             </Text>
             <Flex flexDir={"row"} flexWrap={"wrap"} gap={"12px"}>
               {data.socials.map((item) => (
-                <Link
+                <Flex
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  bg={"#fff"}
+                  w={"40px"}
+                  h={"40px"}
+                  borderRadius={"10px"}
                   key={item.link}
-                  href={item.link}
-                  target={"_blank"}
-                  rel="noreferrer"
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "10px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    background: "#fff",
-                  }}
+                  cursor={"pointer"}
+                  position={"relative"}
+                  p={"0 2px"}
                 >
                   <Image
                     src={item.icon}
@@ -139,7 +144,20 @@ const Footer = ({ data,params }) => {
                       borderRadius: "2px",
                     }}
                   />
-                </Link>
+                  <Link
+                    key={item.link}
+                    href={item.link}
+                    target={"_blank"}
+                    rel="noreferrer"
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  />
+                </Flex>
               ))}
             </Flex>
           </Flex>
@@ -151,25 +169,21 @@ const Footer = ({ data,params }) => {
               lineHeight={"23.44px"}
               color={"#fff"}
             >
-             {params.locale === 'ru' ? ' СПОСОБЫ ОПЛАТЫ' : 'Payment methods'}
+              {params.locale === "ru" ? " СПОСОБЫ ОПЛАТЫ" : "Payment methods"}
             </Text>
             <Flex flexDir={"row"} flexWrap={"wrap"} gap={"12px"}>
               {data.payment.map((item) => (
-                <Link
+                <Flex
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  bg={"#fff"}
+                  w={"40px"}
+                  h={"40px"}
+                  borderRadius={"10px"}
                   key={item.link}
-                  href={item.link}
-                  target={"_blank"}
-                  rel="noreferrer"
-                  style={{
-                    width: "40px",
-                    height: "40px",
-                    borderRadius: "10px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    background: "#fff",
-                    padding: "0 2px",
-                  }}
+                  cursor={"pointer"}
+                  position={"relative"}
+                  p={"0 2px"}
                 >
                   <Image
                     src={item.icon}
@@ -183,7 +197,20 @@ const Footer = ({ data,params }) => {
                       objectFit: "contain",
                     }}
                   />
-                </Link>
+                  <Link
+                    key={item.link}
+                    href={item.link}
+                    target={"_blank"}
+                    rel="noreferrer"
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  />
+                </Flex>
               ))}
             </Flex>
           </Flex>

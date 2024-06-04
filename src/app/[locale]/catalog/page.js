@@ -22,7 +22,7 @@ const page = async({ params }) => {
       gridTemplateColumns=
       {
         {
-          base:'repeat(2, minmax(171px,1fr))',
+          base:'repeat(2, minmax(161px,1fr))',
           md:'repeat(3, minmax(171px,1fr))',
           lg:'repeat(auto-fit,minmax(216px,1fr))',
         }

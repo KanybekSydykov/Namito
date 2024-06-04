@@ -7,7 +7,7 @@ import HomeIcon from "@/../public/home-icon.svg";
 import { useParams, usePathname } from "next/navigation";
 import CartDrawer from "../header/drawer/CartDrawer";
 
-const Footer = ({token}) => {
+const Footer = ({ token }) => {
   const path = usePathname();
   const params = useParams();
   const [isMobile] = useMediaQuery("(max-width: 768px)");
@@ -31,7 +31,7 @@ const Footer = ({token}) => {
         <Container
           position={"fixed"}
           bottom={"0"}
-          zIndex={10}
+          zIndex={100}
           left={"0"}
           w={"100%"}
           h={"80px"}
@@ -41,8 +41,7 @@ const Footer = ({token}) => {
         >
           <Flex flexDir={"row"} justifyContent={"space-between"} w={"100%"}>
             <Flex
-              as={Link}
-              href={"/"}
+              position={"relative"}
               w={"80px"}
               h={"60px"}
               flexDir={"column"}
@@ -78,6 +77,16 @@ const Footer = ({token}) => {
               >
                 Главная
               </Text>
+              <Link
+                href={`${params.locale ? `/${params.locale}/` : "/"}`}
+                style={{
+                  position: "absolute",
+                  top: "0px",
+                  left: "0px",
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
             </Flex>
             <CartDrawer isAuth={token ? true : false} token={token}>
               <Flex
@@ -120,9 +129,7 @@ const Footer = ({token}) => {
               </Flex>
             </CartDrawer>
             <Flex
-              as={Link}
-              prefetch={true}
-              href={`${params.locale ? `/${params.locale}/` : "/"}catalog`}
+              position={"relative"}
               w={"80px"}
               h={"60px"}
               flexDir={"column"}
@@ -173,11 +180,19 @@ const Footer = ({token}) => {
               >
                 Каталог
               </Text>
+              <Link
+                prefetch={true}
+                href={`${params.locale ? `/${params.locale}/` : "/"}catalog`}
+                style={{
+                  position: "absolute",
+                  top: "0px",
+                  left: "0px",
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
             </Flex>
             <Flex
-              as={Link}
-              prefetch={true}
-              href={`${params.locale ? `/${params.locale}/` : "/"}login`}
               w={"80px"}
               h={"60px"}
               flexDir={"column"}
@@ -186,6 +201,7 @@ const Footer = ({token}) => {
               gap={"5px"}
               textDecoration={"none"}
               borderRadius={"20px"}
+              position={"relative"}
               bg={
                 handleActiveRoute("/login")
                   ? "rgba(203, 70, 9, 0.07)"
@@ -220,6 +236,16 @@ const Footer = ({token}) => {
                   ? "Войти"
                   : "Login"}
               </Text>
+              <Link
+                href={`${params.locale ? `/${params.locale}/` : "/"}${token ? "profile" : "login"}`}
+                style={{
+                  position: "absolute",
+                  top: "0px",
+                  left: "0px",
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
             </Flex>
           </Flex>
         </Container>

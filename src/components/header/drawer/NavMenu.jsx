@@ -18,6 +18,7 @@ import Link from "next/link";
 import Image from "next/image";
 import HeaderProfileLinks from "./HeaderProfileLinks";
 import { useParams } from "next/navigation";
+import LocaleSwitcher from "@/components/Locale/Locale";
 
 const Navmenu = ({ isAuth }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -118,22 +119,22 @@ const Navmenu = ({ isAuth }) => {
               fontWeight={"400"}
               textTransform={"uppercase"}
               textAlign={"center"}
-              onClick={onClose}
+              // onClick={onClose}
             >
               <Link href={"/"} >
-                <Text>{locale === "en" ? "Home" : "Главная"}</Text>
+                {locale === "en" ? "Home" : "Главная"}
               </Link>
               <Link href={`/${locale}/catalog`} >
-                <Text>{locale === "en" ? "Catalog" : "Каталог"}</Text>
+                {locale === "en" ? "Catalog" : "Каталог"}
               </Link>
               <Link href={`/${locale}/delivery`} >
-                <Text>{locale === "en" ? "Delivery" : "Доставка"}</Text>
+                {locale === "en" ? "Delivery" : "Доставка"}
               </Link>
             </Flex>
 
             <Flex
               flexDir={"row"}
-              mt={"60px"}
+              my={"60px"}
               gap={"10px"}
               fontSize={"18px"}
               fontWeight={"400"}
@@ -142,9 +143,10 @@ const Navmenu = ({ isAuth }) => {
               justifyContent={"center"}
               alignItems={"center"}
             >
-              <Text color={"#fff"}>РУ</Text>
+              {/* <Text color={"#fff"}>РУ</Text>
               <Divider orientation="vertical" />
-              <Text color={"rgba(160, 160, 160, 1)"}>EN</Text>
+              <Text color={"rgba(160, 160, 160, 1)"}>EN</Text> */}
+              <LocaleSwitcher isWhite={true}/>
             </Flex>
 
             <HeaderProfileLinks

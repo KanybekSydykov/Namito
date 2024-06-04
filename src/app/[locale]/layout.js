@@ -40,7 +40,9 @@ export default async function LocaleLayout({ children, params }) {
                     <CounterProvider>
 
                         <Header data={headerData} params={params} isAuth={isAuth ? true : false} token={isAuth ? isAuth.access_token : null} />
-                        {children}
+                        <div>
+                            {children}
+                        </div>
                         <FixedFooter params={params} token={isAuth ? isAuth.access_token : null} />
                         <Footer data={footerData} params={params} />
                     </CounterProvider>

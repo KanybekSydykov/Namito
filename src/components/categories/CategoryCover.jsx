@@ -24,9 +24,6 @@ const CategoryCover = ({ data, params, token, filteredProductsData = undefined,l
 
   return (
     <Box position={"relative"} width={"100%"}>
-   {loading && <Flex pos={'absolute'} top={'0'} left={0} width={'100%'} height={'100%'} justifyContent={'center'} alignItems={'center'} bg={'rgba(0,0,0,0.5)'}>
-      <Skeleton color={'orange'} size={'xl'} />
-    </Flex>}
       <ProdList token={token} data={currentProducts} locale={params.locale} />
     </Box>
   );

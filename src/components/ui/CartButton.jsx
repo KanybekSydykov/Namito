@@ -5,45 +5,68 @@ import { AddToCart, postData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
 import { useCounter } from "@/lib/auth-content";
 
-const CartButton = ({ selectedVariant, token }) => {
+const CartButton = ({ selectedVariant, token, image }) => {
   const [isRequestPending, setIsRequestPending] = useState(false);
   const toast = useToast();
-  const {increment} = useCounter();
+  const { addItem } = useCounter();
+
+
+  const clientCartItem = {
+    quantity: 1,
+    product_image: image?.image,
+    product_variant: selectedVariant,
+    id: selectedVariant.id
+  };
+
 
   const handleAddToCart = async () => {
-    setIsRequestPending(true);
-    const credentials = { product_variant: selectedVariant.id };
+    if (token) {
+      setIsRequestPending(true);
+      const credentials = { product_variant: selectedVariant.id };
 
-    try {
-      const response = await postData(credentials, token,ENDPOINTS.postAddToCart());
-      // Check for a range of 2xx status codes
-      if (response.status >= 200 && response.status < 300) {
-        setIsRequestPending(false);
-        increment();
-        toast({
-          title: "Товар успешно добавлен в корзину",
-          status: "success",
-          duration: 3000,
-          position: "top-left",
-          isClosable: true,
-        });
-      } else {
-        toast({
-          title: "Необходимо авторизоваться",
-          status: "error",
-          duration: 3000,
-          position: "top-left",
-          isClosable: true,
-        });
-        setIsRequestPending(false);
-
+      try {
+        const response = await postData(
+          credentials,
+          token,
+          ENDPOINTS.postAddToCart()
+        );
+        // Check for a range of 2xx status codes
+        if (response.status >= 200 && response.status < 300) {
+          setIsRequestPending(false);
+          increment();
+          toast({
+            title: "Товар успешно добавлен в корзину",
+            status: "success",
+            duration: 3000,
+            position: "top-left",
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: "Необходимо авторизоваться",
+            status: "error",
+            duration: 3000,
+            position: "top-left",
+            isClosable: true,
+          });
+          setIsRequestPending(false);
+        }
+      } catch (error) {
+        console.error("Error adding to cart:", error);
+      } finally {
+        if (isRequestPending) {
+          setIsRequestPending(false);
+        }
       }
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    } finally {
-      if (isRequestPending) {
-        setIsRequestPending(false);
-      }
+    } else {
+      addItem(clientCartItem);
+      toast({
+        title: "Товар успешно добавлен в корзину",
+        status: "success",
+        duration: 3000,
+        position: "top-left",
+        isClosable: true,
+      });
     }
   };
 
@@ -51,7 +74,7 @@ const CartButton = ({ selectedVariant, token }) => {
     <Button
       w={"100%"}
       h={"32px"}
-      minH={'unset'}
+      minH={"unset"}
       borderRadius={"10px"}
       bg={"orange"}
       color={"#fff"}
@@ -67,9 +90,9 @@ const CartButton = ({ selectedVariant, token }) => {
       maxW={"262px"}
       onClick={handleAddToCart}
       isLoading={isRequestPending}
-      loadingText='Добавляем'
-      colorScheme='teal'
-      variant='outline'
+      loadingText="Добавляем"
+      colorScheme="teal"
+      variant="outline"
       _hover={{ bg: "orange", color: "#fff" }}
     >
       <svg

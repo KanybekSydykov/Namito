@@ -43,8 +43,10 @@ export default async function RootLayout({ children }) {
   return (
     <html   >
       <body className={`body`}>
-        {
-          children}
+        <div>
+          {
+            children}
+        </div>
       </body>
 
 
