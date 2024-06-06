@@ -28,12 +28,10 @@ const Home = ({ data = undefined, locale, newProducts, products, token }) => {
 
           <Flex
             w={"100%"}
-            h={{ base: "385px", lg: "300px" }}
-            bg={"orange"}
+            aspectRatio={{ base: "358/385", lg: "1200/300" }}
             color={"#fff"}
             mt={"50px"}
             pos={"relative"}
-            borderRadius={"10px"}
             overflow={"hidden"}
           >
             <BannerSlider images={data.slider} />

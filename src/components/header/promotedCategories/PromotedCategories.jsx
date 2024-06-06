@@ -43,6 +43,7 @@ const PromotedCategories = ({data, isDesktop,params}) => {
         flexWrap={"nowrap"}
         overflowX={"auto"}
         gap={"20px"}
+        className='promoted-categories'
         position={"relative"}
         alignItems={"center"}
         maxW={{ base: "100%", lg: "900px" }}

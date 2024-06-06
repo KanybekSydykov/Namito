@@ -52,7 +52,7 @@ const FilterCover = ({
           fontWeight={"600"}
           lineHeight={"25.2px"}
         >
-          Фильтр
+         {locale === 'ru' ? 'Фильтр' : 'Filter'}
         </Text>
         <Image
           src={"/filter-icon.svg"}

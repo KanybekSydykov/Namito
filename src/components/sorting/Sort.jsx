@@ -53,6 +53,8 @@ const Sort = ({ handleSorting }) => {
     handleSorting(selectedOption.value);
   };
 
+  const btnText = locale === "ru" ? "Сортировать" : "Sort";
+
   return (
     <Box>
       <Menu closeOnSelect={true}>
@@ -71,7 +73,7 @@ const Sort = ({ handleSorting }) => {
           }}
           transition={"all 0.3s ease"}
         >
-          {uiValue ? uiValue : "Сортировать"}
+          {uiValue ? uiValue : btnText}
         </MenuButton>
         <MenuList minWidth="240px" pos={"relative"} zIndex={40}>
           <MenuOptionGroup

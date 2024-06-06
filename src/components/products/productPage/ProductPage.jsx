@@ -38,7 +38,7 @@ const ProductPage = ({
   const [sliderImages, setSliderImages] = useState([]);
   const [selectedVariant, setSelectedVariant] = useState({});
   const [colors, setColors] = useState([]);
-  const [showMore,setShowMore] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     function getVariants() {
@@ -104,6 +104,10 @@ const ProductPage = ({
     );
   }
 
+  const moreText = params.locale === 'ru' ? 'Показать больше' : 'Show more'
+
+  const lessText = params.locale === 'ru' ? 'Скрыть' : 'Show less'
+
   return (
     <>
       <Text
@@ -161,7 +165,7 @@ const ProductPage = ({
 
               <Flex mt={"20px"} flexDir={"row"} alignItems={"center"}>
                 <Text w={"50%"} color={"rgba(134, 134, 134, 1)"}>
-                  Артикул: {details.sku}
+                 {params.locale === 'ru' ? ' Артикул:' : "Article:"} {details.sku}
                 </Text>
 
                 {/* Product reviews count*/}
@@ -204,8 +208,8 @@ const ProductPage = ({
                     ms={"4px"}
                   >
                     {details.review_count
-                      ? `${details.review_count} отзывов`
-                      : "0 отзывов"}
+                      ? `${details.review_count}${params.locale ==='ru' ? ' отзывов' : ' reviews'}`
+                      : `0 ${params.locale ==='ru' ? ' отзывов' : ' review'}`}
                   </Text>
                 </Flex>
               </Flex>
@@ -226,7 +230,7 @@ const ProductPage = ({
                   {selectedVariant.discounted_price
                     ? selectedVariant.discounted_price
                     : selectedVariant.price}{" "}
-                  сом
+                  {params.locale === "ru" ? "сом" : "kgs"}
                 </Text>
                 {selectedVariant.discounted_price && (
                   <Text
@@ -237,7 +241,8 @@ const ProductPage = ({
                     color={"rgb(160,160,160)"}
                     textDecoration={"line-through"}
                   >
-                    {selectedVariant.price} сом
+                    {selectedVariant.price}{" "}
+                    {params.locale === "ru" ? "сом" : "kgs"}
                   </Text>
                 )}
               </Flex>
@@ -257,24 +262,26 @@ const ProductPage = ({
                 selectedVariant={selectedVariant}
               />
 
-              <CartButton selectedVariant={selectedVariant} token={token} image={sliderImages[0]} />
+              <CartButton
+                selectedVariant={selectedVariant}
+                token={token}
+                image={sliderImages[0]}
+              />
 
               {/* Product desc */}
-              <Box position={'relative'}>
-
-              <Box
-                fontFamily={"roboto"}
-                lineHeight={"24px"}
-                fontSize={"16px"}
-                color={"rgba(11, 11, 11, 1)"}
-                mt={"50px"}
-                position={"relative"}
-                noOfLines={showMore ? 'unset' : 10}
-              >
-                {details.description}
-            
-              </Box>
-              <Button
+              <Box position={"relative"}>
+                <Box
+                  fontFamily={"roboto"}
+                  lineHeight={"24px"}
+                  fontSize={"16px"}
+                  color={"rgba(11, 11, 11, 1)"}
+                  mt={"50px"}
+                  position={"relative"}
+                  noOfLines={showMore ? "unset" : 10}
+                >
+                  {details.description}
+                </Box>
+                <Button
                   position={"absolute"}
                   top={"100%"}
                   right={0}
@@ -292,7 +299,7 @@ const ProductPage = ({
                     textDecoration: "underline",
                   }}
                 >
-                  {showMore ? "Скрыть" : "Показать больше"}
+                  {showMore ? lessText : moreText}
                 </Button>
               </Box>
 

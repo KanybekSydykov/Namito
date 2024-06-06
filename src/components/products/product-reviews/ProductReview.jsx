@@ -37,7 +37,7 @@ const ProductReview = ({ title,params,productId ,token,reviews = [],reviewsAllow
         position={"relative"}
         width={"max-content"}
       >
-        {title ? title : "ОТЗЫВЫ"}
+        {params.locale === 'en' ? 'Reviews' : "ОТЗЫВЫ"}
         <Image
           src="/review-star.svg"
           alt="decor-star"
@@ -80,7 +80,7 @@ const ProductReview = ({ title,params,productId ,token,reviews = [],reviewsAllow
             <Text
             fontWeight={'400'}
             >
-            Отзывов нет
+            {params.locale === "en" ? "No reviews yet" : "Пока нет отзывов"}
             </Text>
             <Text
             fontWeight={'300'}
@@ -99,7 +99,7 @@ const ProductReview = ({ title,params,productId ,token,reviews = [],reviewsAllow
    px={'16px'}
    >
      {reviewsAllowed &&   <Link href={`/${params.locale}/reviews/${productId}`}>
-      <OrangeButton text={"Оставить отзыв"} />
+      <OrangeButton text={"Оставить отзыв"} text_en={"Leave a review"} />
         </Link>}
    <Link
         href={`/${params.locale}/reviews/${productId}`}
@@ -115,7 +115,7 @@ const ProductReview = ({ title,params,productId ,token,reviews = [],reviewsAllow
           textDecoration: "underline",
         }}
       >
-        Смотреть все отзывы
+       {params.locale === "ru" ? "Все отзывы" : "All reviews"}
       </Link>
     </Flex>
     

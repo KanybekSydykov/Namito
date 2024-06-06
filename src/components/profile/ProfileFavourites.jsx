@@ -6,12 +6,13 @@ import Image from "next/image";
 import Product from "../products/product-card/Product";
 import { ENDPOINTS } from "@/API/endpoints";
 import { getData } from "@/lib/apiServices";
+import { useParams } from "next/navigation";
 
 
 const ProfileFavourites = ({ token }) => {
   const [favs, setFavs] = useState([]);
   const [requesting, setRequesting] = useState(true);
-
+  const params = useParams();
 
   function handleRemoveFavItem(id){
     setFavs(favs.filter(item => item.product.id !== id))

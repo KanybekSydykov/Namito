@@ -54,6 +54,7 @@ const MobileHero = ({data}) => {
             fontFamily: "readex",
             fontWeight: "700",
             color: "#000",
+            marginStart:'6px'
           }}
         >
           {data.title}

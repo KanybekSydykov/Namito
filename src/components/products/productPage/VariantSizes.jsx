@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { Flex, Text, Button } from "@chakra-ui/react";
+import { useParams } from "next/navigation";
 
 const VariantSizes = ({ sizes, handleSelectedVariant, selectedVariant }) => {
   const [selectedSize, setSelectedSize] = useState(undefined);
+  const {locale} = useParams();
 
   function handleSelectedSize(index, variantId) {
     setSelectedSize(index);
@@ -27,7 +29,7 @@ const VariantSizes = ({ sizes, handleSelectedVariant, selectedVariant }) => {
         lineHeight={"22.4px"}
         color={"#000"}
       >
-        Размеры
+       {locale === 'ru' ? 'Размер' : 'Size'}
       </Text>
 
       <Flex flexDir={"row"} flexWrap={"wrap"} gap={"16px"} mt={"20px"}>

@@ -4,11 +4,13 @@ import { Button, Spinner, useToast } from "@chakra-ui/react";
 import { AddToCart, postData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
 import { useCounter } from "@/lib/auth-content";
+import { useParams } from "next/navigation";
 
 const CartButton = ({ selectedVariant, token, image }) => {
   const [isRequestPending, setIsRequestPending] = useState(false);
   const toast = useToast();
   const { addItem } = useCounter();
+  const {locale} = useParams();
 
 
   const clientCartItem = {
@@ -17,6 +19,8 @@ const CartButton = ({ selectedVariant, token, image }) => {
     product_variant: selectedVariant,
     id: selectedVariant.id
   };
+
+  const btnText = locale === "ru" ? "В корзину" : "Add to cart";
 
 
   const handleAddToCart = async () => {
@@ -73,7 +77,7 @@ const CartButton = ({ selectedVariant, token, image }) => {
   return (
     <Button
       w={"100%"}
-      h={"32px"}
+      h={"46px"}
       minH={"unset"}
       borderRadius={"10px"}
       bg={"orange"}
@@ -107,7 +111,7 @@ const CartButton = ({ selectedVariant, token, image }) => {
           fill="#fff"
         />
       </svg>
-      {isRequestPending ? <Spinner color="pink" /> : "В корзину"}
+      {isRequestPending ? <Spinner color="pink" /> : btnText}
     </Button>
   );
 };

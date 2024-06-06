@@ -23,7 +23,7 @@ const Footer = ({ data, params }) => {
           flexWrap={{ base: "wrap", lg: "nowrap" }}
         >
           <Box minW={"92px"}>
-            <Logo color={"#fff"} />
+            <Logo color={"#fff"}  params={params}/>
           </Box>
 
           <List

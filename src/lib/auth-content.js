@@ -38,13 +38,7 @@ const eraseCookie = (name) => {
 
 export function CounterProvider({ children }) {
   const [counter, setCounter] = useState(0);
-  const [cart, setCart] = useState(() => {
-    if (typeof document !== 'undefined') {
-      const savedCart = getCookie('cart');
-      return savedCart ? JSON.parse(savedCart) : [];
-    }
-    return [];
-  });
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -129,7 +123,14 @@ export function CounterProvider({ children }) {
   };
 
   const getTotalPrice = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart.reduce((total, item) => {
+      const itemPrice = item.product_variant.discounted_price !== null ? item.product_variant.discounted_price : item.product_variant.price;
+      return total + itemPrice * item.quantity;
+    }, 0);
+  };
+
+  const getTotalQuantity = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
   };
 
   const clearCart = () => {
@@ -149,6 +150,7 @@ export function CounterProvider({ children }) {
         increaseQuantity,
         decreaseQuantity,
         getTotalPrice,
+        getTotalQuantity,
         clearCart,
       }}
     >

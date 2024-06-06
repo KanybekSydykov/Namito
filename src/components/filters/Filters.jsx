@@ -10,6 +10,7 @@ import Image from "next/image";
 import CheckBoxList from "./CheckBoxList";
 import ModalWindow from "../ui/ModalWindow";
 import FilterCover from "./FilterCover";
+import { useParams } from "next/navigation";
 const Filters = ({data,handleFilters,handlePrice,handleRating}) => {
  
   const [isMobile] = useMediaQuery("(max-width: 992px)");
@@ -38,6 +39,8 @@ const Filters = ({data,handleFilters,handlePrice,handleRating}) => {
 export default Filters;
 
 function ModalButton({ onClick }) {
+  const {locale} = useParams();
+
   return (
     <Flex
     flexDir={"row"}
@@ -49,6 +52,7 @@ function ModalButton({ onClick }) {
     h={'40px'}
     borderRadius={'8px'}
     gap={'6px'}
+    className="filter-button"
   >
     <Text
       fontFamily={"roboto"}
@@ -56,7 +60,8 @@ function ModalButton({ onClick }) {
       fontWeight={"400"}
       lineHeight={"24px"}
     >
-      Фильтр
+     { locale === 'ru' ? 'Фильтр' : 'Filter'}
+
     </Text>
     <Image
       src={"/filter-icon.svg"}

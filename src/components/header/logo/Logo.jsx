@@ -3,7 +3,7 @@ import { Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 
-const Logo = ({ color }) => {
+const Logo = ({ color,params }) => {
   return (
     <Flex
       pos={'relative'}
@@ -31,7 +31,7 @@ const Logo = ({ color }) => {
       >
         Namito
       </Text>
-      <Link  href={'/'} style={{ position: "absolute", top: "0px", left: "0px", width: "100%", height: "100%" }} />
+      <Link  href={`/${params.locale}`} style={{ position: "absolute", top: "0px", left: "0px", width: "100%", height: "100%" }} />
     </Flex>
   );
 };

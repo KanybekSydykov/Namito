@@ -12,7 +12,6 @@ const Footer = ({ token }) => {
   const params = useParams();
   const [isMobile] = useMediaQuery("(max-width: 768px)");
 
-  console.log();
 
   function handleActiveRoute(activeRoute, nested = false) {
     if (nested && path.includes(`${activeRoute}`)) {
@@ -75,7 +74,7 @@ const Footer = ({ token }) => {
                 color={handleActiveRoute("") ? "#CB4609" : "#363636"}
                 transition={"all 0.3s ease"}
               >
-                Главная
+                {params.locale === 'ru' ? "Главная" : "Home"}
               </Text>
               <Link
                 href={`${params.locale ? `/${params.locale}/` : "/"}`}
@@ -124,7 +123,8 @@ const Footer = ({ token }) => {
                   transition={"all 0.3s ease"}
                   color={handleActiveRoute("/cart") ? "#CB4609" : "#363636"}
                 >
-                  Корзина
+                  {params.locale === 'ru' ? "Корзина" : "Cart"}
+                  
                 </Text>
               </Flex>
             </CartDrawer>
@@ -178,7 +178,8 @@ const Footer = ({ token }) => {
                 fontWeight={300}
                 color={handleActiveRoute("/catalog") ? "#CB4609" : "#363636"}
               >
-                Каталог
+                  {params.locale === 'ru' ? "Каталог" : "Catalog"}
+                
               </Text>
               <Link
                 prefetch={true}

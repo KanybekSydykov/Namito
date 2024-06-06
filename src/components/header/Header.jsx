@@ -60,7 +60,7 @@ const Header = ({ data,isAuth,token }) => {
           mx={"auto"}
         >
           <Box onClick={() => setIsCatalogDrawer(false)}>
-          <Logo />
+          <Logo params={params} />
           </Box>
 
           {isDesktop && (
@@ -93,7 +93,7 @@ const Header = ({ data,isAuth,token }) => {
             </Flex>
           )}
 
-          {!isDesktop && <Navmenu isAuth={isAuth} />}
+          {!isDesktop && <Navmenu isAuth={isAuth} locale={params.locale} />}
         </Flex>
       </Container>
 

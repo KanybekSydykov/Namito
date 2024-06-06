@@ -121,7 +121,7 @@ const Navmenu = ({ isAuth }) => {
               textAlign={"center"}
               // onClick={onClose}
             >
-              <Link href={"/"} >
+              <Link href={`/${locale}/`} >
                 {locale === "en" ? "Home" : "Главная"}
               </Link>
               <Link href={`/${locale}/catalog`} >

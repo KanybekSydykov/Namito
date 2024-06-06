@@ -4,7 +4,7 @@ import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-const OrangeButton = ({ text }) => {
+const OrangeButton = ({ text,text_en }) => {
   const { locale } = useParams();
   return (
       <Button
@@ -29,7 +29,7 @@ const OrangeButton = ({ text }) => {
         maxW={{ base: "unset", lg: "355px" }}
         mx={"auto"}
       >
-        {text}
+        {locale === 'ru' ? text : text_en}
       </Button>
   );
 };

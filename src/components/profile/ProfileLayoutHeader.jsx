@@ -18,15 +18,15 @@ export default function ProfileLayoutHeader({title}) {
   function getPageName(page){
     switch (page) {
       case "orders":
-        return "Мои заказы";
+        return locale === 'ru' ?  "Мои заказы" : "My orders";
       case "settings":
-        return "Личные данные";
+        return locale === 'ru' ? "Личные данные" : "Personal data";
       case "adresses":
-        return "Мои адреса";
+        return  locale === 'ru' ? "Мои адреса" : "My addresses";
       case "reviews":
-        return "Мои отзывы";
+        return locale === 'ru' ? "Мои отзывы" : "My reviews";
       case "favourites":
-        return "Избранное";
+        return locale === 'ru' ? "Избранные товары" : "Favourites";
     }
   }
 

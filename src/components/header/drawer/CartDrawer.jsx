@@ -22,6 +22,7 @@ import { deleteData, getData, postData, putData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
 import { useCounter } from "@/lib/auth-content";
 import { AnimatePresence, motion } from "framer-motion";
+import CartCounter from "./CartCounter";
 
 const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,6 +34,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
 
   const translate = (enText, ruText) => (locale === "ru" ? ruText : enText);
 
+  console.log(cart);
 
   useEffect(() => {
 
@@ -163,26 +165,8 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
                 transition: "all 0.2s ease-in-out",
               }}
             />
-            <AnimatePresence>
-              {counter !== 0 && (
-                <Text
-                  as={motion.p}
-                  key={counter}
-                  initial={{ opacity: 0, x: 0 }}
-                  animate={{ opacity: 1, x: [30, 20, 10, 0] }}
-                  transition={{ duration: 0.15, type: "spring" }}
-                  pos={"absolute"}
-                  top={"-10px"}
-                  right={"-10px"}
-                  color={"orange"}
-                  filter={"unset"}
-                  fontSize={"14px"}
-                  fontFamily={"roboto"}
-                >
-                  {counter || null}
-                </Text>
-              )}
-            </AnimatePresence>
+            <CartCounter token={token} />
+         
           </Box>
           <Text
             fontFamily={"roboto"}

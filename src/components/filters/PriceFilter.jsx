@@ -15,9 +15,11 @@ import {
   Text,
   Box,
 } from "@chakra-ui/react";
+import { useParams } from "next/navigation";
 
 const PriceFilter = ({onChangePrice}) => {
   const [prices, setPrices] = useState([5000, 25000]);
+  const {locale} = useParams();
 
   return (
     <Accordion allowToggle defaultIndex={[0]}>
@@ -41,7 +43,7 @@ const PriceFilter = ({onChangePrice}) => {
               fontWeight={"600"}
               lineHeight={"25.2px"}
             >
-              Цена
+             {locale === 'ru' ? 'Цена' : 'Price'}
             </Box>
             <AccordionIcon />
           </AccordionButton>

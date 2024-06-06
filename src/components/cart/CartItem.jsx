@@ -17,7 +17,7 @@ const CartItem = ({ item, handleDeleteCartItem, border = true,handleQuantityChan
   const colorCode = item.product_variant.color.color;
   const colorName = item.product_variant.color.name;
   const size = item.product_variant.size.name;
-  const price = item.product_variant.price + " сом";
+  const price = item.product_variant.discounted_price ? item.product_variant.discounted_price + " сом" : item.product_variant.price + " сом";
   const image = item.product_image ? item.product_image : '/placeholder.jpeg';
   const name = item.product_name;
   const toast = useToast();
