@@ -245,7 +245,7 @@ const Product = ({
                 fontSize={{ base: "18px", lg: "20px" }}
                 textOverflow={"ellipsis"}
                 noOfLines={2}
-                minH={{base:'54px'}}
+                minH={{base:'60px'}}
                 color={"rgb(54,54,54)"}
               >
                 {details?.name}

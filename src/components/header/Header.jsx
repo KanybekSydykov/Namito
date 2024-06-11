@@ -63,6 +63,10 @@ const Header = ({ data,isAuth,token }) => {
         zIndex={{ base: "1", lg: isCatalogDrawer ? "2000" : "10" }}
         bg={"rgba(255,255,255,0.5)"}
         py={{ lg: "20px" }}
+        _hover={{
+          bg: "rgba(255,255,255,1)",
+        }}
+        transition={"all 0.3s ease"}
         px={"0px"}
         boxShadow={
           isCatalogDrawer ? "0 0 7px 0 rgba(115, 115, 115, 0.2)" : "unset"

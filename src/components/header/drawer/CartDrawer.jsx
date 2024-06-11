@@ -397,7 +397,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
                 </>
               )}
 
-              {isAuth ? null : (
+              {isAuth && cartData || cart.length > 0? null : (
                 <Text textAlign={'center'} mt={'36px'} fontFamily={'roboto'} fontSize={'18px'} fontWeight={'400'}>
                   {locale === "ru"
                     ? "Для оформления заказа необходимо авторизоваться"

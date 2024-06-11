@@ -4,6 +4,9 @@ import { getSession } from '@/lib/lib';
 import { Flex, Spinner } from '@chakra-ui/react'
 import React, { Suspense } from 'react'
 import Loading from './loading';
+import BreadCrumbs from '@/components/shared-components/breadcrumb/BreadCrumbs';
+import SubCategoriesList from '@/components/categories/SubCategoriesList';
+import CategoryLayout from '@/components/categories/CategoryLayout';
 
 export async function generateMetadata({ params, searchParams }, parent) {
   // read route params
@@ -48,37 +51,12 @@ const layout = async({children,params}) => {
   })
   const responseData = await res.json()
   const [data] = responseData;
+
+  console.log(data);
   return (
-    <Flex
-    maxW={{ base:'100%', lg:"1200px", xl: "1200px", "2xl": "1440px" }}
-    mx={"auto"}
-    flexDir={"row"}
-    flexWrap={"wrap"}
-    justifyContent={"space-between"}
-    gap={"30px"}
-    px={{ base: "16px", xl: "0" }}
-    pb={"100px"}
-    position={"relative"}
-    pt={{ base: "50px" }}
-  >
-    {/* <BreadCrumbs
-      locale={params.locale}
-      data={{ parent: data.parent, current: data.name }}
-    /> */}
-
-    {/* Filters */}
-
-
-    <Flex gap={'30px'} flexDir={{base:'column',lg:'row'}} w={'100%'}>
-
-    <FilterLayout data={data} params={params} children={children}  />
-    <Suspense fallback={<Loading />}>
-   {children}
-   </Suspense>
-
-    </Flex>
-
-    </Flex>
+   <CategoryLayout data={data} params={params} token={token}  >
+    {children}
+   </CategoryLayout>
   )
 }
 

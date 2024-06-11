@@ -4,7 +4,7 @@ import { Button } from "@chakra-ui/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-const OrangeButton = ({ text,text_en }) => {
+const OrangeButton = ({ text,text_en,fn = null }) => {
 
   console.log(text,text_en);
   const { locale } = useParams();
@@ -24,6 +24,7 @@ const OrangeButton = ({ text,text_en }) => {
         lineHeight={"25px"}
         display={"flex"}
         alignItems={"center"}
+        onClick={fn ? fn : null}
         justifyContent={"center"}
         gap={"10px"}
         py={"18px"}

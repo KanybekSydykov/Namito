@@ -114,6 +114,8 @@ const Login = ({ params }) => {
     >
       <Flex
         position={"relative"}
+        maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+        mx={'auto'}
         zIndex={3}
         width={"100%"}
         flexDir={"column"}
@@ -125,8 +127,9 @@ const Login = ({ params }) => {
         gap={'1px'}
         position={'absolute'}
         top={'0px'}
-        left={0}
+        left={'16px'}
         w={'max-content'}
+        
         alignItems={'center'}
         >
           <Link href={`/${params.locale}`}>

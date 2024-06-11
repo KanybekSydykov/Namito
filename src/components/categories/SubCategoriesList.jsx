@@ -3,17 +3,19 @@
 import React, { useEffect } from 'react'
 import Link from 'next/link'
 import {Flex, Text, Box} from '@chakra-ui/react'
+import Sort from '../sorting/Sort'
 
 
-const SubCategoriesList = ({data,locale,responseData}) => {
+const SubCategoriesList = ({data,locale,handleSorting}) => {
 
   useEffect(() => {
   },[data])
 
   return (
+    <Flex flexDir={'row'} justifyContent={'space-between'} width={'100%'}>
     <Flex
     flexDir={'row'}
-    width={{base:'calc(100dvw - 32px)',lg:'calc(100vw - 250px)'}}
+    width={'max-content'}
     overflowX={'auto'}
     gap={'16px'}
     py={'2px'}
@@ -50,7 +52,9 @@ const SubCategoriesList = ({data,locale,responseData}) => {
       ))}
 
    
- 
+    </Flex>
+    <Sort handleSorting={handleSorting} />
+
     </Flex>
   )
 }
