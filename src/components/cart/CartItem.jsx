@@ -10,7 +10,6 @@ import { useCounter } from "@/lib/auth-content";
 import { useAnimate } from "framer-motion";
 
 const CartItem = ({ item, handleDeleteCartItem, border = true,handleQuantityChange }) => {
-  console.log(item);
   const [scope, animate] = useAnimate();
   const [quantity,setQuantity] = useState(item.quantity || 1);
   const { decrement, increment} = useCounter();

@@ -14,29 +14,36 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Button,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import { useParams } from "next/navigation";
 
-export default function CheckOutModal({ children,handleSelectedPayment ,createOrder}) {
+export default function CheckOutModal({ children, handleSelectedPayment, createOrder }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
   const [paymentMethod, setPaymentMethod] = useState("картой");
   const { locale } = useParams();
 
+  // Ensure the keys match exactly with the values being used
+  const paymentText = {
+    картой: locale === 'ru' ? "Оплата картой" : "Pay with card",
+    наличкой: locale === 'ru' ? "Оплата наличными" : "Pay with cash",
+  };
+
   useEffect(() => {
-    handleSelectedPayment(paymentMethod)
+    handleSelectedPayment(paymentMethod, paymentText[paymentMethod]);
   }, [isOpen]);
 
   function handlePayment(value) {
-    setPaymentMethod(value)
-    handleSelectedPayment(value)
-    createOrder()
+    setPaymentMethod(value);
+    handleSelectedPayment(value, paymentText[value]);
+    createOrder();
     onClose();
   }
 
-  function handlePaymentValue(value){
-    setPaymentMethod(value)
+  function handlePaymentValue(value) {
+    console.log(value, paymentText[value]);
+    setPaymentMethod(value);
+    handleSelectedPayment(value, paymentText[value]);
   }
 
   return (
@@ -66,26 +73,17 @@ export default function CheckOutModal({ children,handleSelectedPayment ,createOr
             lineHeight={"28px"}
             color={"#000"}
           >
-            {locale === "ru"
-              ? "Выберите способ оплаты"
-              : "Choose payment method"}
+            {locale === "ru" ? "Выберите способ оплаты" : "Choose payment method"}
           </DrawerHeader>
 
-          <DrawerBody
-          display={'flex'}
-          flexDir={'column'}
-          alignItems={'center'}
-          >
-            <RadioGroup
-              onChange={(value) => handlePaymentValue(value)}
-              value={paymentMethod}
-            >
+          <DrawerBody display={'flex'} flexDir={'column'} alignItems={'center'}>
+            <RadioGroup onChange={(value) => handlePaymentValue(value)} value={paymentMethod}>
               <Stack direction="row" gap={"30px"} justifyContent={"center"}>
                 <Radio value="картой" size={"lg"} colorScheme={"red"}>
-                  Онлайн
+                  {locale === "ru" ? "Оплата картой" : "Pay with card"}
                 </Radio>
                 <Radio value="наличкой" size={"lg"} colorScheme={"red"}>
-                  Наличными
+                  {locale === "ru" ? "Оплата наличными" : "Pay with cash"}
                 </Radio>
               </Stack>
             </RadioGroup>
@@ -99,7 +97,7 @@ export default function CheckOutModal({ children,handleSelectedPayment ,createOr
               maxW={'300px'}
               onClick={() => handlePayment(paymentMethod)}
             >
-              Оформить заказ
+              {locale === "ru" ? "Оформить заказ" : "Confirm order"}
             </Button>
           </DrawerBody>
         </DrawerContent>

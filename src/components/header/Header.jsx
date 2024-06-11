@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Flex,
   Box,
@@ -27,6 +27,23 @@ const Header = ({ data,isAuth,token }) => {
   const params = useParams();
   const path = usePathname();
   const router = useRouter()
+  const ref = useRef(null);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ref.current) {
+        if (window.scrollY > 100) {
+          ref.current.style.top = "0px";
+        } else {
+          ref.current.style.top = "49px";
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
       router.refresh()
@@ -41,9 +58,10 @@ const Header = ({ data,isAuth,token }) => {
       {/* Top nav */}
       <Container
         maxW={"unset"}
-        pos={"relative"}
+        pos={{base:'relative',lg:'fixed'}}
+        top={0}
         zIndex={{ base: "1", lg: isCatalogDrawer ? "2000" : "10" }}
-        bg={"#fff"}
+        bg={"rgba(255,255,255,0.5)"}
         py={{ lg: "20px" }}
         px={"0px"}
         boxShadow={
@@ -101,13 +119,17 @@ const Header = ({ data,isAuth,token }) => {
       {!isDesktop && (
         <Container
         maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
-
+          position={'fixed'}
+          top={'49px'}
+          zIndex={100}
+          transition={"top 0.3s"}
           display={"flex"}
           flexDir={"row"}
           justifyContent={"space-between"}
           alignItems={"center"}
           py={"12px"}
           bg={"#212528"}
+          ref={ref}
         >
           <>
             <CatalogDrawer

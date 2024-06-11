@@ -17,11 +17,19 @@ import React, { useState, useEffect } from "react";
 import AdressModal from "../shared-components/adress-modal/AddressModal";
 import { deleteData, getData, patchData, postData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
+import { useParams } from "next/navigation";
 
-const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
+const ProfileAdresses = ({ token,handleSelectedAddress }) => {
   const [userAddresses, setUserAddresses] = useState(undefined);
   const [isRequestPending, setIsRequestPending] = useState(true);
+  const params = useParams();
   const toast = useToast();
+
+  const succesAddedText = params.locale === 'ru' ? 'Адрес добавлен успешно и назначен основным' : 'Address added successfully and set as primary';
+  const deleteAdressText = params.locale === 'ru' ? '"Адрес успешно удалён"' : 'Address successfully deleted';
+  const adressEditedText = params.locale === 'ru' ? '"Адрес успешно изменён"' : 'Address edited successfully';
+  const adressPrimaryText = params.locale === 'ru' ? '"Адрес успешно назначен основным"' : 'Address set as primary';
+
 
   useEffect(() => {
     async function requestUserAdresses() {
@@ -45,13 +53,13 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
     const response = await postData(payload, token, ENDPOINTS.postAddAdress());
 
     if (response.status >= 200) {
-      console.log("showing toast");
       toast({
-        title: "Адрес добавлен успешно",
+        title: succesAddedText,
         status: "success",
         duration: 9000,
         isClosable: true,
       });
+      handleSetPrimary(response.data.id,false);
       if (userAddresses) {
         setUserAddresses((prev) => [...prev, response.data]);
       } else {
@@ -65,7 +73,7 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
 
     if (response.status >= 200) {
       toast({
-        title: "Адрес успешно изменён",
+        title: adressEditedText,
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -80,7 +88,7 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
     const response = await deleteData(token, ENDPOINTS.deleteAdress(id));
 
     toast({
-      title: "Адрес успешно удалён",
+      title: deleteAdressText,
       status: "success",
       duration: 9000,
       isClosable: true,
@@ -88,7 +96,7 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
     setUserAddresses((prev) => prev.filter((item) => item.id !== id));
   }
 
-  async function handleSetPrimary(id) {
+  async function handleSetPrimary(id,showToast=true) {
     if(handleSelectedAddress){handleSelectedAddress(id);}
     try {
       const currentPrimary = userAddresses.find(
@@ -112,12 +120,14 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
           ENDPOINTS.patchAdress(id)
         );
         if (response.status >= 200) {
+         if(showToast){
           toast({
-            title: "Адрес успешно назначен основным",
+            title: adressPrimaryText,
             status: "success",
             duration: 9000,
             isClosable: true,
           });
+         }
 
           setUserAddresses((prev) =>
             prev.map((item) =>
@@ -227,7 +237,6 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
                   h={"24px"}
                   justifyContent={"center"}
                   alignItems={"center"}
-                  onClick={() => console.log("edit clicked")}
                 >
                   <Menu>
                     <MenuButton as={Button} w={"24px"} h={"24px"} p={0}>
@@ -245,10 +254,12 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
                         data={item}
                         handleEditAdress={handleEditAdress}
                       >
-                        <MenuItem>Изменить</MenuItem>
+                        <MenuItem>
+                        {params.locale === 'ru' ? 'Редактировать' : 'Edit'}
+                        </MenuItem>
                       </AdressModal>
                       <MenuItem onClick={() => handleDeleteAddress(item.id)}>
-                        Удалить
+                        {params.locale === 'ru' ? 'Удалить' : 'Delete'}
                       </MenuItem>
                     </MenuList>
                   </Menu>
@@ -266,7 +277,7 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
               color={"rgba(54, 54, 54, 1)"}
               textAlign={"center"}
             >
-              У вас нет сохраненных адресов
+             {params.locale === 'ru' ? 'У вас нет сохраненных адресов' : 'You have no saved addresses'}
             </Text>
           )}
         </>
@@ -323,7 +334,7 @@ const ProfileAdresses = ({ params, token,handleSelectedAddress }) => {
               color: "#fff",
             }}
           >
-            Добавить адрес
+           {params.locale === 'en' ? "Add new address" : "Добавить новый адрес"}
           </Text>
         </Button>
       </AdressModal>

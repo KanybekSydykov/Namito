@@ -14,6 +14,22 @@ const buildQueryString = (params) => {
 };
 let filteredData = [];
 
+
+async function getFilteredProducts(url, headers) {
+  const res = await fetch(url, {
+    cache: 'no-store',
+    headers: headers,
+  });
+
+  if (!res.ok) {
+    console.error('Failed to fetch filtered products:', res.statusText);
+    return [];
+  }
+
+  const filteredResData = await res.json();
+  return filteredResData;
+}
+
 const page = async ({ params, searchParams }) => {
   const { slug } = params;
   const session = await getSession();
@@ -29,7 +45,7 @@ const page = async ({ params, searchParams }) => {
 
   // Fetch category data
   const categoryRes = await fetch(`${ENDPOINTS.getCategoryData(slug)}`, {
-    cache: 'no-cache',
+    cache: 'no-store',
     headers: headers,
   });
 
@@ -54,22 +70,12 @@ const page = async ({ params, searchParams }) => {
   if (queryString) {
     const url = `${baseURL}?${queryString}`;
     filteredData = await getFilteredProducts(url, headers);
+
+    console.log(filteredData);
+  } else {
+    filteredData = data
   }
 
-  async function getFilteredProducts(url, headers) {
-    const res = await fetch(url, {
-      cache: 'no-cache',
-      headers: headers,
-    });
-
-    if (!res.ok) {
-      console.error('Failed to fetch filtered products:', res.statusText);
-      return [];
-    }
-
-    const filteredResData = await res.json();
-    return filteredResData;
-  }
 
 
   return (

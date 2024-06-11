@@ -117,12 +117,14 @@ const Product = ({
         boxShadow={"0px 0px 4px 0px rgba(0, 0, 0, 0.25)"}
         onMouseEnter={() => setButtonVisibility(true)}
         onMouseLeave={() => setButtonVisibility(false)}
+        h={'100%'}
       >
         <Flex
           flexDir={"column"}
           gap={"20px"}
           position={"relative"}
           cursor={"pointer"}
+          h={'100%'}
         >
           {/* Card Images */}
           <Flex position={"relative"}>
@@ -133,9 +135,9 @@ const Product = ({
               borderRadius={"10px"}
               overflow={"hidden"}
               minW={{ base: "100%", lg: "225px" }}
-              width={"100%"}
+              width={{base:'100%',lg:'100%'}}
               maxW={{ base: "240px", lg: "270px" }}
-              // height={{ base: "225px", lg: "250px" }}
+              height={{ base: "100%", lg: "100%" }}
               zIndex={2}
             >
               <ProductCardSlider
@@ -200,6 +202,7 @@ const Product = ({
             gap={"8px"}
             position={"relative"}
             cursor={"pointer"}
+            justifyContent={'space-between'}
           >
             <Flex
               flexDir={{ base: "row", lg: "row" }}
@@ -241,12 +244,13 @@ const Product = ({
                 fontWeight={"600"}
                 fontSize={{ base: "18px", lg: "20px" }}
                 textOverflow={"ellipsis"}
-                noOfLines={1}
+                noOfLines={2}
+                minH={{base:'54px'}}
                 color={"rgb(54,54,54)"}
               >
                 {details?.name}
               </Text>
-              <Text
+              {/* <Text
                 fontFamily={"roboto"}
                 fontWeight={"300"}
                 fontSize={"18px"}
@@ -256,7 +260,7 @@ const Product = ({
                 minH={"54px"}
               >
                 {details?.description}
-              </Text>
+              </Text> */}
             </Flex>
 
             <Flex

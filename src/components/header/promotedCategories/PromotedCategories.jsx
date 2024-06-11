@@ -12,6 +12,7 @@ const PromotedCategories = ({data, isDesktop,params}) => {
     height={"50px"}
     display={"flex"}
     px='0px'
+    mt={{base:'62px',lg:'84px'}}
     justifyContent={{ base: "flex-start", lg: "center" }}
     alignItems={"center"}
     position={"relative"}

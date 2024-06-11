@@ -6,43 +6,54 @@ import {
   FormLabel,
   Input,
 } from "@chakra-ui/react";
+import { useParams } from "next/navigation";
 import { useState } from "react";
-export default function FormInput({ title, type, required,value,setValue }) {
+export default function FormInput({
+  title,
+  title_en,
+  type,
+  required,
+  value,
+  setValue,
+}) {
   // const [input, setInput] = useState("");
+  const params = useParams();
 
   // const handleInputChange = (e) => setInput(e.target.value);
 
   const isError = value === "";
 
   return (
-    <FormControl fontFamily={'roboto'} isRequired={required}>
-      <FormLabel 
-      fontWeight={'300'}
-      fontSize={'16px'}
-      lineHeight={'24px'}
-      color={'rgba(54, 54, 54, 1)'}
-      >{title}</FormLabel>
+    <FormControl fontFamily={"roboto"} isRequired={required}>
+      <FormLabel
+        fontWeight={"300"}
+        fontSize={"16px"}
+        lineHeight={"24px"}
+        color={"rgba(54, 54, 54, 1)"}
+      >
+        {params.locale === "ru" ? title : title_en}
+      </FormLabel>
       <Input
         type={type}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder={title}
-        border={'1px solid rgba(160, 160, 160, 1)'}
-        borderRadius={'10px'}
-        h={'56px'}
+        placeholder={params.locale === 'ru' ? title : title_en}
+        border={"1px solid rgba(160, 160, 160, 1)"}
+        borderRadius={"10px"}
+        h={"56px"}
         _placeholder={{
-            color:'rgba(160, 160, 160, 1)'
+          color: "rgba(160, 160, 160, 1)",
         }}
         _focus={{
-            borderColor:'rgba(203, 70, 9, .5)',
-            boxShadow:'0 0 0 1px rgba(203, 70, 9, .25)'
+          borderColor: "rgba(203, 70, 9, .5)",
+          boxShadow: "0 0 0 1px rgba(203, 70, 9, .25)",
         }}
       />
       {isError && (
-        <FormErrorMessage
-        fontWeight={'400'}
-        fontSize={'12px'}
-        >{title} обязательное поле.</FormErrorMessage>
+        <FormErrorMessage fontWeight={"400"} fontSize={"12px"}>
+          {params.locale === "ru" ? title : title_en}{" "}
+          {params.locale === "ru" ? "обязательное поле." : "is required."}
+        </FormErrorMessage>
       )}
     </FormControl>
   );

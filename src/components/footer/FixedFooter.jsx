@@ -29,6 +29,7 @@ const Footer = ({ token }) => {
       {isMobile && (
         <Container
           position={"fixed"}
+          className="fixed-footer"
           bottom={"0"}
           zIndex={100}
           left={"0"}

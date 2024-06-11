@@ -3,6 +3,7 @@ import FilterLayout from '@/components/categories/FilterLayout';
 import { getSession } from '@/lib/lib';
 import { Flex, Spinner } from '@chakra-ui/react'
 import React, { Suspense } from 'react'
+import Loading from './loading';
 
 export async function generateMetadata({ params, searchParams }, parent) {
   // read route params
@@ -71,7 +72,9 @@ const layout = async({children,params}) => {
     <Flex gap={'30px'} flexDir={{base:'column',lg:'row'}} w={'100%'}>
 
     <FilterLayout data={data} params={params} children={children}  />
+    <Suspense fallback={<Loading />}>
    {children}
+   </Suspense>
 
     </Flex>
 

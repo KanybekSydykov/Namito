@@ -1,39 +1,48 @@
-'use client'
-import { Text } from '@chakra-ui/react'
-import { AnimatePresence,motion } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
-import { useCounter } from '@/lib/auth-content'
-import { ENDPOINTS } from '@/API/endpoints'
-import { useParams } from 'next/navigation'
-import { getData } from '@/lib/apiServices'
+"use client";
+import { Text } from "@chakra-ui/react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { useCounter } from "@/lib/auth-content";
+import { ENDPOINTS } from "@/API/endpoints";
+import { useParams } from "next/navigation";
+import { getData } from "@/lib/apiServices";
+
+const CartCounter = ({ token }) => {
+  const { locale } = useParams();
+  const { getTotalQuantity } = useCounter();
+  const [cart, setCart] = useState([]);
 
 
-const CartCounter = ({token}) => {
-    const {locale} = useParams();
-    const { getTotalQuantity } = useCounter();
-    const [cart,setCart] = useState([]);
+  async function getServerCart() {
+    const response = await getData(token, ENDPOINTS.getCartData(), locale);
+    const data = response.data;
+    setCart(data);
+  }
 
-    async function getServerCart(){
-        const response = await getData(token, ENDPOINTS.getCartData(),locale);
-        const data = response.data;
-        setCart(data);
+  const handleTotalQuantity = () => {
+    if (cart.length) {
+      return cart.reduce((total, item) => total + item.quantity, 0);
     }
+  };
 
-    const handleTotalQuantity = () => {
-        if(cart.length){
-            return cart.reduce((total, item) => total + item.quantity, 0);
-        }
-    };
+  useEffect(() => {
+    if (token) {
+      getServerCart();
+    }
+  }, [token]);
 
+  function displayCounter() {
+    let serverCounter =
+      handleTotalQuantity() === 0 ? "" : handleTotalQuantity();
+    let clientCounter = getTotalQuantity() === 0 ? "" : getTotalQuantity();
 
+    if (token) {
+      return serverCounter;
+    } else {
+      return clientCounter;
+    }
+  }
 
-    useEffect(() => {
-        if(token){
-            getServerCart();
-        }
-    }, [token])
-
-    console.log(cart);
 
   return (
     <AnimatePresence>
@@ -50,10 +59,10 @@ const CartCounter = ({token}) => {
         fontSize={"14px"}
         fontFamily={"roboto"}
       >
-        {token ? handleTotalQuantity() : getTotalQuantity()}
+        {displayCounter()}
       </Text>
-  </AnimatePresence>
-  )
-}
+    </AnimatePresence>
+  );
+};
 
-export default CartCounter
+export default CartCounter;

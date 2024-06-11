@@ -28,27 +28,33 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cartData, setCartData] = useState(undefined);
   const [isCartPending, setIsCartPending] = useState(true);
-  const { counter, cart, increaseQuantity, decreaseQuantity, removeItem,clearCart } =
-    useCounter();
-  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState("");
+  const {
+    counter,
+    cart,
+    increaseQuantity,
+    decreaseQuantity,
+    removeItem,
+    clearCart,
+    totalAmount,
+  } = useCounter();
+  // const [totalAmount, setTotalAmount] = useState(0);
 
   const translate = (enText, ruText) => (locale === "ru" ? ruText : enText);
 
-  console.log(cart);
+  console.log(totalPrice);
 
   useEffect(() => {
-
-
+    console.log(cart);
     if (token && isOpen) {
-      if(cart.length && !cartData){
-        console.log('should send data');
+      if (cart.length && !cartData) {
+        console.log("should send data");
         postCartData();
       } else {
         clearCart();
         setIsCartPending(true);
         fetchCartData();
       }
-     
     } else {
       setIsCartPending(false);
     }
@@ -65,7 +71,8 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
       const response = await getData(token, ENDPOINTS.getCartData());
       if (response.status >= 200 && response.status < 400) {
         setCartData(response.data.items);
-        setTotalAmount(response.data.total_amount);
+        console.log(response);
+        setTotalPrice(response.data.total_amount);
       }
     } catch (error) {
       console.error("Error fetching cart data:", error);
@@ -76,18 +83,26 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
 
   const postCartData = async () => {
     if (token) {
-      const credentials = 
-      {items: cart.map((item) => {
-        return {product_variant: item.product_variant.id, quantity: item.quantity};
-      })};
+      const credentials = {
+        items: cart.map((item) => {
+          return {
+            product_variant: item.product_variant.id,
+            quantity: item.quantity,
+          };
+        }),
+      };
       console.log(credentials);
       try {
-        const response = await postData(credentials,token, ENDPOINTS.postItemsToCard());
+        const response = await postData(
+          credentials,
+          token,
+          ENDPOINTS.postItemsToCard()
+        );
         if (response.status >= 200 && response.status < 400) {
           console.log(response);
           clearCart();
           setCartData(response.data.items);
-          setTotalAmount(response.data.total_amount);
+          setTotalPrice(response.data.total_amount);
         }
       } catch (error) {
         console.error("Error fetching cart data:", error);
@@ -95,8 +110,33 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
     }
   };
 
+  async function updateTotalPrice(id, action) {
+    const product = cartData.find((item) => item.id === id);
+    console.log(product);
+
+    // Ensure product and product_variant exist
+    if (!product || !product.product_variant) {
+      console.error(`Product or product_variant not found for id: ${id}`);
+      return;
+    }
+
+    const price = product.product_variant.discounted_price
+      ? product.product_variant.discounted_price
+      : product.product_variant.price;
+
+    if (action === "delete") {
+      const totalRemovedPrice = price * product.quantity;
+      setTotalPrice((prev) => prev - totalRemovedPrice);
+    } else if (action === "increase") {
+      setTotalPrice((prev) => prev + price);
+    } else if (action === "decrease") {
+      setTotalPrice((prev) => prev - price);
+    }
+  }
   const handleDeleteCartItem = async (id) => {
     if (token) {
+      await updateTotalPrice(id, "delete");
+
       try {
         await deleteData(token, ENDPOINTS.deleteCartItem(id));
         setCartData((prevData) => prevData.filter((item) => item.id !== id));
@@ -110,6 +150,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
 
   const handleQuantityChange = async (id, quantity, action) => {
     if (token) {
+      updateTotalPrice(id, action);
       const payload = { items: [{ id, quantity }] };
       try {
         await putData(payload, token, ENDPOINTS.putCartQuantity());
@@ -166,7 +207,6 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
               }}
             />
             <CartCounter token={token} />
-         
           </Box>
           <Text
             fontFamily={"roboto"}
@@ -196,7 +236,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
             fontWeight={"600"}
             fontFamily={"roboto"}
             pos={"relative"}
-            mt={"40px"}
+            mt={{ base: "40px", lg: "0px" }}
           >
             <Text width={"auto"} flexGrow={1} textAlign={"center"}>
               {translate("Cart", "Корзина")}
@@ -263,7 +303,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
                         >
                           {translate("Total price:", "Общая цена:")}
                         </Highlight>
-                        {totalAmount} {translate("kgs", "сом")}
+                        {totalPrice} {translate("kgs", "сом")}
                       </Text>
                     </>
                   ) : (
@@ -283,7 +323,12 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
                       >
                         {translate("Your cart is empty", "Ваша корзина пуста")}
                       </Text>
-                      <Image src={"/decor-star.png"} width={50} height={50} />
+                      <Image
+                        src={"/decor-star.png"}
+                        alt="decor star"
+                        width={50}
+                        height={50}
+                      />
                     </Flex>
                   )}
                 </>
@@ -292,9 +337,9 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
                   {cart.length ? (
                     <>
                       <Flex flexDir={"column"} gap={"16px"} mt={"30px"}>
-                        {cart.map((item, index) => (
+                        {cart.map((item) => (
                           <CartItem
-                            key={index}
+                            key={item.id}
                             item={item}
                             handleDeleteCartItem={handleDeleteCartItem}
                             handleQuantityChange={handleQuantityChange}
@@ -341,29 +386,43 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
                       >
                         {translate("Your cart is empty", "Ваша корзина пуста")}
                       </Text>
-                      <Image src={"/decor-star.png"} width={50} height={50} />
+                      <Image
+                        src={"/decor-star.png"}
+                        alt="decor image"
+                        width={50}
+                        height={50}
+                      />
                     </Flex>
                   )}
                 </>
               )}
-      { cartData || cart.length > 0 ?  <Box
+
+              {isAuth ? null : (
+                <Text textAlign={'center'} mt={'36px'} fontFamily={'roboto'} fontSize={'18px'} fontWeight={'400'}>
+                  {locale === "ru"
+                    ? "Для оформления заказа необходимо авторизоваться"
+                    : "To order, you need to log in"}
+                </Text>
+              )}
+
+              <Box
                 as={Link}
                 width={"100%"}
                 px={"20px"}
                 py={"7px"}
+                mb={"50px"}
                 mt={cartData ? "120px" : "46px"}
-                href={cartData ? `/${locale}/checkout` : "#"}
+                href={`/${locale}/checkout`}
                 onClick={onClose}
               >
                 <OrangeButton
                   link={cartData || cart.length > 0 ? "/checkout" : "/"}
                   text={
-                    cartData || cart.length > 0
-                      ? translate("Checkout", "Оформить заказ")
-                      : translate("Close", "Закрыть")
+                    cartData || cart.length > 0 ? `${isAuth ? 'Оформить заказ' : 'Войти'}` : "Закрыть"
                   }
+                  text_en={cartData || cart.length > 0 ? `${isAuth ? 'Checkout' : 'Login'}` : "Close"}
                 />
-              </Box> : null}
+              </Box>
             </DrawerBody>
           )}
         </DrawerContent>

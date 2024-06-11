@@ -28,7 +28,7 @@ const ProductsSection = ({
         flexDir={"column"}
         gap={"26px"}
         pb={"100px"}
-        maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+        maxW={{ base: "100%", lg: "1100px", xl: "1200px", "2xl": "1280px" }}
         mx={"auto"}
         width={'100dvw'}
       >

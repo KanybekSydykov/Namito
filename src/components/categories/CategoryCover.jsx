@@ -8,16 +8,24 @@ import { useSearchParams } from "next/navigation";
 const CategoryCover = ({ data, params, token, filteredProductsData = undefined,loading }) => {
   const [currentProducts, setCurrentProducts] = useState([]);
   const searchParams = useSearchParams();
+  const [initialLoading, setInitialLoading] = useState(true);
   // const [filteredProducts, setFilteredProducts] = useState(filteredProductsData.products);
 
   console.log(filteredProductsData);
+
   
   useEffect(() => {
+    console.log(initialLoading);
     if (filteredProductsData && filteredProductsData.length > 0) {
       setCurrentProducts(() => [...filteredProductsData]);
-    } else {
+    } else if(!initialLoading){
+      setCurrentProducts(() => [...filteredProductsData])
+    }
+    
+    else{
       setCurrentProducts(() => [...data.products]);
     }
+    setInitialLoading(false); 
   }, [filteredProductsData?.length,searchParams]);
 
   console.log(currentProducts);

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
 
-const DeliveryMethod = ({deliveryValue,setDeliveryValue}) => {
+const DeliveryMethod = ({locale,deliveryValue,setDeliveryValue}) => {
   return (
     <Flex
     flexDir={"column"}
@@ -18,7 +18,7 @@ const DeliveryMethod = ({deliveryValue,setDeliveryValue}) => {
       lineHeight={"25.2px"}
       color={"#000"}
     >
-      Способ доставки
+    {locale === 'ru' ? 'Способ доставки' : 'Delivery method'}
     </Text>
 
     <RadioGroup
@@ -27,10 +27,10 @@ const DeliveryMethod = ({deliveryValue,setDeliveryValue}) => {
     >
       <Stack direction="row" gap={"30px"}>
         <Radio value="курьером" size={"lg"} colorScheme={"red"}>
-          Курьер
+          {locale === 'ru' ? 'Курьером' : 'Courier'}
         </Radio>
         <Radio value="самовывоз" size={"lg"} colorScheme={"red"}>
-          Самовывоз
+          {locale === 'ru' ? 'Самовывоз' : 'Pickup'}
         </Radio>
       </Stack>
     </RadioGroup>

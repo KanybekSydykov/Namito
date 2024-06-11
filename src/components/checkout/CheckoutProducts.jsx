@@ -2,7 +2,10 @@ import React from 'react';
 import { Checkbox, Flex, Stack, Text } from '@chakra-ui/react';
 import CartItem from '../cart/CartItem';
 
-const CheckoutProducts = ({ cartData, checkedItems, handleCheckedItem, handleDeleteCartItem }) => {
+const CheckoutProducts = ({ cartData, checkedItems, handleCheckedItem, handleDeleteCartItem,locale }) => {
+
+  console.log(checkedItems, "checkedItems");
+
   return (
     <Flex
       fontFamily={"roboto"}
@@ -22,7 +25,7 @@ const CheckoutProducts = ({ cartData, checkedItems, handleCheckedItem, handleDel
         lineHeight={"25.2px"}
         color={"#000"}
       >
-        Товары
+        {locale === "ru" ? "Товары" : "Goods"}
       </Text>
 
       {cartData?.length ? (
@@ -56,7 +59,7 @@ const CheckoutProducts = ({ cartData, checkedItems, handleCheckedItem, handleDel
           ))}
         </Stack>
       ) : (
-        <Text>Корзина пуста</Text>
+        <Text>{ locale === "ru" ? "Корзина пуста" : "Cart is empty" }</Text>
       )}
     </Flex>
   );

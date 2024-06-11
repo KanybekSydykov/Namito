@@ -24,10 +24,11 @@ import ColorVariants from "./ColorVariants";
 import VariantSizes from "./VariantSizes";
 import Link from "next/link";
 import ProductCharacteristics from "./ProductCharacteristics";
+import { notFound } from "next/navigation";
 
 const ProductPage = ({
   params,
-  details = undefined,
+  details,
   similarProds,
   token,
   reviews,
@@ -39,6 +40,7 @@ const ProductPage = ({
   const [selectedVariant, setSelectedVariant] = useState({});
   const [colors, setColors] = useState([]);
   const [showMore, setShowMore] = useState(false);
+
 
   useEffect(() => {
     function getVariants() {

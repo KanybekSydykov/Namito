@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import FormInput from "../form-control/FormInput";
+import { useParams } from "next/navigation";
 
 export default function AdressModal({ children,handleAddAdress ,data,isEdit,handleEditAdress }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,6 +28,7 @@ export default function AdressModal({ children,handleAddAdress ,data,isEdit,hand
   const [entrance, setEntrance] = useState(isEdit ? data.entrance : "");
   const [floor, setFloor] = useState(isEdit ? data.floor : "");
   const [intercom, setIntercom] = useState( isEdit ? data.intercom : "");
+  const params = useParams();
 
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function AdressModal({ children,handleAddAdress ,data,isEdit,hand
    entrance,
    floor,
    intercom,
-    "is_primary": false
+    "is_primary": true
    }
    handleAddAdress(credentials)
    onClose()
@@ -84,7 +86,7 @@ export default function AdressModal({ children,handleAddAdress ,data,isEdit,hand
               lineHeight={"22px"}
               color={"rgba(54, 54, 54, 1)"}
             >
-              Добавить новый адрес
+              {params.locale === 'ru' ? "Добавить новый адрес" : "Add new address"}
             </Text>
           </ModalHeader>
           <ModalCloseButton />
@@ -95,22 +97,22 @@ export default function AdressModal({ children,handleAddAdress ,data,isEdit,hand
             columnGap={'16px'}
             >
                 <GridItem colSpan={2}>
-                    <FormInput title={'Город'} value={city} setValue={setCity}  type={'text'} required />
+                    <FormInput title={'Город'} title_en={'City'} value={city} setValue={setCity}  type={'text'} required />
                 </GridItem>
                 <GridItem colSpan={2}>
-                    <FormInput title={'Улица'} value={street} setValue={setStreet} type={'text'} required />
+                    <FormInput title={'Улица'} title_en={'Street'} value={street} setValue={setStreet} type={'text'} required />
                 </GridItem>
                 <GridItem colSpan={1}>
-                    <FormInput title={'Квартира/Дом'} value={apartment_number} setValue={setApartment} type={'number'} required />
+                    <FormInput title={'Квартира/Дом'} title_en={'Apartment number'} value={apartment_number} setValue={setApartment} type={'number'} required />
                 </GridItem>
                 <GridItem colSpan={1}>
-                    <FormInput title={'Подъезд'} value={entrance} setValue={setEntrance} type={'number'} />
+                    <FormInput title={'Подъезд'} title_en={'Entrance'} value={entrance} setValue={setEntrance} type={'number'} />
                 </GridItem>
                 <GridItem colSpan={1}>
-                    <FormInput title={'Этаж'} value={floor} setValue={setFloor} type={'number'} />
+                    <FormInput title={'Этаж'} title_en={'Floor'} value={floor} setValue={setFloor} type={'number'} />
                 </GridItem>
                 <GridItem colSpan={1}>
-                    <FormInput title={'Домофон'} value={intercom} setValue={setIntercom} type={'number'} />
+                    <FormInput title={'Домофон'} title_en={'Intercom'} value={intercom} setValue={setIntercom} type={'number'} />
                 </GridItem>
             </Grid>
          
@@ -137,7 +139,7 @@ export default function AdressModal({ children,handleAddAdress ,data,isEdit,hand
               color={"#fff"}
               onClick={isEdit ? editAdress : handleSaveAdress}
             >
-              Сохранить
+              {params.locale === 'ru' ? 'Сохранить' : 'Save'}
             </Button>
             <Button
               width={"100%"}
@@ -148,7 +150,7 @@ export default function AdressModal({ children,handleAddAdress ,data,isEdit,hand
               bg={"#fff"}
               onClick={onClose}
             >
-              Отменить
+              {params.locale === 'ru' ? 'Отменить' : 'Cancel'}
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -13,13 +13,13 @@ import {
   Spinner,
   useToast,
 } from "@chakra-ui/react";
-import { useState} from "react";
+import { useEffect, useState } from "react";
 import CheckOutModal from "./CheckOutModal";
 import { useParams } from "next/navigation";
 import CartItem from "../cart/CartItem";
 import { deleteData, postData, putData } from "@/lib/apiServices";
 import ProfileAdresses from "../profile/ProfileAdresses";
-import {motion } from "framer-motion";
+import { motion } from "framer-motion";
 import CheckoutProducts from "./CheckoutProducts";
 import DeliveryMethod from "./DeliveryMethod";
 import { ENDPOINTS } from "@/API/endpoints";
@@ -28,11 +28,11 @@ import { useRouter } from "next/navigation";
 const CheckOut = ({ data, token }) => {
   const [deliveryValue, setDeliveryValue] = useState("курьером");
   const [adressValue, setAdressValue] = useState("");
-  const [paymentValue, setPaymentValue] = useState("");
+  const [paymentValue, setPaymentValue] = useState({});
   const { locale } = useParams();
   const [cartData, setCartData] = useState(data.items);
   const [checkedItems, setCheckedItems] = useState(
-   cartData ? cartData.map((item) => ({ id: item.id, to_purchase: true }) ): []
+    cartData ? cartData.map((item) => ({ id: item.id, to_purchase: true })) : []
   );
   const [orderPending, setOrderPending] = useState(false);
   const router = useRouter();
@@ -40,34 +40,29 @@ const CheckOut = ({ data, token }) => {
   const toast = useToast();
 
   function handleCheckedItem(id) {
-    setCheckedItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, to_purchase: !item.to_purchase } : item
-      )
+    const newCheckItems = checkedItems.map((item) =>
+      item.id === id ? { ...item, to_purchase: !item.to_purchase } : item
     );
 
-    console.log(checkedItems);
+    setCheckedItems(newCheckItems);
   }
-
 
   function handleSelectedAddress(value) {
     setAdressValue(value);
   }
 
-  function handleSelectedPayment(value) {
-    setPaymentValue(value);
+  function handleSelectedPayment(value, text) {
+    console.log(value, text);
+    setPaymentValue({ value, text });
   }
 
   async function handleDeleteCartItem(id) {
     const filteredCartData = cartData.filter((item) => item.id !== id);
     setCartData(filteredCartData);
-    setCheckedItems(prev => {
-      const newCheckedItems = new Set(prev);
-      newCheckedItems.delete(id);
-      return newCheckedItems;
-    });
+    const newCheckItems = checkedItems.filter((item) => item.id !== id);
+    setCheckedItems(newCheckItems);
     try {
-      const response = await deleteData(id, token);
+      const response = await deleteData(token,ENDPOINTS.deleteCartItem(id));
       if (response.status >= 200) {
         console.log(response);
       }
@@ -77,22 +72,29 @@ const CheckOut = ({ data, token }) => {
   }
 
   async function createOrder() {
-
-    const newCartData = await putData({items:checkedItems},token,ENDPOINTS.putCartQuantity());
+    const newCartData = await putData(
+      { items: checkedItems },
+      token,
+      ENDPOINTS.putCartQuantity()
+    );
 
     console.log(newCartData);
-    const credentials ={
-      delivery_method : deliveryValue,
-      user_address : adressValue,
-      payment_method : paymentValue,
-    }
+    const credentials = {
+      delivery_method: deliveryValue,
+      user_address: adressValue,
+      payment_method: paymentValue.value,
+    };
 
     try {
       setOrderPending(true);
-      const response = await postData(credentials,token, ENDPOINTS.postOrder());
+      const response = await postData(
+        credentials,
+        token,
+        ENDPOINTS.postOrder()
+      );
       console.log(response);
 
-      if(response.status >= 200 && response.status < 400){
+      if (response.status >= 200 && response.status < 400) {
         setOrderPending(false);
         toast({
           title: "Поздравляем!",
@@ -104,22 +106,20 @@ const CheckOut = ({ data, token }) => {
         setCartData([]);
         router.push(`/${locale}`);
       } else {
-
-      setOrderPending(false);
-      toast({
-        title: "Ошибка!",
-        description: "В корзине нет товаров для покупки!",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+        setOrderPending(false);
+        toast({
+          title: "Ошибка!",
+          description: "В корзине нет товаров для покупки!",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     } catch (error) {
       console.log(error);
     } finally {
       setOrderPending(false);
     }
-    
   }
 
   return (
@@ -155,54 +155,69 @@ const CheckOut = ({ data, token }) => {
         mt={{ base: "20px", lg: "40px" }}
         position={"relative"}
       >
-
-     {orderPending &&   <Flex
-        position={'absolute'}
-        top={0}
-        left={0}
-        w={'100%'}
-        h={'100%'}
-        bg={'rgba(0,0,0,0.5)'}
-        justifyContent={'center'}
-        alignItems={'center'} 
-        zIndex={1}
-        >
-          <Spinner color="orange" size="xl" />
-
-        </Flex>}
+        {orderPending && (
+          <Flex
+            position={"absolute"}
+            top={0}
+            left={0}
+            w={"100%"}
+            h={"100%"}
+            bg={"rgba(0,0,0,0.5)"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            zIndex={1}
+          >
+            <Spinner color="orange" size="xl" />
+          </Flex>
+        )}
         {/* Products */}
-      <CheckoutProducts cartData={cartData} checkedItems={checkedItems} handleCheckedItem={handleCheckedItem} handleDeleteCartItem={handleDeleteCartItem} />
+        <CheckoutProducts
+          locale={locale}
+          cartData={cartData}
+          checkedItems={checkedItems}
+          handleCheckedItem={handleCheckedItem}
+          handleDeleteCartItem={handleDeleteCartItem}
+        />
         <Flex flexDir={"column"} flexGrow={1} gap={"30px"}>
           {/* Delivery method */}
-        <DeliveryMethod deliveryValue={deliveryValue} setDeliveryValue={setDeliveryValue} />
+          <DeliveryMethod
+            locale={locale}
+            deliveryValue={deliveryValue}
+            setDeliveryValue={setDeliveryValue}
+          />
 
           {/* Addresses */}
-         {deliveryValue === 'курьером'
-          && 
-         <Flex as={motion.div}
-            initial={{opacity:0}}
-            animate={{opacity:1}}
-            exit={{opacity:0,x:300}}
-            transition={{duration:0.3,delay:0.3}}
-            flexDir={"column"}
-            gap={"30px"}
-            p={"30px 10px"}
-            mx={"16px"}
-            boxShadow={"0 0 4px 0 rgba(151, 151, 151, 0.25)"}
-            borderRadius={"10px"}
-            alignItems={"center"}
-          >
-            <Text
-              fontWeight={"600"}
-              fontSize={"18px"}
-              lineHeight={"25.2px"}
-              color={"#000"}
+          {deliveryValue === "курьером" && (
+            <Flex
+              as={motion.div}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, x: 300 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+              flexDir={"column"}
+              gap={"30px"}
+              p={"30px 10px"}
+              mx={"16px"}
+              boxShadow={"0 0 4px 0 rgba(151, 151, 151, 0.25)"}
+              borderRadius={"10px"}
+              alignItems={"center"}
             >
-              Адрес доставки
-            </Text>
+              <Text
+                fontWeight={"600"}
+                fontSize={"18px"}
+                lineHeight={"25.2px"}
+                color={"#000"}
+              >
+                {locale === "ru" ? "Адрес доставки" : "Delivery address"}
+              </Text>
 
-           <ProfileAdresses token={token} handleSelectedAddress={handleSelectedAddress} />
-          </Flex>}
+              <ProfileAdresses
+                params={locale}
+                token={token}
+                handleSelectedAddress={handleSelectedAddress}
+              />
+            </Flex>
+          )}
 
           {/* Payment Method */}
           <Flex
@@ -219,7 +234,7 @@ const CheckOut = ({ data, token }) => {
               lineHeight={"25.2px"}
               color={"#000"}
             >
-              Способ оплаты
+              {locale === "ru" ? "Способ оплаты" : "Payment method"}
             </Text>
             <Text
               fontWeight={"300"}
@@ -228,13 +243,32 @@ const CheckOut = ({ data, token }) => {
               color={"#000"}
               mt={"20px"}
             >
-              <Highlight query={paymentValue} styles={{color:'orange',fontSize:'18px',textDecoration:'underline'}}>
-
-            {paymentValue ? `Выбраный способ оплаты ${paymentValue} `:  'Выберите способ оплаты'}
+              <Highlight
+                query={paymentValue.text ? paymentValue.text : ""}
+                styles={{
+                  color: "orange",
+                  fontSize: "18px",
+                  textDecoration: "underline",
+                }}
+              >
+                {paymentValue.text
+                  ? `${
+                      locale === "ru"
+                        ? "Выбраный способ оплаты"
+                        : "Selected payment"
+                    } ${paymentValue.text} `
+                  : `${
+                      locale === "ru"
+                        ? "Выберите способ оплаты"
+                        : "Choose payment method"
+                    }`}
               </Highlight>
             </Text>
 
-            <CheckOutModal handleSelectedPayment={handleSelectedPayment} createOrder={createOrder}>
+            <CheckOutModal
+              handleSelectedPayment={handleSelectedPayment}
+              createOrder={createOrder}
+            >
               <Button
                 mt={"16px"}
                 width={"100%"}
@@ -260,7 +294,9 @@ const CheckOut = ({ data, token }) => {
               >
                 <Text>
                   {locale === "ru"
-                    ? `${!paymentValue ? 'Выбрать' : 'Изменить'} способ оплаты`
+                    ? `${
+                        !paymentValue.text ? "Выбрать" : "Изменить"
+                      } способ оплаты`
                     : "Choose payment method"}
                 </Text>
               </Button>

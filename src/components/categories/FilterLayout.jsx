@@ -1,14 +1,15 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Filters from "@/components/filters/Filters";
 import { Box, Flex } from "@chakra-ui/react";
 import Sort from "@/components/sorting/Sort";
 import SubCategoriesList from "./SubCategoriesList";
 
-const FilterLayout = ({ data, params, children }) => {
+const FilterLayout = ({ data, children }) => {
   const router = useRouter();
   const queryParams = useSearchParams();
+  const params = useParams();
   // const { filter, setFilters, sorting, setSorting, url } = useConstructUrl();
   const [filterValues, setFilterValues] = useState({});
   const [query, setQuery] = useState("");
@@ -16,24 +17,27 @@ const FilterLayout = ({ data, params, children }) => {
   const [initialProducts, setInitialProducts] = useState(data.products);
   //   const [filteredProducts, setFilteredProducts] = useState(filteredProductsData);
 
+
   useEffect(() => {
     const url = constructURL(filterValues);
     console.log(url);
 
     if (url) {
-      console.log(filterValues);
       getFilteredProducts(url);
     } else {
-      console.log("should clear queries");
       router.replace(`?`);
     }
   }, [filterValues]);
+
 
   async function getFilteredProducts(url) {
     router.push(`/${params.locale}/category/${params.slug}?category_slug=${params.slug}&${url}`);
   }
 
   function handleFilters(title, value) {
+
+    console.log(title, value);
+
     setFilterValues((prev) => {
       const updatedFilters = { ...prev };
 
@@ -42,11 +46,11 @@ const FilterLayout = ({ data, params, children }) => {
         if (title === "price") {
           delete updatedFilters.min_price;
           delete updatedFilters.max_price;
-        } else if (title === "Бренд") {
+        } else if (title === "Бренд" || title === "Brand") {
           delete updatedFilters.brand;
-        } else if (title === "Цвет") {
+        } else if (title === "Цвет" || title === "Colors") {
           delete updatedFilters.color;
-        } else if (title === "Размер") {
+        } else if (title === "Размер" || title === "Size") {
           delete updatedFilters.size;
         }
       } else {
@@ -54,11 +58,11 @@ const FilterLayout = ({ data, params, children }) => {
         if (title === "price") {
           updatedFilters.min_price = value[0];
           updatedFilters.max_price = value[1];
-        } else if (title === "Бренд") {
+        } else if (title === "Бренд" || title === "Brand") {
           updatedFilters.brand = value;
-        } else if (title === "Цвет") {
+        } else if (title === "Цвет" || title === "Colors") {
           updatedFilters.color = value;
-        } else if (title === "Размер") {
+        } else if (title === "Размер" || title === "Size") {
           updatedFilters.size = value;
         }
       }
@@ -72,14 +76,13 @@ const FilterLayout = ({ data, params, children }) => {
   }
 
   function handleSorting(value) {
-    console.log(value);
     if (value) {
       setFilterValues((prev) => ({ ...prev, ordering: value }));
     }
   }
 
   function handleRating(value) {
-    setFilterValues((prev) => ({ ...prev, rating: value }));
+    setFilterValues((prev) => ({ ...prev, min_rating: value }));
   }
 
   function constructURL(params) {

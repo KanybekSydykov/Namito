@@ -39,6 +39,7 @@ const eraseCookie = (name) => {
 export function CounterProvider({ children }) {
   const [counter, setCounter] = useState(0);
   const [cart, setCart] = useState([]);
+  const [totalAmount,setTotalAmount] = useState(0);
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -58,6 +59,13 @@ export function CounterProvider({ children }) {
     if (typeof document !== 'undefined') {
       setCookie('cart', JSON.stringify(cart), 7); // Cookie expires in 7 days
     }
+  }, [cart]);
+
+  useEffect(() => {
+    setTotalAmount(cart.reduce((total, item) => {
+      const itemPrice = item.product_variant.discounted_price !== null ? item.product_variant.discounted_price : item.product_variant.price;
+      return total + itemPrice * item.quantity;
+    }, 0));
   }, [cart]);
 
   // Counter functions
@@ -122,15 +130,20 @@ export function CounterProvider({ children }) {
     });
   };
 
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => {
-      const itemPrice = item.product_variant.discounted_price !== null ? item.product_variant.discounted_price : item.product_variant.price;
-      return total + itemPrice * item.quantity;
-    }, 0);
-  };
+  // const getTotalPrice = () => {
+  //   cart.reduce((total, item) => {
+  //     const itemPrice = item.product_variant.discounted_price !== null ? item.product_variant.discounted_price : item.product_variant.price;
+  //     setTotalAmount(total + itemPrice * item.quantity);
+  //   }, 0);
+  // };
 
   const getTotalQuantity = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
+   return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  const setCartItems = (newItems) => {
+    setCart(newItems);
+    setCookie('cart', JSON.stringify(newItems), 7); // Update cookie
   };
 
   const clearCart = () => {
@@ -149,9 +162,9 @@ export function CounterProvider({ children }) {
         removeItem,
         increaseQuantity,
         decreaseQuantity,
-        getTotalPrice,
         getTotalQuantity,
         clearCart,
+        totalAmount
       }}
     >
       {children}
