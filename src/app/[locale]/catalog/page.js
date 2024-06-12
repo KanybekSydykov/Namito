@@ -27,7 +27,7 @@ const page = async({ params }) => {
           lg:'repeat(auto-fit,minmax(216px,1fr))',
         }
       }
-      pt={{base:'50px',lg:'105px'}}
+      pt={{base:'120px',lg:'105px'}}
       pb={'100px'}
       gap={{base:'16px',lg:'30px'}}
     >

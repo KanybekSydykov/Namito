@@ -8,7 +8,7 @@ import ColorFilter from "./ColorFilter";
 import SizeFilter from "./SizeFilter";
 import RatingRadioGroup from "./RatingRadioGroup";
 import OrangeButton from "../ui/OrangeButton";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const FilterCover = ({
   getCheckBoxValues,
@@ -17,14 +17,16 @@ const FilterCover = ({
   borders = false,
   data,
 }) => {
-  const { locale } = useParams();
-
+  const { locale,slug } = useParams();
+  const router = useRouter();
   const brands = data.brands;
   const colors = data.colors;
   const sizes = data.sizes;
+  const min_price = data.min_price;
+  const max_price = data.max_price;
 
   function clearFilters(){
-    console.log('should clear filters');
+     router.push(`/${locale}/category/${slug}`)
   }
 
   return (
@@ -65,7 +67,7 @@ const FilterCover = ({
       </Flex>
 
       {/* PRICE */}
-      <PriceFilter onChangePrice={onChangePrice} />
+      <PriceFilter onChangePrice={onChangePrice}  min_price={min_price} max_price={max_price}/>
 
       {colors.length > 0 ? (
         <ColorFilter getValues={getCheckBoxValues} data={colors} />
@@ -77,7 +79,7 @@ const FilterCover = ({
         <BrandFilter getValues={getCheckBoxValues} data={brands} />
       ) : null}
 
-      <RatingRadioGroup handleRating={handleRating} locale={locale} />
+   {data.ratings.length > 0 ? <RatingRadioGroup handleRating={handleRating} ratings={data.ratings} locale={locale} /> : null }
 
       <OrangeButton fn={clearFilters} text={"Сбросить фильтры"} text_en={"Reset filters"} />
     </Flex>

@@ -2,7 +2,7 @@ import { Flex, Box, Text, Stack, Radio, RadioGroup, Accordion, AccordionItem, Ac
 import { useParams } from "next/navigation";
 import React,{useState} from "react";
 
-const RatingRadioGroup = ({locale,handleRating}) => {
+const RatingRadioGroup = ({locale,handleRating,ratings}) => {
 
 
   return (
@@ -33,10 +33,10 @@ const RatingRadioGroup = ({locale,handleRating}) => {
         </AccordionButton>
       </h2>
       <AccordionPanel p={"0"} mt={"20px"}>
-        <Collapse  startingHeight={200}>
+        <Collapse  startingHeight={ratings.length * 44}>
         <RadioGroup onChange={handleRating} >
       <Stack spacing={5} direction="column">
-        {[1, 2, 3, 4, 5].map((value) => (
+        {ratings.map((value) => (
           <Radio colorScheme="red" key={value} value={`${value}`}>
             <Flex flexDir={"row"} alignItems={"center"} gap={"2px"}>
               <Text

@@ -25,6 +25,7 @@ import VariantSizes from "./VariantSizes";
 import Link from "next/link";
 import ProductCharacteristics from "./ProductCharacteristics";
 import { notFound } from "next/navigation";
+import BreadCrumbs from "@/components/shared-components/breadcrumb/BreadCrumbs";
 
 const ProductPage = ({
   params,
@@ -110,18 +111,13 @@ const ProductPage = ({
 
   const lessText = params.locale === 'ru' ? 'Скрыть' : 'Show less'
 
+  console.log(details);
+
   return (
     <>
-      <Text
-        my={"40px"}
-        fontWeight={400}
-        fontSize={"16px"}
-        lineHeight={"24px"}
-        fontFamily={"roboto"}
-        color={"rgb(160, 160, 160)"}
-        ps={"16px"}
-      ></Text>
-      <Flex flexDir={"column"} px={"16px"} gap={"100px"} fontFamily={"roboto"}>
+      <Flex flexDir={"column"} mt={'30px'} px={"16px"} gap={"100px"} fontFamily={"roboto"}>
+     <BreadCrumbs locale={params.locale} data={{current: details.name, parent: {slug: details.category_slug, name: details.category_name}}} />
+
         <Flex
           width={"100%"}
           flexDir={{ base: "column", lg: "row" }}

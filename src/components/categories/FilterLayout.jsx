@@ -7,6 +7,13 @@ import Sort from "@/components/sorting/Sort";
 import SubCategoriesList from "./SubCategoriesList";
 
 const FilterLayout = ({ data,handleFilters,handlePrice,handleRating,handleSorting }) => {
+
+
+  console.log(data);
+
+  if(!data.brands.length && !data.colors.length && !data.sizes.length && !data.ratings.length && !data.min_price && !data.max_price){
+    return null;
+  }
   
   return (
 

@@ -2,11 +2,12 @@
 
 import React, { useEffect } from 'react'
 import Link from 'next/link'
-import {Flex, Text, Box} from '@chakra-ui/react'
+import {Flex, Text, Box, useMediaQuery} from '@chakra-ui/react'
 import Sort from '../sorting/Sort'
 
 
 const SubCategoriesList = ({data,locale,handleSorting}) => {
+  const [isDesktop] = useMediaQuery("(min-width: 992px)");
 
   useEffect(() => {
   },[data])
@@ -53,7 +54,7 @@ const SubCategoriesList = ({data,locale,handleSorting}) => {
 
    
     </Flex>
-    <Sort handleSorting={handleSorting} />
+  {isDesktop && <Sort handleSorting={handleSorting} />}
 
     </Flex>
   )

@@ -15,7 +15,7 @@ const BreadCrumbs = ({data,locale}) => {
   return (
     <Container
     maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
-    my={{base:'40px',lg:'30px'}}
+    mt={{base:'40px',lg:'30px'}}
     px={'0px'}
     >
 

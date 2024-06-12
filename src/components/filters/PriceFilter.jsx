@@ -17,12 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "next/navigation";
 
-const PriceFilter = ({onChangePrice}) => {
-  const [prices, setPrices] = useState([5000, 25000]);
+const PriceFilter = ({onChangePrice,min_price,max_price}) => {
+  const [prices, setPrices] = useState([min_price, max_price]);
   const {locale} = useParams();
 
   return (
-    <Accordion allowToggle defaultIndex={[0]}>
+    <Accordion allowToggle defaultIndex={[0]} role="group">
       <AccordionItem
         py={"20px"}
         borderTop={"none"}
@@ -63,25 +63,38 @@ const PriceFilter = ({onChangePrice}) => {
               onChange={(val) => setPrices(val)}
               onChangeEnd={(val) => onChangePrice(val)}
               py={"15px"}
-              min={50}
-              max={50000}
-              defaultValue={[5000, 25000]}
+              min={min_price}
+              max={max_price}
+              defaultValue={[min_price, max_price]}
+              minStepsBetweenThumbs={200}
+              minH={'20px'}
             >
-              <RangeSliderTrack h={"6px"}>
-                <RangeSliderFilledTrack bg={"rgb(0,0,1)"} />
+              <RangeSliderTrack h={"3px"} _groupHover={{ h: "5px" }} transition={"height 0.3s ease"}>
+                <RangeSliderFilledTrack bg={'linear-gradient(90deg, rgba(226,157,125,1) 0%, rgba(203,70,9,1) 100%)'} />
               </RangeSliderTrack>
               <RangeSliderThumb
                 index={0}
-                bg={"rgb(0,0,1)"}
-                w={"20px"}
-                h={"20px"}
+                bg={"#e29d7d"}
+                w={{base:'20px',lg:"10px"}}
+                h={{base:'20px',lg:"10px"}}
+                transition={"width 0.3s ease, height 0.3s ease"}
+                _groupHover={{
+                  width: "20px",
+                  height: "20px",
+                }}
+                className="min"
                 _focus={{ boxShadow: "none" }}
               />
               <RangeSliderThumb
                 index={1}
-                bg={"rgb(0,0,1)"}
-                w={"20px"}
-                h={"20px"}
+                bg={"orange"}
+                w={{base:'20px',lg:"10px"}}
+                h={{base:'20px',lg:"10px"}}
+                transition={"width 0.3s ease, height 0.3s ease"}
+                _groupHover={{
+                  width: "20px",
+                  height: "20px",
+                }}
                 _focus={{ boxShadow: "none" }}
               />
             </RangeSlider>
