@@ -4,17 +4,19 @@ import React, { useEffect, useState } from "react";
 import BreadCrumbs from "@/components/shared-components/breadcrumb/BreadCrumbs";
 import FilterLayout from "@/components/categories/FilterLayout";
 import SubCategoriesList from "@/components/categories/SubCategoriesList";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
 const CategoryLayout = ({ data, children, params }) => {
     const router = useRouter();
   const [filterValues, setFilterValues] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  console.log(data);
 
 
   useEffect(() => {
     const url = constructURL(filterValues);
-    console.log(url);
 
     if (url) {
       getFilteredProducts(url);
@@ -24,14 +26,16 @@ const CategoryLayout = ({ data, children, params }) => {
   }, [filterValues]);
 
 
-  async function getFilteredProducts(url) {
-    router.push(`/${params.locale}/category/${params.slug}?category_slug=${params.slug}&${url}`);
+ function getFilteredProducts(url) {
+  setIsLoading(true);
+  router.push(`/${params.locale}/category/${params.slug}?category_slug=${params.slug}&${url}`);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
   }
 
   function handleFilters(title, value) {
-
-    console.log(title, value);
-
     setFilterValues((prev) => {
       const updatedFilters = { ...prev };
 
@@ -89,6 +93,12 @@ const CategoryLayout = ({ data, children, params }) => {
     return queryString;
   }
 
+  function resetFilter() {
+    setFilterValues({});
+  }
+
+  console.log(filterValues);
+
   return (
     <Flex
       maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
@@ -111,9 +121,11 @@ const CategoryLayout = ({ data, children, params }) => {
       <SubCategoriesList data={data.children} locale={params.locale} handleSorting={handleSorting} />
 
       <Flex gap={"30px"} flexDir={{ base: "column", lg: "row" }} w={"100%"}>
-        <FilterLayout data={data} params={params} children={children} handleFilters={handleFilters} handlePrice={handlePrice} handleSorting={handleSorting} handleRating={handleRating} />
+        <FilterLayout resetFilter={resetFilter} data={data} params={params} children={children} handleFilters={handleFilters} handlePrice={handlePrice} handleSorting={handleSorting} handleRating={handleRating} />
 
-        {children}
+        { isLoading ? <Flex justifyContent={'center'} alignItems={'center'} w={'100%'} h={'100%'}>
+          <Spinner size={"xl"} color="orange" /> 
+          </Flex>: children}
       </Flex>
     </Flex>
   );

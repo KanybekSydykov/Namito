@@ -11,7 +11,7 @@ import CheckBoxList from "./CheckBoxList";
 import ModalWindow from "../ui/ModalWindow";
 import FilterCover from "./FilterCover";
 import { useParams } from "next/navigation";
-const Filters = ({data,handleFilters,handlePrice,handleRating}) => {
+const Filters = ({data,handleFilters,handlePrice,handleRating,resetFilter}) => {
  
   const [isMobile] = useMediaQuery("(max-width: 992px)");
 
@@ -26,11 +26,11 @@ const Filters = ({data,handleFilters,handlePrice,handleRating}) => {
       {isMobile ?
       
       <ModalWindow ButtonEl={ModalButton}>
-        <FilterCover handleRating={handleRating} data={data} onChangePrice={handlePrice} borders={false} getCheckBoxValues={getCheckBoxValues} />
+        <FilterCover resetFilter={resetFilter} handleRating={handleRating} data={data} onChangePrice={handlePrice} borders={false} getCheckBoxValues={getCheckBoxValues} />
       </ModalWindow>
       
       :  (
-       <FilterCover handleRating={handleRating} data={data} onChangePrice={handlePrice} getCheckBoxValues={getCheckBoxValues} />
+       <FilterCover resetFilter={resetFilter} handleRating={handleRating} data={data} onChangePrice={handlePrice} getCheckBoxValues={getCheckBoxValues} />
       )}
     </>
   );

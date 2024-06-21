@@ -6,7 +6,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import Sort from "@/components/sorting/Sort";
 import SubCategoriesList from "./SubCategoriesList";
 
-const FilterLayout = ({ data,handleFilters,handlePrice,handleRating,handleSorting }) => {
+const FilterLayout = ({ data,handleFilters,handlePrice,handleRating,handleSorting,resetFilter }) => {
 
 
   console.log(data);
@@ -29,6 +29,7 @@ const FilterLayout = ({ data,handleFilters,handlePrice,handleRating,handleSortin
           handleFilters={handleFilters}
           handlePrice={handlePrice}
           handleRating={handleRating}
+          resetFilter={resetFilter}
         />
         <Box display={{ base: "block", lg: "none" }}>
           <Sort handleSorting={handleSorting} />

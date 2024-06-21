@@ -14,6 +14,7 @@ const FilterCover = ({
   getCheckBoxValues,
   handleRating,
   onChangePrice,
+  resetFilter,
   borders = false,
   data,
 }) => {
@@ -26,6 +27,7 @@ const FilterCover = ({
   const max_price = data.max_price;
 
   function clearFilters(){
+    resetFilter()
      router.push(`/${locale}/category/${slug}`)
   }
 
@@ -67,7 +69,7 @@ const FilterCover = ({
       </Flex>
 
       {/* PRICE */}
-      <PriceFilter onChangePrice={onChangePrice}  min_price={min_price} max_price={max_price}/>
+     {min_price && max_price ? <PriceFilter onChangePrice={onChangePrice}  min_price={min_price} max_price={max_price}/> : null}
 
       {colors.length > 0 ? (
         <ColorFilter getValues={getCheckBoxValues} data={colors} />

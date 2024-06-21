@@ -21,6 +21,8 @@ const PriceFilter = ({onChangePrice,min_price,max_price}) => {
   const [prices, setPrices] = useState([min_price, max_price]);
   const {locale} = useParams();
 
+  const step = max_price - min_price < 200 ? 1 : 200;
+
   return (
     <Accordion allowToggle defaultIndex={[0]} role="group">
       <AccordionItem
@@ -66,7 +68,7 @@ const PriceFilter = ({onChangePrice,min_price,max_price}) => {
               min={min_price}
               max={max_price}
               defaultValue={[min_price, max_price]}
-              minStepsBetweenThumbs={200}
+              minStepsBetweenThumbs={step}
               minH={'20px'}
             >
               <RangeSliderTrack h={"3px"} _groupHover={{ h: "5px" }} transition={"height 0.3s ease"}>
