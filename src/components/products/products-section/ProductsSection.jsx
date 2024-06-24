@@ -21,6 +21,8 @@ const ProductsSection = ({
     products = [];
   }
 
+  const sliderMaxW= '100dvw';
+  const maxW =  {base: "100%", lg: "1200px", xl: "1280px", "2xl": "1440px" }
 
   return (
     <>
@@ -28,9 +30,9 @@ const ProductsSection = ({
         flexDir={"column"}
         gap={"26px"}
         pb={"100px"}
-        maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
         mx={"auto"}
         width={'100dvw'}
+        maxW={maxW}
       >
         <Box
           pos={"relative"}
@@ -63,7 +65,7 @@ const ProductsSection = ({
           </AspectRatio>
         </Box>
         {slider ? (
-          <Flex w={"100vw"} >
+          <Flex w={'100dvw'}  maxW={maxW}>
             <ProductListSlider token={token} products={products} />
           </Flex>
         ) : (
@@ -75,8 +77,9 @@ const ProductsSection = ({
             gridTemplateColumns={{
               base: "repeat(2, minmax(161px,219px))",
               md: "repeat(auto-fit, minmax(220px,250px))",
-              lg: "repeat(auto-fit, minmax(240px,250px))",
-              xl: "repeat(auto-fit, minmax(237px,237px))",
+              lg: "repeat(auto-fit, minmax(225px,225px))",
+              xl: "repeat(auto-fit, minmax(225px,225px))",
+              '2xl':'repeat(auto-fit, minmax(250px,250px))',
             }}
           >
             {products.map((item,index) => (

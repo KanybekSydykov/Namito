@@ -70,7 +70,7 @@ export default async function Page({ params }) {
 
   return (
     <Container
-      maxW={{ base: '100%', lg: '1200px', xl: '1200px', '2xl': '1440px' }}
+      maxW={{ base: '100%', lg: '1200px', xl: '1280px', '2xl': '1440px' }}
       px={'0'}
 >
         <ProductPage

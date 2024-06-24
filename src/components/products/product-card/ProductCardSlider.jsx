@@ -15,6 +15,7 @@ const ProductCardSlider = ({ activeSlideIndex, imagesArr = undefined }) => {
   );
   const [isDesktop] = useMediaQuery("(min-width: 768px)");
 
+
   useEffect(() => {
     if (slideRef.current && activeSlideIndex !== undefined) {
       slideRef.current.go(activeSlideIndex);

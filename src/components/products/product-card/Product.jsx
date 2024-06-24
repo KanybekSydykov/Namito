@@ -248,23 +248,25 @@ const Product = ({
                 fontWeight={"600"}
                 fontSize={{ base: "18px", lg: "20px" }}
                 textOverflow={"ellipsis"}
-                noOfLines={2}
-                minH={{ base: "59px" }}
+                noOfLines={1}
+                h={'25.5px'}
+                p={0}
+                m={0}
                 color={"rgb(54,54,54)"}
               >
                 {details?.name}
               </Text>
-              {/* <Text
+              <Text
                 fontFamily={"roboto"}
                 fontWeight={"300"}
                 fontSize={"18px"}
                 textOverflow={"ellipsis"}
                 noOfLines={2}
                 color={"rgba(118, 118, 118, 1)"}
-                minH={"54px"}
+                minH={"52px"}
               >
                 {details?.description}
-              </Text> */}
+              </Text>
             </Flex>
 
             <Flex
@@ -278,7 +280,6 @@ const Product = ({
                 alignItems={"center"}
                 gap={"2px"}
                 width={"max-content"}
-                opacity={details?.average_rating ? 1 : 0}
               >
                 {[1, 2, 3, 4, 5].map((item) => (
                   <Box key={item} width={"14px"} h={"14px"}>

@@ -16,7 +16,7 @@ const Home = ({ data = undefined, locale, newProducts, products, token }) => {
     <>
       <Container
         as="div"
-        maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+        maxW={{ base: "100%", lg: "1200px", xl: "1280px", "2xl": "1440px" }}
         pb={"90px"}
       >
         {isDesktop ? <DesktopHero data={data} /> : <MobileHero data={data} />}
@@ -27,13 +27,12 @@ const Home = ({ data = undefined, locale, newProducts, products, token }) => {
           color={"#fff"}
           mt={"50px"}
           pos={"relative"}
-          overflow={"hidden"}
         >
           <BannerSlider images={data.slider} />
         </Flex>
       </Container>
 
-      <Flex flexDir={"column"} gap={"90px"}>
+      <Flex flexDir={"column"} gap={"90px"} overflowX={"hidden"}>
         {/* Featured Prods       */}
         <ProductsSection
           products={topProducts}

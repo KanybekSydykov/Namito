@@ -30,7 +30,7 @@ const PromotedCategories = ({data, isDesktop,params}) => {
     }}
   >
     <Flex
-             maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+             maxW={{ base: "100%", lg: "1200px", xl: "1280px", "2xl": "1440px" }}
 
       flexDir={"row"}
       w={"100%"}

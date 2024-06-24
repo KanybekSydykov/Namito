@@ -72,7 +72,7 @@ const Header = ({ data, isAuth, token }) => {
     >
       {/* Top nav */}
       <Container
-        maxW={"unset"}
+        maxW={"100vw"}
         pos={{ base: "relative", lg: "fixed" }}
         top={0}
         zIndex={{ base: "1", lg: isCatalogDrawer ? "2000" : "10" }}
@@ -89,7 +89,7 @@ const Header = ({ data, isAuth, token }) => {
         ref={headerRef}
       >
         <Flex
-          maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+          maxW={{ base: "100%", lg: "1200px", xl: "1280px", "2xl": "1440px" }}
           flexDir={"row"}
           px={"16px"}
           justifyContent={{ base: "space-between", xl: "flex-start" }}
@@ -141,7 +141,7 @@ const Header = ({ data, isAuth, token }) => {
       {/* Middle nav */}
       {!isDesktop && (
         <Container
-          maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+          maxW={{ base: "100%", lg: "1200px", xl: "1280px", "2xl": "1440px" }}
           position={"fixed"}
           top={"49px"}
           zIndex={100}

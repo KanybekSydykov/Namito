@@ -26,15 +26,9 @@ const BannerSlider = ({ images }) => {
           loop: true,
           pagination:  false,
           speed: 1000,
-          arrows:true,
           drag: "free",
           snap: true,
           mediaQuery: "min",
-          breakpoints: {
-            992:{
-              arrows:false
-            }
-          }
         }}
         w={"100%"}
         h={"100%"}
@@ -66,77 +60,96 @@ const BannerSlider = ({ images }) => {
         <Flex
           className="splide__arrows"
           position={"absolute"}
-          top={"100%"}
+          top={{base:"102%",lg:'calc(50% - 12px)'}}
           left={0}
           w={"100%"}
-          h={"0"}
+          h={{base:"32px",lg:'0px'}}
           zIndex={3}
         >
           <Button
             className="splide__arrow splide__arrow--prev"
-            w={"48px"}
-            h={"48px"}
+            w={{base:"32px",lg:'24px'}}
+            h={{base:"32px",lg:'24px'}}
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
-            bg={"orange"}
             borderRadius={'50%'}
             position={'absolute'}
             p={0}
             opacity={'1'}
             top={0}
-            right={'calc(100% + 16px)'}
-            left={'unset'}
+            right={'unset'}
+            left={{base:'calc(100% - 75px)',lg:'16px'}}
             minW={'unset'}
             boxShadow={'0 0 2.67px 2px rgba(130, 130, 130, 0.25)'}
+            transform={'none'}
+            bg={'orange'}
+            _disabled={{
+              opacity: '0.7 !important',
+              display:'flex'
+            }}
+            _hover={{
+              bg:'orange'
+            }}
           >
             <Image
-              src={"/arrow-next.svg"}
-              width={11}
-              height={14}
+              src={"/banner_arrow.svg"}
+              width={7}
+              height={12}
               alt={"arrow"}
               loading="lazy"
               style={{
-                width: "11.78px",
-                height: "14.74px",
-                transform: "rotate(180deg)",
+                width: "7px",
+                height: "12px",
+                transform: "rotate(-180deg)",
               }}
             />
           </Button>
 
           <Button
             className="splide__arrow splide__arrow--next"
-            w={"48px"}
-            h={"48px"}
+            w={{base:"32px",lg:'24px'}}
+            h={{base:"32px",lg:'24px'}}
             display={"flex"}
             justifyContent={"center"}
             p={0}
             alignItems={"center"}
-            bg={"orange"}
             position={'absolute'}
             borderRadius={'50%'}
             opacity={'1'}
             top={0}
+            zIndex={10}
             minW={'unset'}
-            right={'unset'}
-            left={'0'}
+            right={{base:'0',lg:'16px'}}
+            left={'unset'}
             boxShadow={'0 0 2.67px 2px rgba(130, 130, 130, 0.25)'}
+            transform={'none'}
+            bg={'orange'}
+            _disabled={{
+              opacity: '0.7 !important',
+              display:'flex'
+            }}
+            _hover={{
+              bg:'orange'
+            }}
+
 
           >
             <Image
-              src={"/arrow-next.svg"}
-              width={11}
-              height={14}
+              src={"/banner_arrow.svg"}
+              width={7}
+              height={12}
               alt={"arrow"}
-              priority
               style={{
-                width: "11.78px",
-                height: "14.74px",
+                width: "7px",
+                height: "12px",
               }}
             />
           </Button>
         </Flex>
+      
       </Box>
+   
     </>
   );
 };

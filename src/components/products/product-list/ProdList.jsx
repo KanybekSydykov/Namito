@@ -17,6 +17,7 @@ const ProdList = ({ data, locale, token }) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
 
 
+  console.log(data);
   if (data.length === 0) {
     return (
       <Flex
@@ -51,7 +52,7 @@ const ProdList = ({ data, locale, token }) => {
           base: "repeat(2, minmax(161px,219px))",
           md: "repeat(auto-fit, minmax(220px,230px))",
           lg: "repeat(auto-fit, minmax(230px,247px))",
-          xl: "repeat(auto-fit, minmax(247px,247px))",
+          xl: "repeat(auto-fit, minmax(225px,225px))",
         }}
         gap={"16px"}
       >

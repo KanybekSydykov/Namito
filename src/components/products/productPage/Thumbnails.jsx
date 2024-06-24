@@ -80,7 +80,7 @@ const Thumbnails = ({ images, tags }) => {
                           <Image
                             src={item.image}
                             alt="Image 1"
-                            width={420}
+                            width={500}
                             height={500}
                             priority
                             style={{
@@ -242,7 +242,6 @@ const Thumbnails = ({ images, tags }) => {
                         style={{
                           width: "100%",
                           height: "100%",
-                          objectFit: "cover",
                           boxShadow: "0 0 4px 0px rgba(5, 5, 5, .5)",
                         }}
                       />

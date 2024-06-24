@@ -31,7 +31,7 @@ import { ChakraProvider ,extendTheme} from '@chakra-ui/react'
       md: '48em',
       lg: '62em',
       xl: '80em',
-      '2xl': '90em'
+      '2xl': '96em'
     },
     size:{
       xl:'24px'

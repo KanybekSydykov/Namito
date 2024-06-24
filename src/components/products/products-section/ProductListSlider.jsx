@@ -115,6 +115,7 @@ const ProductListSlider = ({products,token}) => {
             borderRadius={'50%'}
             opacity={'1'}
             top={0}
+            zIndex={100}
             minW={'unset'}
             right={'unset'}
             left={'calc(100% + 16px)'}
