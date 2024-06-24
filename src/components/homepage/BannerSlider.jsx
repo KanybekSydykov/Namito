@@ -50,6 +50,7 @@ const BannerSlider = ({ images }) => {
               alt="Image 1"
               width={500}
               height={783}
+              priority
               style={{
                 width: "100%",
                 height: "100%",
@@ -127,6 +128,7 @@ const BannerSlider = ({ images }) => {
               width={11}
               height={14}
               alt={"arrow"}
+              priority
               style={{
                 width: "11.78px",
                 height: "14.74px",

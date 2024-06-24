@@ -8,7 +8,6 @@ import { ENDPOINTS } from "@/API/endpoints";
 import { CounterProvider } from "@/lib/auth-content";
 import { getSession } from "@/lib/lib";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
-import GlobalError from "./global-error";
 
 export async function generateStaticParams() {
     return i18n.locales.map((locale) => ({ lang: locale }));
@@ -56,9 +55,9 @@ export default async function LocaleLayout({ children, params }) {
     const isAuth = await getSession();
 
     return (
-        <ErrorBoundary fallback={<GlobalError />}>
 
             <html lang={params.locale}>
+                <title>Namito</title>
                 <body>
 
 
@@ -84,8 +83,6 @@ export default async function LocaleLayout({ children, params }) {
 
 
             </html>
-
-        </ErrorBoundary>
     )
 
 

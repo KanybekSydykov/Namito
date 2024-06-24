@@ -1,29 +1,19 @@
-import { ENDPOINTS } from '@/API/endpoints'
-import ProductPage from '@/components/products/productPage/ProductPage'
-import { getData } from '@/lib/apiServices'
-import { getSession } from '@/lib/lib'
-import { Container } from '@chakra-ui/react'
-import { ErrorBoundary } from 'next/dist/client/components/error-boundary'
-import { notFound, redirect } from 'next/navigation'
-import React from 'react'
-import GlobalError from '../../global-error'
-import Error from './error'
-import { error } from 'console'
+import { ENDPOINTS } from '@/API/endpoints';
+import ProductPage from '@/components/products/productPage/ProductPage';
+import { getSession } from '@/lib/lib';
+import { Container } from '@chakra-ui/react';
+import { notFound, redirect } from 'next/navigation';
+
 
 export async function generateMetadata({ params, searchParams }, parent) {
-  // read route params
-
-  // fetch data
-
   try {
     const res = await fetch(`https://namito.tatadev.pro/api/product-seo/${params.id}/`, {
-      cache: 'no-store'
-    })
+      cache: 'no-store',
+    });
 
     if (res.ok) {
-      const meta = await res.json()
-      // optionally access and extend (rather than replace) parent metadata
-      const previousImages = (await parent).openGraph?.images || []
+      const meta = await res.json();
+      const previousImages = (await parent).openGraph?.images || [];
 
       return {
         title: meta.meta_title,
@@ -33,98 +23,61 @@ export async function generateMetadata({ params, searchParams }, parent) {
           title: meta.meta_title,
           images: [{ url: meta.meta_image }, ...previousImages],
         },
-      }
+      };
     }
-  }
-  catch (error) {
-    throw error;
+  } catch (error) {
+    console.error(error); // Log error for debugging
   }
 }
-
 
 async function fetchData(headers, url) {
   try {
     const res = await fetch(url, {
       cache: 'no-store',
-      headers: headers
-    })
+      headers: headers,
+    });
 
     if (res.ok) {
-      const data = await res.json()
-    return data
+      return await res.json();
     } else {
-     return undefined
+      console.error(`Error fetching data from ${url}: ${res.statusText}`);
+      return null;
     }
   } catch (error) {
-    return undefined
+    console.error(`Fetch error: ${error.message}`);
+    return null;
   }
 }
 
-const page = async ({ params }) => {
-
+export default async function Page({ params }) {
   const session = await getSession();
-
   const token = session?.access_token;
+
   const headers = {
     'Accept-Language': `${params.locale}`,
     'Content-Type': 'application/json',
-  }
+  };
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
-
-  const product = await fetchData(headers, `${ENDPOINTS.getProductData(params.id)}`)
+  const product = await fetchData(headers, ENDPOINTS.getProductData(params.id));
+  const similarProds = await fetchData(headers, ENDPOINTS.getSimilarProducts(params.id)) || [];
 
   if (!product) {
-    notFound()
+   redirect('/not-found')
   }
-  const similarProds = await fetchData(headers, `${ENDPOINTS.getSimilarProducts(params.id)}`)
-  if(!similarProds) {
-    notFound()
-  }
-  const reviews = await fetchData(headers, `${ENDPOINTS.getProductReviews(params.id)}`)
-  if(!reviews) {
-    notFound()
-  }
-
-  // const productRes = await fetch(`${ENDPOINTS.getProductData(params.id)}`, {
-  //   cache: 'no-cache',
-  //   headers: headers
-  // })
-  // let data;
-  // if (productRes.status >= 200 && productRes.status < 400) {
-  //   data = await productRes.json()
-  // } else {
-  //   notFound()
-  // }
-
-  // const similarProductsRes = await fetch(`${ENDPOINTS.getSimilarProducts(params.id)}`, {
-  //   cache: 'no-store',
-  //   headers: headers,
-  // })
-  // const similarProds = await similarProductsRes.json()
-
-
-
-  // const reviewRes = await fetch(`${ENDPOINTS.getProductReviews(params.id)}`, {
-  //   headers: headers,
-  //   cache: 'no-store',
-  // })
-
-  // const reviews = await reviewRes.json()
-
 
   return (
-    <ErrorBoundary fallback={<Error />}>
     <Container
-      maxW={{ base: "1200px", xl: "1472px", '2xl': '1600px' }}
+      maxW={{ base: '100%', lg: '1200px', xl: '1200px', '2xl': '1440px' }}
       px={'0'}
-    >
-      <ProductPage params={params} reviews={reviews} details={product} similarProds={similarProds} token={session ? token : undefined} />
+>
+        <ProductPage
+          params={params}
+          details={product}
+          similarProds={similarProds}
+        />
     </Container>
-    </ErrorBoundary>
-  )
+  );
 }
-
-export default page

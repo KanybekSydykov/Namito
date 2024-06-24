@@ -71,8 +71,6 @@ const Search = ({ handleCatalogDrawer }) => {
     }
   };
 
-  console.log(searchResults);
-
   return (
     <>
       <Box
@@ -237,9 +235,15 @@ const Search = ({ handleCatalogDrawer }) => {
                 boxShadow="lg"
                 zIndex="3000"
                 >
-                  <Text textAlign={'center'}>
-                    {locale === "ru" ? "Ничего не найдено" : "Nothing found"}
-                  </Text>
+               {!searchValue && !searchResults.length ? 
+                 
+                 <Text textAlign={'center'}>
+                 {" "}
+               </Text>
+                 :<Text textAlign={'center'}>
+                 {locale === "ru" ? "Ничего не найдено" : "Nothing found"}
+               </Text> 
+              }
                 </Box>
               }
             </>

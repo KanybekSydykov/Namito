@@ -51,8 +51,6 @@ const layout = async({children,params}) => {
   })
   const responseData = await res.json()
   const [data] = responseData;
-
-  console.log(data);
   return (
    <CategoryLayout data={data} params={params} token={token}  >
     {children}

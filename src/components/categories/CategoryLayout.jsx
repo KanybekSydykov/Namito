@@ -12,8 +12,6 @@ const CategoryLayout = ({ data, children, params }) => {
   const [filterValues, setFilterValues] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(data);
-
 
   useEffect(() => {
     const url = constructURL(filterValues);
@@ -96,8 +94,6 @@ const CategoryLayout = ({ data, children, params }) => {
   function resetFilter() {
     setFilterValues({});
   }
-
-  console.log(filterValues);
 
   return (
     <Flex

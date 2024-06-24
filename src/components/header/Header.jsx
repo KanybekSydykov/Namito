@@ -20,14 +20,16 @@ import HeaderProfileLinks from "./drawer/HeaderProfileLinks";
 import LocaleSwitcher from "../Locale/Locale";
 import PromotedCategories from "./promotedCategories/PromotedCategories";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
-const Header = ({ data,isAuth,token }) => {
+const Header = ({ data, isAuth, token }) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
   const [isCatalogDrawer, setIsCatalogDrawer] = useState(false);
   const params = useParams();
   const path = usePathname();
-  const router = useRouter()
+  const router = useRouter();
   const ref = useRef(null);
+  const headerRef = useRef(null);
   useEffect(() => {
     const handleScroll = () => {
       if (ref.current) {
@@ -35,6 +37,14 @@ const Header = ({ data,isAuth,token }) => {
           ref.current.style.top = "0px";
         } else {
           ref.current.style.top = "49px";
+        }
+      }
+
+      if (headerRef.current) {
+        if (window.scrollY > 100) {
+          headerRef.current.style.boxShadow = "0 2px 3px 0 rgba(115, 115, 115, 0.2)";
+        } else {
+          headerRef.current.style.boxShadow = "unset";
         }
       }
     };
@@ -45,23 +55,28 @@ const Header = ({ data,isAuth,token }) => {
     };
   }, []);
 
+
   useEffect(() => {
-      router.refresh()
-  }, [isDesktop,isAuth]);
+    router.refresh();
+  }, [isDesktop, isAuth]);
 
   function handleCatalogDrawer(value) {
     setIsCatalogDrawer(value);
   }
 
   return (
-    <>
+    <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1, transition: { duration: 0.3 } }}
+    exit={{ opacity: 0 }}
+    >
       {/* Top nav */}
       <Container
         maxW={"unset"}
-        pos={{base:'relative',lg:'fixed'}}
+        pos={{ base: "relative", lg: "fixed" }}
         top={0}
         zIndex={{ base: "1", lg: isCatalogDrawer ? "2000" : "10" }}
-        bg={"rgba(255,255,255,0.5)"}
+        bg={"rgba(255,255,255,0.75)"}
         py={{ lg: "20px" }}
         _hover={{
           bg: "rgba(255,255,255,1)",
@@ -69,12 +84,12 @@ const Header = ({ data,isAuth,token }) => {
         transition={"all 0.3s ease"}
         px={"0px"}
         boxShadow={
-          isCatalogDrawer ? "0 0 7px 0 rgba(115, 115, 115, 0.2)" : "unset"
+            isCatalogDrawer ? "0 0 7px 0 rgba(115, 115, 115, 0.2)" : '0 0 0 0 rgba(115, 115, 115, 0.2)'
         }
+        ref={headerRef}
       >
         <Flex
-                  maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
-
+          maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
           flexDir={"row"}
           px={"16px"}
           justifyContent={{ base: "space-between", xl: "flex-start" }}
@@ -82,7 +97,7 @@ const Header = ({ data,isAuth,token }) => {
           mx={"auto"}
         >
           <Box onClick={() => setIsCatalogDrawer(false)}>
-          <Logo params={params} />
+            <Logo params={params} />
           </Box>
 
           {isDesktop && (
@@ -106,11 +121,15 @@ const Header = ({ data,isAuth,token }) => {
 
                 <HeaderProfileLinks
                   isDekstop={isDesktop}
-                  locale={params.locale} 
+                  locale={params.locale}
                   isAuth={isAuth}
                 />
-                  <CartDrawer token={token} isAuth={isAuth} locale={params.locale} isDesktop={isDesktop} />
-
+                <CartDrawer
+                  token={token}
+                  isAuth={isAuth}
+                  locale={params.locale}
+                  isDesktop={isDesktop}
+                />
               </Flex>
             </Flex>
           )}
@@ -122,9 +141,9 @@ const Header = ({ data,isAuth,token }) => {
       {/* Middle nav */}
       {!isDesktop && (
         <Container
-        maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
-          position={'fixed'}
-          top={'49px'}
+          maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+          position={"fixed"}
+          top={"49px"}
           zIndex={100}
           transition={"top 0.3s"}
           display={"flex"}
@@ -143,7 +162,12 @@ const Header = ({ data,isAuth,token }) => {
               data={data.categories}
             />
             <Search handleCatalogDrawer={handleCatalogDrawer} />
-            <CartDrawer token={token} isAuth={isAuth} locale={params.locale} isDesktop={isDesktop} />
+            <CartDrawer
+              token={token}
+              isAuth={isAuth}
+              locale={params.locale}
+              isDesktop={isDesktop}
+            />
           </>
         </Container>
       )}
@@ -164,7 +188,7 @@ const Header = ({ data,isAuth,token }) => {
           />
         )
       )}
-    </>
+    </motion.div>
   );
 };
 

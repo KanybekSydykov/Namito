@@ -9,13 +9,9 @@ const CategoryCover = ({ data, params, token, filteredProductsData = undefined,l
   const [currentProducts, setCurrentProducts] = useState([]);
   const searchParams = useSearchParams();
   const [initialLoading, setInitialLoading] = useState(true);
-  // const [filteredProducts, setFilteredProducts] = useState(filteredProductsData.products);
-
-  console.log(filteredProductsData);
 
   
   useEffect(() => {
-    console.log(initialLoading);
     if (filteredProductsData && filteredProductsData.length > 0) {
       setCurrentProducts(() => [...filteredProductsData]);
     } else if(!initialLoading){
@@ -27,8 +23,6 @@ const CategoryCover = ({ data, params, token, filteredProductsData = undefined,l
     }
     setInitialLoading(false); 
   }, [filteredProductsData?.length,searchParams]);
-
-  console.log(currentProducts);
 
   return (
     <Box position={"relative"} width={"100%"}>

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { ENDPOINTS } from '@/API/endpoints';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { getSession } from '@/lib/lib';
 import CategoryCover from '@/components/categories/CategoryCover';
 import { Flex } from '@chakra-ui/react';
@@ -58,20 +58,16 @@ const page = async ({ params, searchParams }) => {
   const [data] = categoryData;
 
   if (!data) {
-    notFound();
-    return null;
+    redirect('/not-found');
   }
 
   // Build query string for filtered products
   const queryString = buildQueryString(searchParams);
 
-  console.log('query string ------', queryString);
 
   if (queryString) {
     const url = `${baseURL}?${queryString}`;
     filteredData = await getFilteredProducts(url, headers);
-
-    console.log(filteredData);
   } else {
     filteredData = data
   }

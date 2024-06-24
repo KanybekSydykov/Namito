@@ -16,7 +16,6 @@ import Image from "next/image";
 const ProdList = ({ data, locale, token }) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
 
-  console.log(data);
 
   if (data.length === 0) {
     return (

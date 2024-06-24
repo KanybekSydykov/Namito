@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 const OrangeButton = ({ text,text_en,fn = null }) => {
-
-  console.log(text,text_en);
   const { locale } = useParams();
   return (
       <Button

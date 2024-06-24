@@ -7,13 +7,6 @@ import {
   Flex,
   Text,
   Button,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  List,
-  ListItem,
   Skeleton,
 } from "@chakra-ui/react";
 import ProductReview from "@/components/products/product-reviews/ProductReview";
@@ -29,10 +22,9 @@ import BreadCrumbs from "@/components/shared-components/breadcrumb/BreadCrumbs";
 
 const ProductPage = ({
   params,
-  details,
+  details = undefined,
   similarProds,
-  token,
-  reviews,
+  token
 }) => {
   const [colorVariant, setColorVariant] = useState(undefined);
   const [uniqueVariantColors, setUniqueVariantColors] = useState([]);
@@ -110,8 +102,6 @@ const ProductPage = ({
   const moreText = params.locale === 'ru' ? 'Показать больше' : 'Show more'
 
   const lessText = params.locale === 'ru' ? 'Скрыть' : 'Show less'
-
-  console.log(details);
 
   return (
     <>

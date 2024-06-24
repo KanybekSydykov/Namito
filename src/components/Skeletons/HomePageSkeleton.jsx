@@ -3,11 +3,12 @@ import { Container, Flex, Skeleton, Grid } from "@chakra-ui/react";
 const HomePageSkeleton = () => {
   return (
     <Container
-      maxW={{ base: "1200px", xl: "1472px" }}
+    maxW={{ base: "100%", lg: "1200px", xl: "1200px", "2xl": "1440px" }}
+
       display={"flex"}
       flexDir={"column"}
       gap={"100px"}
-      mt={"50px"}
+      mt={{base:"50px",xl:'200px'}}
     >
       <Flex
         flexDir={{ base: "column", lg: "row" }}

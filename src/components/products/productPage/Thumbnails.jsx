@@ -82,6 +82,7 @@ const Thumbnails = ({ images, tags }) => {
                             alt="Image 1"
                             width={420}
                             height={500}
+                            priority
                             style={{
                               width: "100%",
                               height: "100%",
@@ -237,6 +238,7 @@ const Thumbnails = ({ images, tags }) => {
                         alt="Image 1"
                         width={100}
                         height={143}
+                        priority
                         style={{
                           width: "100%",
                           height: "100%",

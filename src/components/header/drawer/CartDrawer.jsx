@@ -42,10 +42,8 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
 
   const translate = (enText, ruText) => (locale === "ru" ? ruText : enText);
 
-  console.log(totalPrice);
 
   useEffect(() => {
-    console.log(cart);
     if (token && isOpen) {
       if (cart.length && !cartData) {
         console.log("should send data");
@@ -91,7 +89,6 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
           };
         }),
       };
-      console.log(credentials);
       try {
         const response = await postData(
           credentials,
@@ -99,7 +96,6 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
           ENDPOINTS.postItemsToCard()
         );
         if (response.status >= 200 && response.status < 400) {
-          console.log(response);
           clearCart();
           setCartData(response.data.items);
           setTotalPrice(response.data.total_amount);
@@ -112,8 +108,6 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
 
   async function updateTotalPrice(id, action) {
     const product = cartData.find((item) => item.id === id);
-    console.log(product);
-
     // Ensure product and product_variant exist
     if (!product || !product.product_variant) {
       console.error(`Product or product_variant not found for id: ${id}`);

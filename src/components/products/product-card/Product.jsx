@@ -30,7 +30,7 @@ const Product = ({
   const [activeSlide, setActiveSlide] = useState(0);
   const params = useParams();
   const router = useRouter();
-  const [requestIsPending,setIsRequestPending] = useState(false);
+  const [requestIsPending, setIsRequestPending] = useState(false);
   const [buttonVisibility, setButtonVisibility] = useState(false);
   const { addItem, increaseQuantity, decreaseQuantity, cart } = useCounter();
   const toast = useToast();
@@ -58,7 +58,7 @@ const Product = ({
   const handleAddToCart = async (id) => {
     if (token) {
       setIsRequestPending(true);
-      console.log('should be sending request to add to cart product');
+      console.log("should be sending request to add to cart product");
       const credentials = { product_variant: id };
 
       try {
@@ -117,14 +117,14 @@ const Product = ({
         boxShadow={"0px 0px 4px 0px rgba(0, 0, 0, 0.25)"}
         onMouseEnter={() => setButtonVisibility(true)}
         onMouseLeave={() => setButtonVisibility(false)}
-        h={'100%'}
+        h={"100%"}
       >
         <Flex
           flexDir={"column"}
           gap={"20px"}
           position={"relative"}
           cursor={"pointer"}
-          h={'100%'}
+          h={"100%"}
         >
           {/* Card Images */}
           <Flex position={"relative"}>
@@ -133,10 +133,13 @@ const Product = ({
               pos={"relative"}
               position={"relative"}
               borderRadius={"10px"}
+              boxShadow={"0px 0px 2px 0px rgba(0, 0, 0, 0.25)"}
               overflow={"hidden"}
-              minW={{ base: "100%", lg: "225px" }}
-              width={{base:'100%',lg:'100%'}}
-              maxW={{ base: "240px", lg: "270px" }}
+              // minW={{ base: "100%", lg: "230px" }}
+              minW={"100%"}
+              maxW={"100%"}
+              width={{ base: "100%", lg: "100%" }}
+              // maxW={{ base: "230px", lg: "237px" }}
               height={{ base: "100%", lg: "100%" }}
               zIndex={2}
             >
@@ -153,13 +156,14 @@ const Product = ({
                 opacity={0}
                 zIndex={1}
                 gridTemplateColumns={`repeat(3, minmax(0,1fr))`}
-                onClick={() => router.push(`/${params.locale}/product/${details?.id}`)}
+                onClick={() =>
+                  router.push(`/${params.locale}/product/${details?.id}`)
+                }
               >
                 {[0, 1, 2].map((item, index) => (
                   <GridItem
                     key={index}
                     onMouseEnter={() => setActiveSlide(index)}
-
                     w={"100%"}
                     h={"100%"}
                   />
@@ -174,8 +178,8 @@ const Product = ({
                 bg={tag.color}
                 borderRadius={"5px"}
                 position={"absolute"}
-                left={0}
-                bottom={`${index * 25}px`}
+                left={'2px'}
+                bottom={`${index === 0 ? 5 : index * 35}px`}
                 color={"#fff"}
                 fontFamily={"roboto"}
                 fontWeight={"400"}
@@ -202,7 +206,7 @@ const Product = ({
             gap={"8px"}
             position={"relative"}
             cursor={"pointer"}
-            justifyContent={'space-between'}
+            justifyContent={"space-between"}
           >
             <Flex
               flexDir={{ base: "row", lg: "row" }}
@@ -245,7 +249,7 @@ const Product = ({
                 fontSize={{ base: "18px", lg: "20px" }}
                 textOverflow={"ellipsis"}
                 noOfLines={2}
-                minH={{base:'60px'}}
+                minH={{ base: "59px" }}
                 color={"rgb(54,54,54)"}
               >
                 {details?.name}

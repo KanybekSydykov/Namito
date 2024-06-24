@@ -9,8 +9,6 @@ import SubCategoriesList from "./SubCategoriesList";
 const FilterLayout = ({ data,handleFilters,handlePrice,handleRating,handleSorting,resetFilter }) => {
 
 
-  console.log(data);
-
   if(!data.brands.length && !data.colors.length && !data.sizes.length && !data.ratings.length && !data.min_price && !data.max_price){
     return null;
   }

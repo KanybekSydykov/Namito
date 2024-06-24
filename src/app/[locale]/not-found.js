@@ -1,3 +1,4 @@
+'use server'
 import OrangeButton from '@/components/ui/OrangeButton'
 import { Box, Container, Text } from '@chakra-ui/react'
 import Image from 'next/image'

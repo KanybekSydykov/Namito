@@ -16,7 +16,7 @@ const PromotedCategories = ({data, isDesktop,params}) => {
     justifyContent={{ base: "flex-start", lg: "center" }}
     alignItems={"center"}
     position={"relative"}
-    boxShadow={{ base: "0 0 7px 0 rgba(115, 115, 115, 0.2)" }}
+    boxShadow={{ base: "0 2px 3px 0 rgba(115, 115, 115, 0.2)" }}
     _after={{
       content: '""',
       position: "absolute",

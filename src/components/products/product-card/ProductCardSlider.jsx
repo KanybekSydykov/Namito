@@ -66,10 +66,12 @@ const ProductCardSlider = ({ activeSlideIndex, imagesArr = undefined }) => {
                       width={500}
                       height={783}
                       onLoad={() => handleImageLoad(index)}
-                      loading="lazy"
+                      priority
                       style={{
                         width: "100%",
-                        height: "100%",
+                        height: "auto",
+                        minHeight:'100%',
+                        maxHeight:'100%'
                       }}
                     />
                     {loadingImages[index] && (
@@ -91,6 +93,7 @@ const ProductCardSlider = ({ activeSlideIndex, imagesArr = undefined }) => {
                           alt="Placeholder"
                           width={500}
                           height={783}
+                          priority
                           style={{
                             width: "100%",
                             height: "100%",
@@ -137,6 +140,7 @@ const ProductCardSlider = ({ activeSlideIndex, imagesArr = undefined }) => {
                 alt="Placeholder"
                 width={500}
                 height={783}
+                priority
                 style={{
                   width: "100%",
                   height: "100%",
