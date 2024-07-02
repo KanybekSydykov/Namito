@@ -8,7 +8,9 @@ import React from 'react'
 const page = async({ params }) => {
   const catalogRes = await fetch(`${ENDPOINTS.getCategories()}`,{
     cache:'no-cache',
-    'Accept-Language': `${params.locale}`,
+    headers : {
+      'Accept-Language': `${params.locale}`,
+    }
   })
 
   const catalog = await catalogRes.json()
