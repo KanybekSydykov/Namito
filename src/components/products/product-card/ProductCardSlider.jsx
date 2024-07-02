@@ -58,19 +58,18 @@ const ProductCardSlider = ({ activeSlideIndex, imagesArr = undefined }) => {
         {images?.length !== 0 ? (
           images?.map((item, index) => (
             <SplideSlide key={index}>
-              <Box pos={"relative"} w={"100%"} h={"100%"}>
+              <Box pos={"relative"} w={"100%"} h={"100%"} aspectRatio={500/783} position={'relative'}>
                 {isImage(item) ? (
                   <>
                     <Image
                       src={item}
                       alt={`Image ${index + 1}`}
-                      width={500}
-                      height={783}
+                      fill
                       onLoad={() => handleImageLoad(index)}
                       priority
                       style={{
                         width: "100%",
-                        height: "auto",
+                        height: "100%",
                         minHeight:'100%',
                         maxHeight:'100%'
                       }}

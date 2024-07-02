@@ -16,6 +16,7 @@ const ProductsSection = ({
 }) => {
 
 
+
   if (!Array.isArray(products)) {
     console.error("Products is not an array", products);
     products = [];

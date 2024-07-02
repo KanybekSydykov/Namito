@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Flex, Box, Text, Container, useMediaQuery } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,6 +11,36 @@ const Footer = ({ token }) => {
   const path = usePathname();
   const params = useParams();
   const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const ref = useRef(null);
+  const [prevScrollY, setPrevScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (ref.current) {
+        const currentScrollY = window.scrollY;
+
+        // Compare current scroll position with previous scroll position
+        if (currentScrollY > prevScrollY) {
+          // Scrolling down
+          ref.current.style.transform = 'translateY(100%)';
+        } else {
+          // Scrolling up
+          console.log('Scrolling up');
+          ref.current.style.transform = 'translateY(0)';
+
+        }
+
+        // Update previous scroll position
+        setPrevScrollY(currentScrollY);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [prevScrollY]); 
 
 
   function handleActiveRoute(activeRoute, nested = false) {
@@ -38,6 +68,8 @@ const Footer = ({ token }) => {
           py={"10px"}
           bg={"rgba(255,255,255,0.95)"}
           maxW={"unset"}
+          transition={"all 0.3s ease"}
+          ref={ref}
         >
           <Flex flexDir={"row"} justifyContent={"space-between"} w={"100%"}>
             <Flex

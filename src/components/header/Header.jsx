@@ -33,7 +33,7 @@ const Header = ({ data, isAuth, token }) => {
   useEffect(() => {
     const handleScroll = () => {
       if (ref.current) {
-        if (window.scrollY > 100) {
+        if (window.scrollY > 10) {
           ref.current.style.top = "0px";
         } else {
           ref.current.style.top = "49px";

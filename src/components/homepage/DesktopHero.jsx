@@ -29,6 +29,8 @@ const DesktopHero = ({ data }) => {
     },
   ];
 
+  console.log(data);
+
   return (
     <Flex
       flexDir={{ base: "column", lg: "row" }}
@@ -113,12 +115,11 @@ const DesktopHero = ({ data }) => {
             "2xl": "205px",
           }}
         >
-          <AspectRatio width={"100%"} height={"100%"} ratio={116 / 142}>
+          <AspectRatio width={"100%"} height={"100%"} ratio={116 / 142} pos={'relative'}>
             <Image
               src={data.banner1}
               alt={"hero image"}
-              width={116}
-              height={142}
+              fill
               priority
               style={{
                 borderRadius: "10px",
@@ -127,12 +128,11 @@ const DesktopHero = ({ data }) => {
               }}
             />
           </AspectRatio>
-          <AspectRatio width={"100%"} height={"100%"} ratio={116 / 142}>
+          <AspectRatio width={"100%"} height={"100%"} ratio={116 / 142} pos={'relative'}>
             <Image
               src={data.banner2}
               alt={"hero image"}
-              width={116}
-              height={142}
+              fill
               priority
               style={{
                 borderRadius: "10px",
@@ -143,12 +143,11 @@ const DesktopHero = ({ data }) => {
           </AspectRatio>
         </Flex>
         <Box flexGrow={1} w={{ base: "218px", lg: "270px", xl: "350px" }}>
-          <AspectRatio ratio={218 / 299} width={"100%"} h={"100%"}>
+          <AspectRatio ratio={218 / 299} width={"100%"} h={"100%"} pos={'relative'}>
             <Image
               src={data.banner3}
               alt={"hero image"}
-              width={218}
-              height={299}
+              fill
               priority
               style={{
                 borderRadius: "10px",

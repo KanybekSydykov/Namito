@@ -12,6 +12,7 @@ const BannerSlider = ({ images }) => {
   const [isDesktop] = useMediaQuery("(min-width: 992px)");
 
   function getResponsiveImage(item){
+    
     if(isDesktop){
       return item.image
     } else {
@@ -40,12 +41,11 @@ const BannerSlider = ({ images }) => {
         <Box as={SplideTrack} w={"100%"} h={"100%"}>
           {images?.map((item, index) => (
             <SplideSlide key={index}>
-              <Box pos={"relative"} w={"100%"} h={"100%"}>
+              <Box pos={"relative"} w={"100%"} h={"100%"} aspectRatio={{base:358/385,lg:500/783}} position={'relative'}>
                 <Image
                   src={getResponsiveImage(item)}
                   alt="Image 1"
-                  width={500}
-                  height={783}
+                  fill
                   priority
                   style={{
                     width: "100%",

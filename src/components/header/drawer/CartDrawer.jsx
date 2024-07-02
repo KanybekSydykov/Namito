@@ -406,11 +406,10 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
                 py={"7px"}
                 mb={"50px"}
                 mt={cartData ? "120px" : "46px"}
-                href={`/${locale}/checkout`}
+                href={ cartData || cart.length > 0 ? `/${locale}/checkout` :`/${locale}/`}
                 onClick={onClose}
               >
                 <OrangeButton
-                  link={cartData || cart.length > 0 ? "/checkout" : "/"}
                   text={
                     cartData || cart.length > 0 ? `${isAuth ? 'Оформить заказ' : 'Войти'}` : "Закрыть"
                   }

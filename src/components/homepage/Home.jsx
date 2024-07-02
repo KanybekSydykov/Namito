@@ -47,12 +47,16 @@ const Home = ({ data = undefined, locale, newProducts, products, token }) => {
           title={{ ru: "НОВИНКИ", en: "NEW PRODUCTS" }}
           products={newProducts}
           token={token}
+          locale={locale}
+
         />
         {/* All prods */}
         <ProductsSection
           title={{ ru: "ВСЕ ТОВАРЫ", en: "ALL PRODUCTS" }}
           products={products.products}
           token={token}
+          locale={locale}
+
         />
       </Flex>
     </>

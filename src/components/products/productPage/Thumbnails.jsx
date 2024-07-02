@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Box, Button, Flex, Grid, GridItem, Skeleton, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  GridItem,
+  Skeleton,
+  Text,
+} from "@chakra-ui/react";
 import { Splide, SplideSlide, SplideTrack } from "@splidejs/react-splide";
 import Image from "next/image";
 import "@splidejs/react-splide/css";
@@ -10,8 +18,7 @@ import "@/components/products/product-card/CardSlider.css";
 const Thumbnails = ({ images, tags }) => {
   //   const [activeSlide, setActiveSlide] = useState(0);
 
-    useEffect(() => {
-    }, [images]);
+  useEffect(() => {}, [images]);
 
   const slideRef = useRef(null);
   const thumbRef = useRef(null);
@@ -23,7 +30,6 @@ const Thumbnails = ({ images, tags }) => {
   function showSlide(index) {
     slideRef.current.go(index);
   }
-
 
   return (
     <>
@@ -56,103 +62,107 @@ const Thumbnails = ({ images, tags }) => {
             startColor="rgba(199,131,124,1)"
             endColor="rgba(236,169,162,1)"
           />
-            <Box
-              as={Splide}
-              aria-label="Main"
-              hasTrack={false}
-              ref={slideRef}
-              w={"100%"}
-              h={"100%"}
-              options={{
-                type: "fade",
-                loop: true,
-                pagination: false,
-                speed: 1000,
-                arrows: false,
-              }}
-            >
-              <Box as={SplideTrack} w={"100%"} h={"100%"}>
-                {images &&
-                  images.map((item) => (
-                    <SplideSlide key={item.id}>
-                      <Box pos={"relative"} w={"100%"} h={"100%"}>
-                        {isImage(item.image) ? (
-                          <Image
-                            src={item.image}
-                            alt="Image 1"
-                            width={500}
-                            height={500}
-                            priority
-                            style={{
-                              width: "100%",
-                              height: "100%",
-                            }}
-                          />
-                        ) : (
-                          <video
-                            src={item.image}
-                            key={item.id}
-                            controls
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            width={"100%"}
-                            height={"100%"}
-                          ></video>
-                        )}
-
-                        {tags?.map((tag, index) => (
-                          <Text
-                            textAlign={"center"}
-                            p={"1px 6px"}
-                            key={index}
-                            bg={tag.color}
-                            borderRadius={"5px"}
-                            position={"absolute"}
-                            left={0}
-                            top={`${index * 25}px`}
-                            color={"#fff"}
-                            fontFamily={"roboto"}
-                            fontWeight={"400"}
-                            fontSize={"14px"}
-                            opacity={"0.8"}
-                            lineHeight={"16.8px"}
-                            h={"20px"}
-                          >
-                            {tag.name}
-                          </Text>
-                        ))}
-                      </Box>
-                    </SplideSlide>
-                  ))}
-              </Box>
-            </Box>
-            <Grid
-              position={"absolute"}
-              top={0}
-              left={0}
-              w={"100%"}
-              h={"100%"}
-              opacity={0}
-              zIndex={100}
-              gridTemplateColumns={`repeat(${
-                images && images.length
-              }, minmax(0,1fr))`}
-            >
+          <Box
+            as={Splide}
+            aria-label="Main"
+            hasTrack={false}
+            ref={slideRef}
+            w={"100%"}
+            h={"100%"}
+            options={{
+              type: "fade",
+              loop: true,
+              pagination: false,
+              speed: 1000,
+              arrows: false,
+            }}
+          >
+            <Box as={SplideTrack} w={"100%"} h={"100%"}>
               {images &&
-                images.map((item, index) => (
-                  <GridItem
-                    key={item.id}
-                    onMouseEnter={() => {
-                      showSlide(index);
-                    }}
-                    w={"100%"}
-                    h={"100%"}
-                  />
+                images.map((item) => (
+                  <SplideSlide key={item.id}>
+                    <Box
+                      pos={"relative"}
+                      w={"100%"}
+                      h={"100%"}
+                      aspectRatio={1}
+                      position={"relative"}
+                    >
+                      {isImage(item.image) ? (
+                        <Image
+                          src={item.image}
+                          alt="Image 1"
+                          fill
+                          priority
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        />
+                      ) : (
+                        <video
+                          src={item.image}
+                          key={item.id}
+                          controls
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          width={"100%"}
+                          height={"100%"}
+                        ></video>
+                      )}
+
+                      {tags?.map((tag, index) => (
+                        <Text
+                          textAlign={"center"}
+                          p={"1px 6px"}
+                          key={index}
+                          bg={tag.color}
+                          borderRadius={"5px"}
+                          position={"absolute"}
+                          left={0}
+                          top={`${index * 25}px`}
+                          color={"#fff"}
+                          fontFamily={"roboto"}
+                          fontWeight={"400"}
+                          fontSize={"14px"}
+                          opacity={"0.8"}
+                          lineHeight={"16.8px"}
+                          h={"20px"}
+                        >
+                          {tag.name}
+                        </Text>
+                      ))}
+                    </Box>
+                  </SplideSlide>
                 ))}
-            </Grid>
-     
+            </Box>
+          </Box>
+          <Grid
+            position={"absolute"}
+            top={0}
+            left={0}
+            w={"100%"}
+            h={"100%"}
+            opacity={0}
+            zIndex={100}
+            gridTemplateColumns={`repeat(${
+              images && images.length
+            }, minmax(0,1fr))`}
+          >
+            {images &&
+              images.map((item, index) => (
+                <GridItem
+                  key={item.id}
+                  onMouseEnter={() => {
+                    showSlide(index);
+                  }}
+                  w={"100%"}
+                  h={"100%"}
+                />
+              ))}
+          </Grid>
         </Flex>
         {images?.length === 0 ? (
           <Grid
@@ -278,12 +288,12 @@ const Thumbnails = ({ images, tags }) => {
                 position={"absolute"}
                 p={0}
                 opacity={"1"}
-                top={{ base: 0, lg: '0px !important' }}
+                top={{ base: 0, lg: "0px !important" }}
                 minW={"unset"}
                 left={{ base: "16px", lg: "auto" }}
                 transform={{
-                    base: "rotate(90deg) !important",
-                    lg: "rotate(180deg) !important",
+                  base: "rotate(90deg) !important",
+                  lg: "rotate(180deg) !important",
                 }}
                 right={{ base: "unset", lg: "auto" }}
               >
@@ -316,13 +326,13 @@ const Thumbnails = ({ images, tags }) => {
                 right={{ base: "16px", lg: "auto !important" }}
                 left={{ base: "unset", lg: "auto !important" }}
                 transform={{
-                    base: "rotate(90deg) !important",
-                    lg: "none !important",
+                  base: "rotate(90deg) !important",
+                  lg: "none !important",
                 }}
                 minW={"unset"}
               >
                 <Image
-                 src={"/product/chevron-down.svg"}
+                  src={"/product/chevron-down.svg"}
                   width={12}
                   height={6}
                   alt="Next Arrow"
