@@ -163,6 +163,7 @@ const Navmenu = ({ isDesktop, isCatalogDrawer, handleCatalogDrawer, data }) => {
                       locale={locale}
                       onClick={onClose}
                       item={item}
+                      isSub={true}
                       onHover={() => handleSubCategories(item.children)}
                     />
                   </motion.div>
@@ -197,6 +198,7 @@ const Navmenu = ({ isDesktop, isCatalogDrawer, handleCatalogDrawer, data }) => {
                         onClick={onClose}
                         onHover={() => setSubCategories(item.children)}
                         item={item}
+
                       />
                     </motion.div>
                   ))}

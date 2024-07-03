@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-const CategoryItem = ({ locale, imgUrl = false, onClick, onHover, item }) => {
+const CategoryItem = ({ locale, imgUrl = false, onClick, onHover, item,isSub=false }) => {
 
 
 
@@ -45,16 +45,16 @@ const CategoryItem = ({ locale, imgUrl = false, onClick, onHover, item }) => {
         gap={"14px"}
       >
 
-          <Box
-            width={"24px"}
-            h={"24px"}
+  { isSub ?     <Box
+            width={"32px"}
+            h={"32px"}
             pos={"relative"}
             _groupHover={{
               filter: "invert(100%) brightness(200%)",
             }}
           >
             <Image src={item.icon !== null ? item.icon : "/catalog-item-icon.svg"} fill alt="category icon" />
-          </Box>
+          </Box> : null}
 
         <Text>{item?.name}</Text>
       </Flex>
