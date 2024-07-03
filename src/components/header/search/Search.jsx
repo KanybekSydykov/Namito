@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Input,
   Box,
@@ -21,24 +21,30 @@ const Search = ({ handleCatalogDrawer }) => {
   const [searchResults, setSearchResults] = useState([]);
   const { locale } = useParams();
   const [isRequestPending, setIsRequestPending] = useState(false);
+  const ref = useRef(null);
 
   function handleInputFocus(e, show = false) {
+    window.scrollTo(0, 0);
+   setTimeout(() => {
     if (isDesktop) {
       handleCatalogDrawer(false);
     }
     e.stopPropagation();
     setIsFocused(show);
+   },500)
   }
   useEffect(() => {
     if (isFocused) {
-      document.body.style.width = "100vw";
-      document.body.style.height = "100vh";
+      document.body.style.width = "100dvw";
+      document.body.style.height = "100dvh";
       document.body.style.overflow = "hidden";
       if (!searchValue.trim()) {
         setSearchResults([]);
       }
     } else {
       document.body.style.overflow = "unset";
+      document.body.style.width = "100dvw";
+      document.body.style.height = "auto";
     }
 
     // Cleanup on unmount
@@ -71,6 +77,12 @@ const Search = ({ handleCatalogDrawer }) => {
     }
   };
 
+  const handleInputBlur = (e) => {
+    // Handle actions after "Done" is clicked
+    handleInputFocus(e, false);
+
+  };
+
   return (
     <>
       <Box
@@ -81,7 +93,7 @@ const Search = ({ handleCatalogDrawer }) => {
         alignItems={"center"}
       >
         <Input
-          type="text"
+          type="search"
           placeholder={locale === "en" ? "Search" : "Я ищу..."}
           bg={isFocused ? "fff" : "transparent"}
           border={"1px solid #A4A4A4"}
@@ -99,6 +111,7 @@ const Search = ({ handleCatalogDrawer }) => {
           outline={"none"}
           onClick={(e) => handleInputFocus(e, true)}
           onChange={handleSearchChange}
+          onBlur={handleInputBlur}
           ps={isFocused ? "16px" : "54px"}
           transition={"all 0.1s linear .1s"}
           zIndex={isFocused ? "3010" : "10"}

@@ -18,16 +18,21 @@ const Footer = ({ token }) => {
     const handleScroll = () => {
       if (ref.current) {
         const currentScrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
 
         // Compare current scroll position with previous scroll position
         if (currentScrollY > prevScrollY) {
           // Scrolling down
-          ref.current.style.transform = 'translateY(100%)';
+          ref.current.style.transform = "translateY(100%)";
         } else {
           // Scrolling up
-          console.log('Scrolling up');
-          ref.current.style.transform = 'translateY(0)';
+          console.log("Scrolling up");
+          ref.current.style.transform = "translateY(0)";
+        }
 
+        if (currentScrollY + windowHeight >= documentHeight) {
+          ref.current.style.transform = "translateY(100%)";
         }
 
         // Update previous scroll position
@@ -40,8 +45,7 @@ const Footer = ({ token }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [prevScrollY]); 
-
+  }, [prevScrollY]);
 
   function handleActiveRoute(activeRoute, nested = false) {
     if (nested && path.includes(`${activeRoute}`)) {
@@ -107,7 +111,7 @@ const Footer = ({ token }) => {
                 color={handleActiveRoute("") ? "#CB4609" : "#363636"}
                 transition={"all 0.3s ease"}
               >
-                {params.locale === 'ru' ? "Главная" : "Home"}
+                {params.locale === "ru" ? "Главная" : "Home"}
               </Text>
               <Link
                 href={`${params.locale ? `/${params.locale}/` : "/"}`}
@@ -156,8 +160,7 @@ const Footer = ({ token }) => {
                   transition={"all 0.3s ease"}
                   color={handleActiveRoute("/cart") ? "#CB4609" : "#363636"}
                 >
-                  {params.locale === 'ru' ? "Корзина" : "Cart"}
-                  
+                  {params.locale === "ru" ? "Корзина" : "Cart"}
                 </Text>
               </Flex>
             </CartDrawer>
@@ -211,8 +214,7 @@ const Footer = ({ token }) => {
                 fontWeight={300}
                 color={handleActiveRoute("/catalog") ? "#CB4609" : "#363636"}
               >
-                  {params.locale === 'ru' ? "Каталог" : "Catalog"}
-                
+                {params.locale === "ru" ? "Каталог" : "Catalog"}
               </Text>
               <Link
                 prefetch={true}
@@ -271,7 +273,9 @@ const Footer = ({ token }) => {
                   : "Login"}
               </Text>
               <Link
-                href={`${params.locale ? `/${params.locale}/` : "/"}${token ? "profile" : "login"}`}
+                href={`${params.locale ? `/${params.locale}/` : "/"}${
+                  token ? "profile" : "login"
+                }`}
                 style={{
                   position: "absolute",
                   top: "0px",
