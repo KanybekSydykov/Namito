@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 const CartButton = ({ selectedVariant, token, image }) => {
   const [isRequestPending, setIsRequestPending] = useState(false);
   const toast = useToast();
-  const { addItem } = useCounter();
+  const { addItem,increment } = useCounter();
   const {locale} = useParams();
 
 
@@ -24,6 +24,7 @@ const CartButton = ({ selectedVariant, token, image }) => {
 
 
   const handleAddToCart = async () => {
+    console.log(token,selectedVariant);
     if (token) {
       setIsRequestPending(true);
       const credentials = { product_variant: selectedVariant.id };
@@ -38,6 +39,7 @@ const CartButton = ({ selectedVariant, token, image }) => {
         if (response.status >= 200 && response.status < 300) {
           setIsRequestPending(false);
           increment();
+          console.log(response);
           toast({
             title: "Товар успешно добавлен в корзину",
             status: "success",

@@ -77,6 +77,7 @@ export default async function Page({ params }) {
           params={params}
           details={product}
           similarProds={similarProds}
+          token={token}
         />
     </Container>
   );

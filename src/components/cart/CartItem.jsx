@@ -1,6 +1,6 @@
 "use client";
 
-import React,{useState} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Box, Flex, Text, Button, useToast } from "@chakra-ui/react";
 import Image from "next/image";
 import DeleteIcon from "@/../public/profile-icons/delete-icon.svg";
@@ -9,10 +9,10 @@ import MinusIcon from "@/../public/minus-icon.svg";
 import { useCounter } from "@/lib/auth-content";
 import { useAnimate } from "framer-motion";
 
-const CartItem = ({ item, handleDeleteCartItem, border = true,handleQuantityChange }) => {
+const CartItem = ({ item, handleDeleteCartItem, border = true, handleQuantityChange }) => {
   const [scope, animate] = useAnimate();
-  const [quantity,setQuantity] = useState(item.quantity || 1);
-  const { decrement, increment} = useCounter();
+  const [quantity, setQuantity] = useState(item.quantity || 1);
+  const { decrement, increment } = useCounter();
   const colorCode = item.product_variant.color.color;
   const colorName = item.product_variant.color.name;
   const size = item.product_variant.size.name;
@@ -20,10 +20,12 @@ const CartItem = ({ item, handleDeleteCartItem, border = true,handleQuantityChan
   const image = item.product_image ? item.product_image : '/placeholder.jpeg';
   const name = item.product_name;
   const toast = useToast();
+  const [disabled, setDisabled] = useState(false);
+  const btnRef = useRef();
 
   async function handleDelete() {
-    if(scope.current){
-      await animate(scope.current, { opacity: 0,x:-200 }, { duration: 0.3 });
+    if (scope.current) {
+      await animate(scope.current, { opacity: 0, x: -200 }, { duration: 0.3 });
       decrement();
       handleDeleteCartItem(item.id);
     }
@@ -34,31 +36,37 @@ const CartItem = ({ item, handleDeleteCartItem, border = true,handleQuantityChan
       duration: 3000,
       position: "top-left",
       isClosable: true,
-    })
+    });
   }
 
-  function handleItemQuantity(increase = false,decrease = false) {
-    if(increase){
-      increment();
-      handleQuantityChange(item.id, quantity + 1,'increase');
+  useEffect(() => {
+    console.log(quantity,item.product_variant.stock,disabled,btnRef.current);
+    if(quantity === item.product_variant.stock && !disabled){
+      setDisabled(true);
+    }
+
+  }, [quantity]);
+
+  function handleItemQuantity(increase = false, decrease = false) {
+
+    if (increase && quantity < item.product_variant.stock) {
       setQuantity((prev) => prev + 1);
-    }else if(decrease){
-      if(quantity === 1){
+      increment();
+      handleQuantityChange(item.id, quantity + 1, 'increase');
+    } else if (decrease) {
+      if (quantity === 1) {
         handleDelete();
         return;
       }
-      handleQuantityChange(item.id, quantity - 1,'decrease');
       setQuantity((prev) => prev - 1);
+      handleQuantityChange(item.id, quantity - 1, 'decrease');
       decrement();
     }
-
   }
-
-
 
   return (
     <Flex
-    ref={scope}
+      ref={scope}
       flexDir={"column"}
       gap={"16px"}
       px={"20px"}
@@ -163,13 +171,13 @@ const CartItem = ({ item, handleDeleteCartItem, border = true,handleQuantityChan
           _hover={{
             filter: "grayscale(0%)",
           }}
-          onClick={() => handleItemQuantity(false,true)}
+          onClick={() => handleItemQuantity(false, true)}
         >
           <Image
             src={MinusIcon}
             width={20}
             height={20}
-            alt={"plus"}
+            alt={"minus"}
             style={{
               transition: "all 0.2s ease-in-out",
             }}
@@ -203,7 +211,13 @@ const CartItem = ({ item, handleDeleteCartItem, border = true,handleQuantityChan
           _hover={{
             filter: "grayscale(0%)",
           }}
+          disabled={disabled}
           onClick={() => handleItemQuantity(true)}
+          _disabled={{
+            cursor: "not-allowed",
+            opacity: "0.5",
+          }}
+          ref={btnRef}
         >
           <Image
             src={PlusIcon}
