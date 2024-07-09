@@ -25,6 +25,7 @@ import DeliveryMethod from "./DeliveryMethod";
 import { ENDPOINTS } from "@/API/endpoints";
 import { useRouter } from "next/navigation";
 
+
 const CheckOut = ({ data, token }) => {
   const [deliveryValue, setDeliveryValue] = useState("курьером");
   const [adressValue, setAdressValue] = useState("");
@@ -39,6 +40,11 @@ const CheckOut = ({ data, token }) => {
 
   const toast = useToast();
 
+  const noItemsMsg = locale === "ru" ? "Ваша корзина пуста" : "Your cart is empty";
+  const chooseDeliveryMsg = locale === "ru" ? "Выберите способ доставки" : "Choose delivery method";
+  const errorMsg = locale === "ru" ? "Ошибка!" : "Error!"
+  const successMsg = locale === "ru" ? "Заказ оформлен!" : "Order placed!"
+  const congratsMsg = locale === "ru" ? "Спасибо!" : "Thank you!"
   function handleCheckedItem(id) {
     const newCheckItems = checkedItems.map((item) =>
       item.id === id ? { ...item, to_purchase: !item.to_purchase } : item
@@ -71,19 +77,50 @@ const CheckOut = ({ data, token }) => {
     }
   }
 
-  async function createOrder() {
-    const newCartData = await putData(
-      { items: checkedItems },
-      token,
-      ENDPOINTS.putCartQuantity()
-    );
+  console.log(deliveryValue);
 
-    console.log(newCartData);
+
+  async function createOrder() {
+
+
+    if(checkedItems.length){
+      const newCartData = await putData(
+        { items: checkedItems },
+        token,
+        ENDPOINTS.putCartQuantity()
+      );
+    } else {
+      toast({
+        title: errorMsg,
+        description: noItemsMsg,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    if(!adressValue && deliveryValue === "курьером"){
+      toast({
+        title: errorMsg,
+        description: chooseDeliveryMsg,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const credentials = {
       delivery_method: deliveryValue,
-      user_address: adressValue,
       payment_method: paymentValue.value,
     };
+
+    if(deliveryValue === "курьером"){
+      credentials.user_address = adressValue;
+    }
+
+
 
     try {
       setOrderPending(true);
@@ -97,8 +134,8 @@ const CheckOut = ({ data, token }) => {
       if (response.status >= 200 && response.status < 400) {
         setOrderPending(false);
         toast({
-          title: "Поздравляем!",
-          description: "Ваш заказ успешно создан!",
+          title: congratsMsg ,
+          description: successMsg,
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -108,8 +145,8 @@ const CheckOut = ({ data, token }) => {
       } else {
         setOrderPending(false);
         toast({
-          title: "Ошибка!",
-          description: "В корзине нет товаров для покупки!",
+          title: errorMsg,
+          description: noItemsMsg,
           status: "error",
           duration: 3000,
           isClosable: true,

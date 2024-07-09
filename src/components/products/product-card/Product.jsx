@@ -55,10 +55,11 @@ const Product = ({
       : handleAddToCart(details.variants[0].id);
   }
 
+  const successMsg = params.locale === "ru" ? "Товар добавлен в корзину" : "Product added to cart";
+
   const handleAddToCart = async (id) => {
     if (token) {
       setIsRequestPending(true);
-      console.log("should be sending request to add to cart product");
       const credentials = { product_variant: id };
 
       try {
@@ -72,7 +73,7 @@ const Product = ({
           setIsRequestPending(false);
           // increment();
           toast({
-            title: "Товар успешно добавлен в корзину",
+            title: successMsg,
             status: "success",
             duration: 3000,
             position: "top-left",
@@ -95,7 +96,7 @@ const Product = ({
       };
       addItem(clientCartItem);
       toast({
-        title: "Товар успешно добавлен в корзину",
+        title: successMsg,
         status: "success",
         duration: 3000,
         position: "top-left",
@@ -338,7 +339,7 @@ const Product = ({
               color={"orange"}
               zIndex={2}
               isLoading={requestIsPending}
-              loadingText="Добавляем"
+              loadingText={params.locale === "ru" ? "Добавляем..." : "Adding..."}
               colorScheme="teal"
               variant="outline"
               _hover={{

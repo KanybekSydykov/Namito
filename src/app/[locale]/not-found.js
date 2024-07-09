@@ -1,10 +1,11 @@
-'use server'
+'use client'
+
 import OrangeButton from '@/components/ui/OrangeButton'
 import { Box, Container, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import Link from 'next/link'
  
-export default async function NotFound() {
+export default function NotFound() {
   return (
     <Container
     maxW={{base:'1200px',xl:'1472px'}}
@@ -17,6 +18,7 @@ export default async function NotFound() {
     gap={'70px'}
     fontFamily={'roboto'}
     color={'#000'}
+    mt={'110px'}
     >
       <Text
       fontWeight={'700'}

@@ -27,6 +27,7 @@ export default async function ProfileLayout({
       flexDir={'row'}
       gap={'30px'}
       px={'16px'}
+      mt={{base:'70px',lg:'0px'}}
       >
         <ProfileCover data={data} token={token} >
             {children}

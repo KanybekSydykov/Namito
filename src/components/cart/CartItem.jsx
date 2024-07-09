@@ -40,7 +40,6 @@ const CartItem = ({ item, handleDeleteCartItem, border = true, handleQuantityCha
   }
 
   useEffect(() => {
-    console.log(quantity,item.product_variant.stock,disabled,btnRef.current);
     if(quantity === item.product_variant.stock && !disabled){
       setDisabled(true);
     }

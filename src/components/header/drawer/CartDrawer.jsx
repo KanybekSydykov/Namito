@@ -408,6 +408,9 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
                 mt={cartData ? "120px" : "46px"}
                 href={ cartData || cart.length > 0 ? `/${locale}/checkout` :`/${locale}/`}
                 onClick={onClose}
+                _focus={{
+                  outline: "none",
+                }}
               >
                 <OrangeButton
                   text={

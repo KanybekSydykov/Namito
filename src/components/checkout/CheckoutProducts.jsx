@@ -3,9 +3,6 @@ import { Checkbox, Flex, Stack, Text } from '@chakra-ui/react';
 import CartItem from '../cart/CartItem';
 
 const CheckoutProducts = ({ cartData, checkedItems, handleCheckedItem, handleDeleteCartItem,locale }) => {
-
-  console.log(checkedItems, "checkedItems");
-
   return (
     <Flex
       fontFamily={"roboto"}

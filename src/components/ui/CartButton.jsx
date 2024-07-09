@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Spinner, useToast } from "@chakra-ui/react";
 import { AddToCart, postData } from "@/lib/apiServices";
 import { ENDPOINTS } from "@/API/endpoints";
@@ -11,6 +11,11 @@ const CartButton = ({ selectedVariant, token, image }) => {
   const toast = useToast();
   const { addItem,increment } = useCounter();
   const {locale} = useParams();
+  const [disabled, setDisabled] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+
+
+
 
 
   const clientCartItem = {
@@ -22,9 +27,16 @@ const CartButton = ({ selectedVariant, token, image }) => {
 
   const btnText = locale === "ru" ? "В корзину" : "Add to cart";
 
+  useEffect(() => {
+    if(quantity === selectedVariant.stock && !disabled){
+      setDisabled(true);
+    }
+  }, [quantity]);
 
   const handleAddToCart = async () => {
-    console.log(token,selectedVariant);
+
+    setQuantity((prev) => prev + 1);
+
     if (token) {
       setIsRequestPending(true);
       const credentials = { product_variant: selectedVariant.id };
@@ -76,6 +88,8 @@ const CartButton = ({ selectedVariant, token, image }) => {
     }
   };
 
+  console.log(quantity, selectedVariant.stock);
+
   return (
     <Button
       w={"100%"}
@@ -96,7 +110,8 @@ const CartButton = ({ selectedVariant, token, image }) => {
       maxW={"262px"}
       onClick={handleAddToCart}
       isLoading={isRequestPending}
-      loadingText="Добавляем"
+      loadingText= {locale === "ru" ? "Добавляем" : "Adding"}
+      isDisabled={disabled}
       colorScheme="teal"
       variant="outline"
       _hover={{ bg: "orange", color: "#fff" }}

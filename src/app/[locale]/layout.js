@@ -8,6 +8,7 @@ import { ENDPOINTS } from "@/API/endpoints";
 import { CounterProvider } from "@/lib/auth-content";
 import { getSession } from "@/lib/lib";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Box } from "@chakra-ui/react";
 
 export async function generateStaticParams() {
     return i18n.locales.map((locale) => ({ lang: locale }));
@@ -67,9 +68,9 @@ export default async function LocaleLayout({ children, params }) {
                           <header>
                              <Header data={headerData} params={params} isAuth={isAuth ? true : false} token={isAuth ? isAuth.access_token : null} />
                             </header> 
-                            <div>
+                            <Box mt={{base:'40px',lg:'0px'}}>
                                 {children}
-                            </div>
+                            </Box>
                             <footer>
                             <FixedFooter params={params} token={isAuth ? isAuth.access_token : null} />
                             <Footer data={footerData} params={params} />

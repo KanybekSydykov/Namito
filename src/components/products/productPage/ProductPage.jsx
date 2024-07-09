@@ -34,8 +34,6 @@ const ProductPage = ({
   const [colors, setColors] = useState([]);
   const [showMore, setShowMore] = useState(false);
 
-  console.log(details);
-
 
   useEffect(() => {
     function getVariants() {

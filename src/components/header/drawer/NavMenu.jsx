@@ -119,7 +119,7 @@ const Navmenu = ({ isAuth }) => {
               fontWeight={"400"}
               textTransform={"uppercase"}
               textAlign={"center"}
-              // onClick={onClose}
+              onClick={onClose}
             >
               <Link href={`/${locale}/`} >
                 {locale === "en" ? "Home" : "Главная"}

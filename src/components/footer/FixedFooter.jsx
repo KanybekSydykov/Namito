@@ -124,7 +124,7 @@ const Footer = ({ token }) => {
                 }}
               />
             </Flex>
-            <CartDrawer isAuth={token ? true : false} token={token}>
+            <CartDrawer isAuth={token} token={token} locale={params.locale}>
               <Flex
                 w={"80px"}
                 h={"60px"}
