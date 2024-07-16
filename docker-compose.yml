@@ -13,6 +13,7 @@ services:
       - PORT=3002
       - HOSTNAME=0.0.0.0
     user: "1001"  # используем созданного пользователя для запуска
+    restart: always
 
 
 volumes:

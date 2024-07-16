@@ -216,7 +216,7 @@ const CartDrawer = ({ isDesktop = false, locale, isAuth, token, children }) => {
       <Drawer
         placement={"right"}
         onClose={onClose}
-        size={isDesktop ? "lg" : "full"}
+        size={isDesktop ? "sm" : "full"}
         isOpen={isOpen}
       >
         <DrawerOverlay />
